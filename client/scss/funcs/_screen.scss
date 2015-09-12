@@ -1,0 +1,14 @@
+@function screen($screen, $limit) {
+
+    @if (type-of($screen) != 'string' or type-of($limit) != 'string') {
+        @error '$screen and $limit value should be a string.';
+        @return null;
+    }
+
+    @if ( map-has-key($screens, $screen) ) {
+        @return map-get( map-get($screens, $screen), $limit );
+    } @else {
+        @error 'No such screen: "#{$screen}".';
+        @return null;
+    }
+}

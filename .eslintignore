@@ -1,0 +1,14 @@
+node_modules
+build
+gulp
+source/vendor
+vendor
+source/js/libs
+js/libs
+libs
+webpack.*.js
+*.conf.js
+libs
+source/js/**/tests/
+js/**/tests/
+

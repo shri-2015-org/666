@@ -1,0 +1,14 @@
+[data-anim*=zoomFromFade] {
+    transition: transform 1.8s $cssEase;
+    transform: scale(0.95);
+
+    .is-shown & {
+        transform: scale(1);
+    }
+}
+
+[data-anim*=randomTilt] {
+    transition: all 2s $cssEase;
+}
+
+

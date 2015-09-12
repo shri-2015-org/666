@@ -1,0 +1,9 @@
+.btn {
+    outline: none;
+    appearance: none;
+    box-sizing: border-box;
+
+    &:hover {
+        color: color(alias, hover);
+    }
+}

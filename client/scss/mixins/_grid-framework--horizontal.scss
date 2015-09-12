@@ -1,0 +1,84 @@
+// Bootstrap SASS v 3.3.4 adapted
+
+// COLS: {
+//   mo: mobile only
+//   m: mobile
+//   t: tablet
+//   d: desktop,
+//   xd: extraDesktop
+// }
+
+@mixin make-grid-columns($i: 1, $list: ".col-mo-#{$i}, .col-m-#{$i}, .col-t-#{$i}, .col-d-#{$i}, .col-xd-#{$i}, .col-m-l-#{$i}") {
+  @for $i from (1 + 1) through $grid-columns {
+    $list: "#{$list}, .col-mo-#{$i}, .col-m-#{$i}, .col-t-#{$i}, .col-d-#{$i}, .col-xd-#{$i}, .col-m-l-#{$i}";
+  }
+  #{$list} {
+    position: relative;
+    // Prevent columns from collapsing when empty
+    min-height: 1px;
+    // Inner gutter via padding
+    padding-left:  ($grid-gutter-width / 2);
+    padding-right: ($grid-gutter-width / 2);
+    box-sizing: border-box;
+  }
+}
+
+@mixin float-grid-columns($class, $i: 1, $list: ".col-#{$class}-#{$i}") {
+  @for $i from (1 + 1) through $grid-columns {
+    $list: "#{$list}, .col-#{$class}-#{$i}";
+  }
+  #{$list} {
+    float: left;
+  }
+}
+
+@mixin calc-grid-column($index, $class, $type) {
+  @if ($type == width) and ($index > 0) {
+    .col-#{$class}-#{$index} {
+      width: percentage(($index / $grid-columns));
+
+      // временное решение для 1px гэпа из-за субпиксельного размера блоков
+      margin-right: -0.1px;
+    }
+  }
+  @if ($type == push) and ($index > 0) {
+    .col-#{$class}-push-#{$index} {
+      left: percentage(($index / $grid-columns));
+    }
+  }
+  @if ($type == push) and ($index == 0) {
+    .col-#{$class}-push-0 {
+      left: auto;
+    }
+  }
+  @if ($type == pull) and ($index > 0) {
+    .col-#{$class}-pull-#{$index} {
+      right: percentage(($index / $grid-columns));
+    }
+  }
+  @if ($type == pull) and ($index == 0) {
+    .col-#{$class}-pull-0 {
+      right: auto;
+    }
+  }
+  @if ($type == offset) {
+    .col-#{$class}-offset-#{$index} {
+      margin-left: percentage(($index / $grid-columns));
+    }
+  }
+}
+
+@mixin loop-grid-columns($columns, $class, $type) {
+  @for $i from 0 through $columns {
+    @include calc-grid-column($i, $class, $type);
+  }
+}
+
+// Create grid for specific class
+@mixin make-grid-horizontal($class) {
+  @include float-grid-columns($class);
+  @include loop-grid-columns($grid-columns, $class, width);
+  @include loop-grid-columns($grid-columns, $class, pull);
+  @include loop-grid-columns($grid-columns, $class, push);
+  @include loop-grid-columns($grid-columns, $class, offset);
+}
