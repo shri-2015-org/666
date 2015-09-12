@@ -1,18 +1,22 @@
 import React from 'react';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider, connect } from 'react-redux';
+import all from './reducers';
 import App from './components/App.js'
+import loggerMiddleware from 'redux-logger';
 
-function noOp (state = null, action) {
-  return state;
-}
-function propsFromState () { 
+function propsFromState (state) { 
   return {
-    messages: []
+    messages: [
+      ...state.received,
+      ...state.pending.messages,
+    ]
   };
 }
 
-const store = createStore (noOp);
+const createStorePlus = applyMiddleware(loggerMiddleware)(createStore);
+
+const store = createStorePlus (all);
 const SmartApp = connect(propsFromState)(App);
 const rootElement = document.getElementById ('content');
 

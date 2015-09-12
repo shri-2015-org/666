@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { messagesT } from '../propTypes';
-import { sendMessage } from '../actions';
+import { addMessagePending } from '../actions';
 import Room from './Room';
 
 export default class App extends Component {
@@ -9,7 +9,7 @@ export default class App extends Component {
     return (
       <Room
         messages={this.props.messages}
-        onSend={text => dispatch(sendMessage(text))}
+        onSend={text => dispatch(addMessagePending(text))}
       />
     );
   }
