@@ -1,6 +1,7 @@
-var User = require('./User.js');
+var User = require('./User.js'),
+    db = require('./db.js');
 
-var users = {};
+//var users = {};
 
 var login = {
   createUser: function (uid) {
@@ -10,14 +11,13 @@ var login = {
       "avatar": "Some avatar"
     });
 
-    users[uid] = user;
-    return user.toJSON();
+    return db.addUser(user);
   },
   getUser: function (uid) {
-    return users[uid];
+    return db.getUser(uid);
   },
   getRoomUsers: function () {
-    return users;
+    return db.getRoomUsers();
   }
 };
 
