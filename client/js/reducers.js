@@ -8,7 +8,7 @@ const initialPending = {
 
 function login (state = null, action) {
   switch (action.type) {
-    case actions.LOGIN: return action.login;
+    case actions.NEW_LOGIN: return action.login;
     default: return state;
   }
 }
