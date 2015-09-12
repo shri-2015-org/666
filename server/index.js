@@ -10,7 +10,7 @@ app.use('/', express.static(__dirname + '/static'));
 io.on('connection', function(socket){
   socket.on('loginReq', function (data) {
     var user;
-    if (data.uid && login.getUser(data.uid)) {
+    if (data && data.uid && login.getUser(data.uid)) {
       user = login.getUser(data.uid);
     } else {
       user = login.createUser(socket.id);

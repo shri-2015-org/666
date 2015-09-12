@@ -6,6 +6,13 @@ export const ADD_USER = 'ADD_USER';
 export function addMessagePending (text) {
   return {
     type: ADD_MESSAGE_PENDING,
-    text,
+    text
+  };
+}
+
+export function addUser(user) {
+  return {
+    type: ADD_USER,
+    user
   };
 }
