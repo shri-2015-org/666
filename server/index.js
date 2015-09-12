@@ -5,12 +5,14 @@ var io = require('socket.io')(http);
 
 var login = require('./login.js');
 
+var PORT = 3001;
+
 app.use('/', express.static(__dirname + '/static'));
 
 io.on('connection', function(socket){
   socket.on('loginReq', function (data) {
     var user;
-    if (data.uid && login.getUser(data.uid)) {
+    if (data && data.uid && login.getUser(data.uid)) {
       user = login.getUser(data.uid);
     } else {
       user = login.createUser(socket.id);
@@ -34,6 +36,6 @@ io.on('connection', function(socket){
 
 });
 
-http.listen(3000, function(){
-  console.log('listening on *:3000');
+http.listen(PORT, function(){
+  console.log('listening on *:' + PORT);
 });
