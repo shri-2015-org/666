@@ -15,7 +15,7 @@ io.on('connection', function(socket){
     if (data && data.uid && login.getUser(data.uid)) {
       user = login.getUser(data.uid);
     } else {
-      user = login.createUser(socket.id);
+      user = login.createUser(socket.id + Date.now());
     }
     socket.emit('loginRes', user);
     io.emit('newUser', user);
