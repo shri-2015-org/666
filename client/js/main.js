@@ -1,3 +1,5 @@
+require('../scss/main.scss');
+
 import React from 'react';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider, connect } from 'react-redux';

@@ -1,0 +1,8 @@
+@function color($palette, $tone: 'base', $transparency: 1) {
+    @if ( map-has-key($color-stack, $palette) ) {
+        @return rgba( map-get(map-get($color-stack, $palette), $tone), $transparency );
+    } @else {
+        @error 'No such color "#{$palette}" in stack.';
+        @return null;
+    }
+}
