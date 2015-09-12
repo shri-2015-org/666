@@ -4,6 +4,7 @@ import { Provider, connect } from 'react-redux';
 import all from './reducers';
 import App from './components/App.js'
 import loggerMiddleware from 'redux-logger';
+import io from 'socket.io-client';
 
 import { addUser } from './actions.js';
 import { cloneDeep } from 'lodash';
@@ -31,15 +32,16 @@ function _getUID() {
   return localStorage['user_uid'];
 }
 
-const onLogin = function (data) {
+function onLoginRes (data) {
   const user = JSON.parse(data);
+  console.log("Event: onLoginRes", user);
 
   _setUID(user.uid);
 
-  store.dispatch(addUser(user));
-};
+  store.dispatch(newLogin(user));
+}
 
-socket.on('loginRes', onLogin);
+socket.on('loginRes', onLoginRes);
 socket.emit('loginReq', {uid: _getUID()});
 
 const SmartApp = connect(propsFromState)(App);
