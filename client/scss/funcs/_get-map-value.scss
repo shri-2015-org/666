@@ -1,8 +1,0 @@
-@function getMapValue($map, $key) {
-    @if ( map-has-key($map, $key) ) {
-        @return map-get($map, $key);
-    } @else {
-        @error 'No such key "#{$key}" in map "#{$map}"';
-        @return null;
-    }
-}
