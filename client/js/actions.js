@@ -31,3 +31,10 @@ export function newLogin(login) {
   }
 }
 
+export function addMessageReceived(message) {
+  return {
+    type: ADD_MESSAGE_RECEIVED,
+    message,
+  };
+}
+
