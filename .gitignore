@@ -12,3 +12,4 @@ tmp/**/*.*
 .idea/
 upload/
 .tmp
+*.swp

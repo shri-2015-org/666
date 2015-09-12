@@ -5,7 +5,6 @@
 //   m: mobile
 //   t: tablet
 //   d: desktop,
-//   xd: extraDesktop
 // }
 
 @mixin make-grid-columns($i: 1, $list: ".col-mo-#{$i}, .col-m-#{$i}, .col-t-#{$i}, .col-d-#{$i}, .col-xd-#{$i}, .col-m-l-#{$i}") {
