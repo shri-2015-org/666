@@ -10,11 +10,14 @@ var login = {
       "avatar": "Some avatar"
     });
 
-    user[uid] = user;
+    users[uid] = user;
     return user.toJSON();
   },
   getUser: function (uid) {
     return users[uid];
+  },
+  getRoomUsers: function () {
+    return users;
   }
 };
 
