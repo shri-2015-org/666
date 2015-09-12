@@ -1,22 +1,28 @@
 {
-
   "parser": "babel-eslint",
+  "extends": "airbnb",
   "env": {
-    // I write for browser
     "browser": true,
-    // in CommonJS
-    "node": true
+    "node": true,
+    "es6": true
+  },
+  "plugins": [
+    "react"
+  ],
+  "ecmaFeatures": {
+    "jsx": true
   },
   "rules": {
     "quotes": [2, "single"],
     "no-mixed-requires": [0],
     "no-underscore-dangle": [0],
-    "camelcase": [0],
     "strict": [0],
     "no-new": [0],
     "space-unary-ops": [0],
     "no-unused-expressions": [0],
-    "new-cap": [0]
+    "comma-dangle": [2, "never"],
+    "no-var": [0],
+    "no-console": [0]
   },
   "globals": {
     "$": true,
@@ -24,21 +30,10 @@
     "window": true,
     "document": true,
     "google": true,
-    "Backbone": true,
-    "vent": true,
     "_": true,
     "Modernizr": true,
     "Image": true,
-    "navigator": true,
-    "Snap": true,
-    "mina": true,
-    "TweenMax": true,
-    "Power1": true,
-    "Power2": true,
-    "Power4": true,
-    "ga": true,
-    "Expo": true,
-    "Circ": true
+    "navigator": true
   }
 
 }

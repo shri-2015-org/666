@@ -6,8 +6,6 @@ var webpack = require('webpack');
 var webpackConfigPath = path.join(process.cwd(), 'webpack.config.js');
 var webpackConfig = require(webpackConfigPath);
 
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-
 gulp.task('webpack:build', ['lint'], function(callback) {
 
     var config = Object.create(webpackConfig);

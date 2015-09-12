@@ -28,9 +28,6 @@ module.exports = {
     entry: {
         bundle: [
             './client/js/main.js'
-        ],
-        vendor: [
-            './client/js/vendor.js'
         ]
     },
     output: {
