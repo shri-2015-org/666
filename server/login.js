@@ -1,7 +1,6 @@
 var User = require('./User.js');
-var userGenerator = require('./userGenerator.js');
-
-var users = {};
+var userGenerator = require('./userGenerator.js'),
+    db = require('./db.js');
 
 var login = {
   createUser: function (uid) {
@@ -11,14 +10,13 @@ var login = {
       "avatar": userGenerator.generateAvatar()
     });
 
-    users[uid] = user;
-    return user;
+    return db.addUser(user);
   },
   getUser: function (uid) {
-    return users[uid];
+    return db.getUser(uid);
   },
   getRoomUsers: function () {
-    return users;
+    return db.getRoomUsers();
   }
 };
 

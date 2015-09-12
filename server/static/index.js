@@ -11,6 +11,9 @@
     localStorage['uid'] = uid;
   };
 
+  var onLogin = function (data) {
+    setUID(data.uid);
+  };
 
   var onMessage = function (data) {
     console.log('onMessage', data);
