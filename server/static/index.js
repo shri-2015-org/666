@@ -12,7 +12,7 @@
   };
 
   var onLogin = function (data) {
-    setUID(JSON.parse(data).uid);
+    setUID(data.uid);
   };
 
   var onMessage = function (data) {
