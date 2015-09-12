@@ -1,18 +1,49 @@
 import React from 'react';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider, connect } from 'react-redux';
+import all from './reducers';
 import App from './components/App.js'
+import loggerMiddleware from 'redux-logger';
+import io from 'socket.io-client';
 
-function noOp (state = null, action) {
-  return state;
-}
-function propsFromState () { 
+import { addUser } from './actions.js';
+import { cloneDeep } from 'lodash';
+
+function propsFromState (state) {
   return {
-    messages: []
+    messages: [
+      ...state.received,
+      ...state.pending.messages,
+    ]
   };
 }
 
-const store = createStore (noOp);
+const createStorePlus = applyMiddleware(loggerMiddleware)(createStore);
+
+const store = createStorePlus (all);
+
+const socket = io('http://localhost:3000/');
+
+function _setUID(uid) {
+  localStorage['user_uid'] = uid;
+}
+
+function _getUID() {
+  return localStorage['user_uid'];
+}
+
+function onLoginRes (data) {
+  const user = JSON.parse(data);
+  console.log("Event: onLoginRes", user);
+
+  _setUID(user.uid);
+
+  store.dispatch(newLogin(user));
+}
+
+socket.on('loginRes', onLoginRes);
+socket.emit('loginReq', {uid: _getUID()});
+
 const SmartApp = connect(propsFromState)(App);
 const rootElement = document.getElementById ('content');
 

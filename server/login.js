@@ -1,14 +1,13 @@
-var User = require('./User.js'),
+var User = require('./User.js');
+var userGenerator = require('./userGenerator.js'),
     db = require('./db.js');
-
-//var users = {};
 
 var login = {
   createUser: function (uid) {
     var user =  new User({
-      "name": "Some name",
+      "name": userGenerator.generateName(),
       "uid": uid,
-      "avatar": "Some avatar"
+      "avatar": userGenerator.generateAvatar()
     });
 
     return db.addUser(user);
