@@ -7,7 +7,7 @@ var login = require('./login.js');
 
 var PORT = 3001;
 
-app.use('/', express.static(__dirname + '/static'));
+app.use('/', express.static(__dirname + '/mock'));
 
 io.on('connection', function(socket) {
   socket.on('loginReq', function(data) {
