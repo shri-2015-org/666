@@ -4,7 +4,7 @@
   "description": "SHRI-6-CHAT",
   "main": "node_server.js",
   "scripts": {
-    "lint": "eslint ."
+    "lint": "./node_modules/.bin/eslint  ."
   },
   "dependencies": {
     "express": "^4.13.3",
