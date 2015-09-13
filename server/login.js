@@ -1,10 +1,10 @@
-var User = require('./User.js');
-var userGenerator = require('./userGenerator.js');
-var db = require('./db.js');
+import User from './User';
+import userGenerator from './userGenerator';
+import db from './db';
 
-var login = {
+const login = {
   createUser: function createUser(uid) {
-    var user =  new User({
+    const user =  new User({
       'name': userGenerator.generateName(),
       'uid': uid,
       'avatar': userGenerator.generateAvatar(),
