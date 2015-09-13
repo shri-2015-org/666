@@ -4,8 +4,8 @@
   "description": "SHRI-6-CHAT",
   "main": "node_server.js",
   "scripts": {
-    "lint": "./node_modules/.bin/eslint .",
-    "server": "node_modules/.bin/babel-node server/index.js"
+    "lint": "eslint .",
+    "server": "babel-node server/index.js"
   },
   "dependencies": {
     "express": "^4.13.3",
