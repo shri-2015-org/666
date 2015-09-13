@@ -6,14 +6,14 @@ const initialPending = {
   messages: [],
 };
 
-function login (state = null, action) {
+function login(state = null, action) {
   switch (action.type) {
     case actions.NEW_LOGIN: return action.login;
     default: return state;
   }
 }
 
-function pending (state = initialPending, action) {
+function pending(state = initialPending, action) {
   switch (action.type) {
     case actions.ADD_MESSAGE_PENDING: {
       const id = state.count;
@@ -25,7 +25,7 @@ function pending (state = initialPending, action) {
           {
             id,
             text: action.text,
-          }
+          },
         ],
       };
     }
@@ -33,7 +33,7 @@ function pending (state = initialPending, action) {
   }
 }
 
-function received (state = [], action) {
+function received(state = [], action) {
   switch (action.type) {
     case actions.ADD_MESSAGE_RECEIVED: {
       return [
@@ -45,7 +45,7 @@ function received (state = [], action) {
   }
 }
 
-function users (state = [], action) {
+function users(state = [], action) {
   switch (action.type) {
     case actions.ADD_USER: {
       return [
@@ -57,6 +57,6 @@ function users (state = [], action) {
   }
 }
 
-const all = combineReducers ({login, users, received, pending});
+const all = combineReducers({login, users, received, pending});
 
 export default all;

@@ -1,45 +1,45 @@
-(function () {
+(function() {
   var socket = io();
 
-  var getUID = function () {
+  var getUID = function() {
     console.log('getUID', localStorage['uid']);
     return localStorage['uid'];
   };
 
-  var setUID = function (uid) {
+  var setUID = function(uid) {
     console.log('setUID', uid);
     localStorage['uid'] = uid;
   };
 
-  var onLogin = function (data) {
+  var onLogin = function(data) {
     setUID(data.uid);
   };
 
-  var onMessage = function (data) {
+  var onMessage = function(data) {
     console.log('onMessage', data);
     $('#messages').append($('<li>').text(data.text));
   };
 
-  var send = function (text, uid) {
+  var send = function(text, uid) {
     socket.emit('sendMessage', {
       text: text,
-      uid: uid
+      uid: uid,
     });
   };
 
-  var login = function () {
+  var login = function() {
     socket.emit('loginReq', {uid: getUID()});
   };
 
-  var getRoomUsers = function () {
+  var getRoomUsers = function() {
     socket.emit('getRoomUsers');
   };
 
-  var onNewUser = function (data) {
+  var onNewUser = function(data) {
     console.log('onNewUser', data);
   };
 
-  var roomUsers = function (data) {
+  var roomUsers = function(data) {
     console.log('roomUsers', data);
   };
 
@@ -51,7 +51,7 @@
 
   socket.on('roomUsers', roomUsers);
 
-  $('form').submit(function () {
+  $('form').submit( function() {
     send($('#m').val(), localStorage['uid']);
     console.log('socket', socket);
     $('#m').val('');
@@ -59,5 +59,5 @@
   });
 
   login();
-
 })();
+

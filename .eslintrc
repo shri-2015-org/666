@@ -13,27 +13,17 @@
     "jsx": true
   },
   "rules": {
-    "quotes": [2, "single"],
-    "no-mixed-requires": [0],
-    "no-underscore-dangle": [0],
-    "strict": [0],
-    "no-new": [0],
-    "space-unary-ops": [0],
-    "no-unused-expressions": [0],
-    "comma-dangle": [2, "never"],
-    "no-var": [0],
-    "no-console": [0]
+    "no-var": [1],
+    "new-cap": [1],
+    "no-console": [1],
+    "dot-notation": [1],
+    "no-unused-vars": [1],
+    "react/prop-types": [1],
+    "indent": [2, 2, {"SwitchCase": 1}]
   },
   "globals": {
-    "$": true,
-    "jQuery": true,
     "window": true,
     "document": true,
-    "google": true,
-    "_": true,
-    "Modernizr": true,
-    "Image": true,
-    "navigator": true
   }
 
 }
