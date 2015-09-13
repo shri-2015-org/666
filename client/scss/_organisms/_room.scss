@@ -1,0 +1,36 @@
+.room {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+	
+	&-messages {
+		display: flex;
+		flex-direction: column-reverse;
+		
+		flex: 1;
+		
+		overflow: auto;
+		-webkit-overflow-scrolling: touch;
+		
+		padding: 1.15em;
+	}
+	
+	&-actions {
+		display: flex;
+		flex-direction: row;
+		
+		position: relative;
+		
+		padding: .75rem 1rem .9rem;
+		border-top: 1px solid rgba(black, .05);
+		
+		&-input {
+			flex: 1;
+		}
+		
+		&-send {
+			margin-left: 1rem;
+			background-color: color(blue);
+		}
+	}
+}

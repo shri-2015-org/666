@@ -1,3 +1,5 @@
+require('../scss/main.scss');
+
 import React from 'react';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider, connect } from 'react-redux';
@@ -6,8 +8,7 @@ import App from './components/App.js';
 import loggerMiddleware from 'redux-logger';
 import io from 'socket.io-client';
 
-import { addUser, addMessageReceived, newLogin } from './actions.js';
-import { cloneDeep } from 'lodash';
+import { addMessageReceived, newLogin } from './actions.js';
 
 function propsFromState(state) {
   return {
@@ -25,11 +26,11 @@ const store = createStorePlus(all);
 const socket = io('localhost:3001');
 
 function _setUID(uid) {
-  localStorage['user_uid'] = uid;
+  localStorage.user_uid = uid;
 }
 
 function _getUID() {
-  return localStorage['user_uid'];
+  return localStorage.user_uid;
 }
 
 function onMessage(message) {

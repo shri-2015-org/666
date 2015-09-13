@@ -3,13 +3,15 @@ import Message from './Message';
 
 export default class MessageList extends Component {
   render() {
-    const { dispatch } = this.props;
     return (
-      <ul>
+      <div className="messages">
         {this.props.messages.map((message, index) =>
-          <Message {...message} />
+          <Message
+            {...message}
+            key={index}
+          />
         )}
-      </ul>
+      </div>
     );
   }
 }

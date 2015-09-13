@@ -1,0 +1,80 @@
+/* @group Reset */
+
+html {
+	box-sizing: border-box;
+}
+
+* { box-sizing: inherit; }
+
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+/**
+ * The usual...
+ */
+
+h1, h2, h3, h4, h5, h6,
+p, blockquote, pre, dl, dd, ol, ul,
+form, fieldset, legend,
+table, th, td,
+caption, hr {
+    margin: 0;
+    padding: 0;
+}
+
+/**
+ * Give a help cursor to elements that give extra info on `:hover`.
+ */
+
+abbr[title],
+dfn[title] { cursor: help }
+
+/**
+ * Remove underlines from potentially troublesome elements.
+ */
+
+a,
+u,
+ins { text-decoration: none }
+
+/**
+ * Apply faux underline via `border-bottom`.
+ */
+
+ins { border-bottom: 1px solid }
+
+/**
+ * So that `alt` text is visually offset if images don’t load.
+ */
+
+img { font-style: italic }
+
+/**
+ * Give form elements some cursor interactions...
+ */
+
+label, input, textarea,
+button, select,option { cursor: pointer }
+
+input[type=text]:active,
+input[type=text]:focus,
+input[type=email]:active,
+input[type=email]:focus,
+input[type=number]:active,
+input[type=number]:focus,
+textarea:active,
+textarea:focus {
+    cursor: text;
+    outline: none;
+}
+
+ul, li, ol, dl { list-style: none; }
+
+
+iframe {
+    background-color: transparent;
+    border: 0px none transparent;
+    padding: 0px;
+}

@@ -1,0 +1,39 @@
+.messages {
+	display: flex;
+	flex-direction: column-reverse;
+}
+
+.message {
+	flex-shrink: 0;
+	padding-top: 1rem;
+	
+	&-meta {
+		display: flex;
+		justify-content: space-between;
+		
+		margin-bottom: .5rem;
+		margin-left: $ava-width;
+		padding-left: 1rem;
+		
+		color: color(grey);
+	}
+	
+	&-content {
+		display: flex;
+		
+		&-ava {
+			margin-right: 1rem;
+		}
+		
+		&-text {
+			flex-grow: 1;
+		}
+	}
+}
+
+.bubble {
+	background-color: color(grey);
+	color: white;
+	padding: .75rem 1rem .9rem;
+	border-radius: $radius;
+}
