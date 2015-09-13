@@ -10,7 +10,6 @@ export default class Input extends Component {
   }
 
   render() {
-    const { dispatch } = this.props;
     return (
       <div>
         <input

@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 
 export default class Message extends Component {
   render() {
-    const { dispatch } = this.props;
     return (
       <div className="message">
         <div className="message-meta">
@@ -10,7 +9,8 @@ export default class Message extends Component {
           <time className="message-time">14:25</time>
         </div>
         <div className="message-content">
-          <div className="message-content-ava ava" style="background-color: #73DD40">
+          <div className="message-content-ava ava"
+            style={{'background-color': '#73DD40'}}>
             <img src="media/icons/airplane.svg" alt="" />
           </div>
           <div className="message-content-text bubble">
