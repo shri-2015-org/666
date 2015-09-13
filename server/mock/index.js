@@ -2,21 +2,28 @@
   var socket = io();
 
   var getUID = function getUID() {
-    console.log('getUID', localStorage.uid);
-    return localStorage.uid;
+    console.log('getUID', localStorage.getItem('uid'));
+    return localStorage.getItem('uid');
   };
 
   var setUID = function setUID(uid) {
     console.log('setUID', uid);
-    localStorage.uid = uid;
+    localStorage.setItem('uid', uid);
   };
 
   var onLogin = function onLogin(data) {
     setUID(data.uid);
   };
 
+  var readMessage = function readMessage(data) {
+    if (data && data.uid !== getUID()) {
+      socket.emit('readMessage', data);
+    }
+  }
+
   var onMessage = function onMessage(data) {
     console.log('onMessage', data);
+    readMessage(data);
     $('#messages').append($('<li>').text(data.text));
   };
 
@@ -53,7 +60,7 @@
   socket.on('roomUsers', roomUsers);
 
   $('form').submit( function submit() {
-    send($('#m').val(), localStorage.uid);
+    send($('#m').val(), getUID());
     console.log('socket', socket);
     $('#m').val('');
     return false;

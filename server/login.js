@@ -9,7 +9,6 @@ const login = {
       'uid': uid,
       'avatar': userGenerator.generateAvatar(),
     });
-
     return db.addUser(user);
   },
   getUser: function getUser(uid) {
