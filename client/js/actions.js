@@ -10,10 +10,10 @@ export function addMessagePending(text) {
   };
 }
 
-export function addMessageReceived(text) {
+export function addMessageReceived(message) {
   return {
     type: ADD_MESSAGE_RECEIVED,
-    text,
+    message,
   };
 }
 

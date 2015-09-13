@@ -22,7 +22,7 @@ const createStorePlus = applyMiddleware(loggerMiddleware)(createStore);
 
 const store = createStorePlus(all);
 
-const socket = io('http://localhost:3000/');
+const socket = io('localhost:3001');
 
 function _setUID(uid) {
   localStorage['user_uid'] = uid;
