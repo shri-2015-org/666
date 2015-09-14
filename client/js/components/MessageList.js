@@ -1,6 +1,6 @@
-import { ArrayOf } from '../types';
+import { Shape, ArrayOf, Str } from '../types';
 import React, { Component } from 'react';
-import Message, { MessageT } from './Message';
+import Message from './Message';
 
 export default class MessageList extends Component {
   render() {
@@ -16,6 +16,11 @@ export default class MessageList extends Component {
     );
   }
 }
+
+const MessageT =
+  Shape({
+    text: Str,
+  });
 
 export const MessagesT = ArrayOf(MessageT);
 

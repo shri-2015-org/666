@@ -1,4 +1,4 @@
-import { Shape, Str } from '../types';
+import { Str } from '../types';
 import React, { Component } from 'react';
 
 export default class Message extends Component {
@@ -23,11 +23,6 @@ export default class Message extends Component {
   }
 }
 
-export const MessageT =
-  Shape({
-    text: Str,
-  });
-
 Message.propTypes = {
-  text: MessageT,
+  text: Str,
 };
