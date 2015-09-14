@@ -66,8 +66,6 @@
   },
   "author": "Sergey Khokhlachev (sergey@khokhlachev.ru)",
   "pre-commit": [
-    "lint",
-    "validate",
-    "test"
+    "lint"
   ]
 }

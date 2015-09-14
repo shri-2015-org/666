@@ -14,11 +14,9 @@ export default class Room extends Component {
             messages={this.props.messages}
           />
         </div>
-        <div className="room-actions">
-          <Input
-            onSend={this.props.addMessage}
+         <Input
+          onSend={this.props.addMessage}
           />
-        </div>
       </div>
     );
   }

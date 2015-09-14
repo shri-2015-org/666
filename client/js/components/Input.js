@@ -11,7 +11,7 @@ export default class Input extends Component {
 
   render() {
     return (
-      <div>
+      <div className="room-actions">
         <input
           type="text"
           ref="input"
