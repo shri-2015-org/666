@@ -16,7 +16,6 @@ function propsFromState(state) {
       ...state.received,
       ...state.pending.messages,
     ],
-    addMessage: transport.sendMessage,
   };
 }
 
@@ -27,7 +26,7 @@ const rootElement = document.getElementById('content');
 
 const app = (
   <Provider store={store}>
-    {() => <SmartApp />}
+    {() => <SmartApp addMessage={transport.sendMessage} />}
   </Provider>
 );
 

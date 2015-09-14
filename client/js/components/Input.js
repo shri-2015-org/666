@@ -5,7 +5,7 @@ export default class Input extends Component {
   handleClick() {
     const node = findDOMNode(this.refs.input);
     const text = node.value;
-    this.props.onClick(text);
+    this.props.addMessage(text);
     node.value = '';
   }
 
@@ -29,6 +29,6 @@ export default class Input extends Component {
 }
 
 Input.propTypes = {
-  onClick: PropTypes.func.isRequired,
+  addMessage: PropTypes.func.isRequired,
 };
 

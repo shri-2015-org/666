@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { messagesT } from '../propTypes';
 import Room from './Room';
 
@@ -8,7 +8,7 @@ export default class App extends Component {
       <div className="app">
         <Room
           messages={this.props.messages}
-          onSend={text => this.props.addMessage(text)}
+          addMessage={this.props.addMessage}
         />
       </div>
     );
@@ -16,6 +16,7 @@ export default class App extends Component {
 }
 
 App.propTypes = {
+  addMessage: PropTypes.func.isRequired,
   messages: messagesT,
 };
 
