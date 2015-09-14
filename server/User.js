@@ -1,4 +1,4 @@
-var User = function(options) {
+const User = function User(options) {
   this.name = options.name;
   this.avatar = options.avatar;
   this.uid = options.uid;

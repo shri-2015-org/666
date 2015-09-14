@@ -1,11 +1,11 @@
-var users = {};
+const users = {};
 
 module.exports = {
   addUser: function addUser(user) {
-    var promise = new Promise( function(resolve, reject) {
+    const promise = new Promise( function onAddUser(resolve, reject) {
       if (!user) reject('Error!');
 
-      setTimeout( function() {
+      setTimeout( function onAddUserSuccess() {
         users[user.uid] = user;
         resolve(user);
       }, 10);
@@ -14,13 +14,13 @@ module.exports = {
     return promise;
   },
   getUser: function getUser(userId) {
-    var promise = new Promise( function(resolve, reject) {
+    const promise = new Promise( function onGetUser(resolve, reject) {
       if (!userId || !users[userId]) {
         reject('Error!');
         return;
       }
 
-      setTimeout( function() {
+      setTimeout( function onGetUserSuccess() {
         resolve(users[userId]);
       }, 10);
     });
@@ -28,8 +28,8 @@ module.exports = {
     return promise;
   },
   getRoomUsers: function getRoomUsers() {
-    var promise = new Promise( function(resolve, reject) {
-      setTimeout( function() {
+    const promise = new Promise( function onGetRoomUsers(resolve) {
+      setTimeout( function onGetRoomUsersSuccess() {
         resolve(users);
       }, 10);
     });

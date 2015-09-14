@@ -1,49 +1,51 @@
-var express = require('express');
-var app = express();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+import express from 'express';
+import http from 'http';
+import socketIO from 'socket.io';
+import login from './login';
 
-var login = require('./login.js');
+const app = express();
+const httpServer = new http.Server(app);
+const io = socketIO(httpServer);
 
-var PORT = 3001;
+const PORT = 3001;
 
-app.use('/', express.static(__dirname + '/static'));
+app.use('/', express.static(__dirname + '/mock'));
 
-io.on('connection', function(socket) {
-  socket.on('loginReq', function(data) {
+io.on('connection', function onConnection(socket) {
+  socket.on('loginReq', function onLoginReq(data) {
     data.uid = data && data.uid ? data.uid : (socket.id + Date.now());
 
-    login.getUser(data.uid).then( function(user) {
+    login.getUser(data.uid).then( function onGetUser(user) {
       if (user) {
         socket.emit('loginRes', user);
         io.emit('newUser', user);
       }
-    }).catch( function() {
-      login.createUser(socket.id).then( function(user) {
+    }).catch( function createNewUser() {
+      login.createUser(socket.id).then( function onCreateUser(user) {
         socket.emit('loginRes', user);
         io.emit('newUser', user);
       });
     });
   });
 
-  socket.on('sendMessage', function(data) {
+  socket.on('sendMessage', function onSendMessage(data) {
     data.time = Date.now();
     io.emit('message', data);
   });
 
-  socket.on('getUser', function(data) {
-    login.getUser(data.uid).then( function(user) {
+  socket.on('getUser', function onGetUser(data) {
+    login.getUser(data.uid).then( function sendUser(user) {
       socket.emit('user', user);
     });
   });
 
-  socket.on('getRoomUsers', function(data) {
-    login.getRoomUsers().then( function(users) {
+  socket.on('getRoomUsers', function onGetRoomUsers() {
+    login.getRoomUsers().then( function sendRoomUsers(users) {
       socket.emit('roomUsers', users);
     });
   });
 });
 
-http.listen(PORT, function() {
+httpServer.listen(PORT, function onListen() {
   console.log('listening on *:' + PORT);
 });

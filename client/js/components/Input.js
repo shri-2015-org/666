@@ -10,13 +10,19 @@ export default class Input extends Component {
   }
 
   render() {
-    const { dispatch } = this.props;
     return (
       <div>
-        <input type="text" ref="input" />
-        <button onClick={e => this.handleClick(e)}>
-          Послать!
-        </button>
+        <input
+          type="text"
+          ref="input"
+          placeholder="Message..."
+          className="room-actions-input input"
+        />
+        <button
+          className="room-actions-send btn"
+          type="button"
+          onClick={e => this.handleClick(e)}
+        > Send </button>
       </div>
     );
   }
