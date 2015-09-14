@@ -16,7 +16,7 @@ export default class Room extends Component {
         </div>
         <div className="room-actions">
           <Input
-            onClick={this.props.onSend}
+            onSend={this.props.addMessage}
           />
         </div>
       </div>
@@ -25,6 +25,7 @@ export default class Room extends Component {
 }
 
 Room.propTypes = {
-  onSend: PropTypes.func.isRequired,
+  addMessage: PropTypes.func.isRequired,
   messages: messagesT,
 };
+
