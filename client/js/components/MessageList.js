@@ -1,5 +1,6 @@
-import React, { Component, PropTypes } from 'react';
-import Message from './Message';
+import { ArrayOf } from '../types';
+import React, { Component } from 'react';
+import Message, { MessageT } from './Message';
 
 export default class MessageList extends Component {
   render() {
@@ -16,8 +17,8 @@ export default class MessageList extends Component {
   }
 }
 
+export const MessagesT = ArrayOf(MessageT);
+
 MessageList.propTypes = {
-  messages: PropTypes.arrayOf(PropTypes.shape({
-    text: PropTypes.string.isRequired,
-  }).isRequired).isRequired,
+  messages: MessagesT,
 };

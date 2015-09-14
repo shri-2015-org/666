@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { messagesT } from '../propTypes';
 import { addMessage } from '../operations';
-import Room from './Room';
+import Room, { MessagesT } from './Room';
 
 export default class App extends Component {
   render() {
@@ -17,5 +16,5 @@ export default class App extends Component {
 }
 
 App.propTypes = {
-  messages: messagesT,
+  messages: MessagesT,
 };

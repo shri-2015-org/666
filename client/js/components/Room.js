@@ -1,7 +1,7 @@
-import React, { Component, PropTypes } from 'react';
-import { messagesT } from '../propTypes';
-import MessageList from './MessageList';
-import Input from './Input';
+import React, { Component } from 'react';
+import MessageList, { MessagesT } from './MessageList';
+export { MessagesT } from './MessageList';
+import Input, { ClickHandlerT } from './Input';
 
 export default class Room extends Component {
   render() {
@@ -24,7 +24,9 @@ export default class Room extends Component {
   }
 }
 
+export const SendHandlerT = ClickHandlerT;
+
 Room.propTypes = {
-  onSend: PropTypes.func.isRequired,
-  messages: messagesT,
+  onSend: SendHandlerT,
+  messages: MessagesT,
 };

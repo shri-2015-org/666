@@ -1,4 +1,5 @@
-import React, { findDOMNode, Component, PropTypes } from 'react';
+import { Func, Str } from '../types';
+import React, { findDOMNode, Component } from 'react';
 
 export default class Input extends Component {
 
@@ -28,7 +29,8 @@ export default class Input extends Component {
   }
 }
 
-Input.propTypes = {
-  onClick: PropTypes.func.isRequired,
-};
+export const ClickHandlerT = Func([Str]);
 
+Input.propTypes = {
+  onClick: ClickHandlerT,
+};
