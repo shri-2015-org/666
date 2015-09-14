@@ -5,8 +5,7 @@
   "main": "node_server.js",
   "scripts": {
     "lint": "eslint .",
-    "server": "babel-node server/index.js",
-    "validate": "npm ls"
+    "server": "babel-node server/index.js"
   },
   "dependencies": {
     "express": "^4.13.3",
@@ -68,3 +67,4 @@
     "test"
   ]
 }
+
