@@ -1,5 +1,7 @@
 require('../scss/main.scss');
 
+import { Shape, Num, Str } from './types';
+
 import React from 'react';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider, connect } from 'react-redux';
@@ -7,6 +9,7 @@ import all from './reducers';
 import App from './components/App.js';
 import loggerMiddleware from 'redux-logger';
 import io from 'socket.io-client';
+import { assertType } from './types';
 
 import { addMessageReceived, newLogin } from './actions.js';
 
@@ -33,14 +36,30 @@ function _getUID() {
   return localStorage.user_uid;
 }
 
+const TransportMessageT = Shape({
+  text: Str,
+  uid: Str,
+  time: Num,
+});
+
+const TransportUserT = Shape({
+  avatar: Str,
+  uid: Str,
+  name: Str,
+});
+
 function onMessage(message) {
   console.log('Event: onMessage', message);
+
+  assertType(message, TransportMessageT);
 
   store.dispatch(addMessageReceived(message));
 }
 
 function onLoginRes(user) {
   console.log('Event: onLoginRes', user);
+
+  assertType(user, TransportUserT);
 
   _setUID(user.uid);
   store.dispatch(newLogin(user));
