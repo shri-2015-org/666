@@ -1,20 +1,22 @@
 import React, { Component, PropTypes } from 'react';
 import { messagesT } from '../propTypes';
-import { addMessage } from '../operations';
 import Room from './Room';
 
 export default class App extends Component {
   render() {
-    const { dispatch } = this.props;
     return (
-      <Room
-        messages={this.props.messages}
-        onSend={text => addMessage(text)}
-      />
+      <div className="app">
+        <Room
+          messages={this.props.messages}
+          addMessage={this.props.addMessage}
+        />
+      </div>
     );
   }
 }
 
 App.propTypes = {
+  addMessage: PropTypes.func.isRequired,
   messages: messagesT,
 };
+

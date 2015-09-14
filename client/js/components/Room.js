@@ -6,19 +6,26 @@ import Input from './Input';
 export default class Room extends Component {
   render() {
     return (
-      <div>
-        <MessageList
-          messages={this.props.messages}
-        />
-        <Input
-          onClick={this.props.onSend}
-        />
+      <div className="room">
+        <div className="room-header">
+        </div>
+        <div className="room-messages">
+          <MessageList
+            messages={this.props.messages}
+          />
+        </div>
+        <div className="room-actions">
+          <Input
+            onSend={this.props.addMessage}
+          />
+        </div>
       </div>
     );
   }
 }
 
 Room.propTypes = {
-  onSend: PropTypes.func.isRequired,
+  addMessage: PropTypes.func.isRequired,
   messages: messagesT,
 };
+
