@@ -1,8 +1,8 @@
 import express from 'express';
 import http from 'http';
 import socketIO from 'socket.io';
-import utils from './utils';
-import login from './login';
+import _ from 'lodash';
+import * as login from './login';
 
 const app = express();
 const httpServer = new http.Server(app);
@@ -15,10 +15,7 @@ app.use('/', express.static(__dirname + '/mock'));
 
 io.on('connection', function onConnection(socket) {
   socket.on('loginReq', function onLoginReq(data) {
-    let uid;
-    if (data && data.uid) {
-      uid = data.uid;
-    }
+    const uid = _.result(data, 'uid');
 
     login.getUser(uid).then( function onGetUser(user) {
       if (user) {
@@ -34,7 +31,9 @@ io.on('connection', function onConnection(socket) {
   });
 
   socket.on('sendMessage', function onSendMessage(data) {
-    if (data && data.uid) {
+    const uid = _.result(data, 'uid');
+
+    if (uid) {
       data.time = Date.now();
       data.mid = data.uid + Date.now();
       messages.push(data.mid);
@@ -44,14 +43,20 @@ io.on('connection', function onConnection(socket) {
   });
 
   socket.on('readMessage', function onReadMessage(data) {
-    if (data && data.mid) {
-      utils.removeFromArray(data.mid, messages);
+    const mid = _.result(data, 'mid');
+
+    if (mid) {
+      _.remove(messages, function checkMessageForRemove(el) {
+        return el === data.mid;
+      });
       console.log(messages);
     }
   });
 
   socket.on('getUser', function onGetUser(data) {
-    if (data && data.uid) {
+    const uid = _.result(data, 'uid');
+
+    if (uid) {
       login.getUser(data.uid).then( function sendUser(user) {
         socket.emit('user', user);
       });
