@@ -8,7 +8,7 @@ const app = express();
 const httpServer = new http.Server(app);
 const io = socketIO(httpServer);
 
-const PORT = 3001;
+const PORT = process.env.npm_package_config_serverPort || 3001;
 
 app.use('/', express.static(__dirname + '/mock'));
 

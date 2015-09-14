@@ -7,3 +7,10 @@ Run server:
 ```
 npm run server
 ```
+Change port:
+```
+"config": {
+  "serverPort": "3001"
+}
+```
+in ```package.json```

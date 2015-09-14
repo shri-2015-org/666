@@ -5,7 +5,10 @@
   "main": "node_server.js",
   "scripts": {
     "lint": "eslint .",
-    "server": "babel-node server/index.js"
+    "server": "babel-node server"
+  },
+  "config": {
+    "serverPort": "3001"
   },
   "dependencies": {
     "express": "4.13.3",
