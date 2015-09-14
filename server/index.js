@@ -2,14 +2,13 @@ import express from 'express';
 import http from 'http';
 import socketIO from 'socket.io';
 import _ from 'lodash';
-import * as login from './login';
+import * as storage from './storage';
 
 const app = express();
 const httpServer = new http.Server(app);
 const io = socketIO(httpServer);
 
 const PORT = 3001;
-const messages = [];
 
 app.use('/', express.static(__dirname + '/mock'));
 
@@ -17,13 +16,13 @@ io.on('connection', function onConnection(socket) {
   socket.on('loginReq', function onLoginReq(data) {
     const uid = _.result(data, 'uid');
 
-    login.getUser(uid).then( function onGetUser(user) {
+    storage.getUser(uid).then( function onGetUser(user) {
       if (user) {
         socket.emit('loginRes', user);
         io.emit('newUser', user);
       }
     }).catch( function createNewUser() {
-      login.createUser(socket.id + Date.now()).then( function onCreateUser(user) {
+      storage.createUser(socket.id + Date.now()).then( function onCreateUser(user) {
         socket.emit('loginRes', user);
         io.emit('newUser', user);
       });
@@ -31,40 +30,27 @@ io.on('connection', function onConnection(socket) {
   });
 
   socket.on('sendMessage', function onSendMessage(data) {
-    const uid = _.result(data, 'uid');
-
-    if (uid) {
-      data.time = Date.now();
-      data.mid = data.uid + Date.now();
-      messages.push(data.mid);
-      console.log(messages);
-      io.emit('message', data);
+    if (data && data.uid) {
+      storage.addUnreadMessage(data).then( function onAddUnreadMessage(message) {
+        io.emit('message', message);
+      });
     }
   });
 
   socket.on('readMessage', function onReadMessage(data) {
-    const mid = _.result(data, 'mid');
-
-    if (mid) {
-      _.remove(messages, function checkMessageForRemove(el) {
-        return el === data.mid;
-      });
-      console.log(messages);
-    }
+    storage.readMessage(_.result(data, 'mid')).then( function messageRead(message) {
+      socket.emit('messageRead', message);
+    });
   });
 
   socket.on('getUser', function onGetUser(data) {
-    const uid = _.result(data, 'uid');
-
-    if (uid) {
-      login.getUser(data.uid).then( function sendUser(user) {
-        socket.emit('user', user);
-      });
-    }
+    storage.getUser(_.result(data, 'uid')).then( function sendUser(user) {
+      socket.emit('user', user);
+    });
   });
 
   socket.on('getRoomUsers', function onGetRoomUsers() {
-    login.getRoomUsers().then( function sendRoomUsers(users) {
+    storage.getRoomUsers().then( function sendRoomUsers(users) {
       socket.emit('roomUsers', users);
     });
   });

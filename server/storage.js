@@ -1,4 +1,5 @@
 import User from './User';
+import Message from './Message';
 import * as userGenerator from './userGenerator';
 import * as db from './db';
 
@@ -31,4 +32,22 @@ export function getUser(uid) {
  */
 export function getRoomUsers() {
   return db.getRoomUsers();
+}
+
+/**
+ * Добавляет id сообщения в список непрочитанных
+ * @param {Object} data
+ * @param {string} data.uid - идентификатор пользователя-отправителя
+ */
+export function addUnreadMessage(data) {
+  const message = new Message(data);
+  return db.addUnreadMessage(message);
+}
+
+/**
+ * Удаляет сообщение из списока непрочитанных
+ * @param  {string} идентификатор сообщения
+ */
+export function readMessage(mid) {
+  return db.readMessage(mid);
 }
