@@ -1,22 +1,21 @@
+import _ from 'lodash';
+
 const FIRST = ['Limited', 'Endless', 'Orange', 'Blue', 'Swollen', 'Horrible', 'Great', 'Awesome', 'Terrible', 'Idiotic', 'Massive', 'Cheesy'];
 const LAST = ['Peppermints', 'Oil', 'Dragon', 'Cafeteria', 'Junkie', 'Vegetables', 'Twinkies', 'Turtle', 'Fox', 'Calculator', 'Bandwidth', 'Crust', 'Cake', 'Derp'];
 const COLORS =  ['#DE3404', '#E68210', '#BFBF0A', '#1D9608', '#24BD09', '#10DE81', '#10C2DE', '#07B0AD', '#0C56A6', '#C215BF', '#8B1AD6'];
 
-function genRandomFloorBetween(min, max) {
-  let rand = min - 0.5 + Math.random() * (max - min + 1);
-  rand = Math.round(rand);
-  return rand;
+/**
+ * Генерирует имя пользователя
+ * @return {string}
+ */
+export function generateName() {
+  return _.sample(FIRST) + ' ' + _.sample(LAST);
 }
 
-function getRandomFromArray(arr) {
-  return arr[genRandomFloorBetween(0, arr.length - 1)];
+/**
+ * Генерирует аватар пользователя в hex в формате '#FFFFFF'
+ * @return {string}
+ */
+export function generateAvatar() {
+  return _.sample(COLORS);
 }
-
-module.exports = {
-  generateName: function generateName() {
-    return getRandomFromArray(FIRST) + ' ' + getRandomFromArray(LAST);
-  },
-  generateAvatar: function generateName() {
-    return getRandomFromArray(COLORS);
-  },
-};
