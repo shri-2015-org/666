@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 export default class Message extends Component {
   render() {
     return (
-      <div className="message">
+      <li className="message">
         <div className="message-meta">
           <p className="user-name">EpicPlane</p>
           <time className="message-time">14:25</time>
@@ -17,7 +17,7 @@ export default class Message extends Component {
             <p>{this.props.text}</p>
           </div>
         </div>
-      </div>
+      </li>
     );
   }
 }
