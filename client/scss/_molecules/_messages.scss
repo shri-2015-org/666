@@ -1,6 +1,7 @@
 .messages {
 	display: flex;
-	flex-direction: column-reverse;
+	flex-direction: column;
+	flex-shrink: 0;
 }
 
 .message {
@@ -20,13 +21,14 @@
 	
 	&-content {
 		display: flex;
+		align-items: center;
 		
 		&-ava {
 			margin-right: 1rem;
 		}
 		
 		&-text {
-			flex-grow: 1;
+			flex: 1;
 		}
 	}
 }
