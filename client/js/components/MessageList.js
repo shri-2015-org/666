@@ -5,14 +5,14 @@ import Message from './Message';
 export default class MessageList extends Component {
   render() {
     return (
-      <div className="messages">
+      <ul className="messages">
         {this.props.messages.map((message, index) =>
           <Message
             {...message}
             key={index}
           />
         )}
-      </div>
+      </ul>
     );
   }
 }

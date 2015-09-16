@@ -6,13 +6,13 @@ export default class Input extends Component {
   handleClick() {
     const node = findDOMNode(this.refs.input);
     const text = node.value;
-    this.props.onClick(text);
+    this.props.onSend(text);
     node.value = '';
   }
 
   render() {
     return (
-      <div>
+      <div className="room-actions">
         <input
           type="text"
           ref="input"
@@ -29,8 +29,8 @@ export default class Input extends Component {
   }
 }
 
-export const ClickHandlerT = Func([Str]);
+export const OnSendT = Func([Str]);
 
 Input.propTypes = {
-  onClick: ClickHandlerT,
+  onSend: OnSendT,
 };

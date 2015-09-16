@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { addMessage } from '../operations';
-import Room, { MessagesT } from './Room';
+import Room, { MessagesT, OnAddMessageT } from './Room';
+export { OnAddMessageT } from './Room';
 
 export default class App extends Component {
   render() {
@@ -8,7 +8,7 @@ export default class App extends Component {
       <div className="app">
         <Room
           messages={this.props.messages}
-          onSend={text => addMessage(text)}
+          addMessage={this.props.addMessage}
         />
       </div>
     );
@@ -16,5 +16,7 @@ export default class App extends Component {
 }
 
 App.propTypes = {
+  addMessage: OnAddMessageT,
   messages: MessagesT,
 };
+

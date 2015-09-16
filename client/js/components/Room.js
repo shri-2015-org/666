@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import MessageList, { MessagesT } from './MessageList';
 export { MessagesT } from './MessageList';
-import Input, { ClickHandlerT } from './Input';
+import Input, { OnSendT } from './Input';
 
 export default class Room extends Component {
   render() {
@@ -14,19 +14,18 @@ export default class Room extends Component {
             messages={this.props.messages}
           />
         </div>
-        <div className="room-actions">
-          <Input
-            onClick={this.props.onSend}
+         <Input
+          onSend={this.props.addMessage}
           />
-        </div>
       </div>
     );
   }
 }
 
-export const SendHandlerT = ClickHandlerT;
+export const OnAddMessageT = OnSendT;
 
 Room.propTypes = {
-  onSend: SendHandlerT,
+  addMessage: OnAddMessageT,
   messages: MessagesT,
 };
+
