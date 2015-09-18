@@ -1,6 +1,7 @@
 import io from 'socket.io-client';
-import { assertInvariant } from '~/common/utils/invariants';
 import * as API from '~/transportAPI';
+import { addMessageReceived, newLogin } from './actions.js';
+import { buildTransport, CLIENT } from '~/common/transport/builder';
 
 /* eslint no-console: 0 */
 const log = console.log.bind(console, 'transport:');
@@ -15,30 +16,17 @@ function _getUID() {
   return localStorage.getItem('user_uid');
 }
 
-function emit(type, data) {
-  const sendData =  Object.assign({ uid: _getUID() }, data);
-
-  log('Emit:', type, sendData);
-  socket.emit(type, sendData);
-}
-
-export function onMessage(store, action) {
-  socket.on('message', data => {
-    log('On: message', data);
+export default transport = buildTransport(socket, CLIENT, API.protocol, {
+  login: data => {
+    assertInvariant(data, API.User);
+    log('On: login', data);
+    _setUID(data.uid);
+    store.dispatch(newLogin(data));
+  },
+  message: data => {
     assertInvariant(data, API.Message);
-    store.dispatch(action(data));
-  });
-}
-
-export function loginRes(store, action) {
-  socket.on('loginRes', user => {
-    log('On: loginRes', user);
-    assertInvariant(user, API.User);
-    _setUID(user.uid);
-    store.dispatch(action(user));
-  });
-}
-
-export const sendMessage = (text) => emit('sendMessage', { text });
-export const loginReq = () => emit('loginReq');
+    log('On: message', data);
+    store.dispatch(addMessageReceived(data));
+  },
+});
 

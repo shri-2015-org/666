@@ -7,8 +7,7 @@ import loggerMiddleware from 'redux-logger';
 
 import all from './reducers';
 import App from './components/App.js';
-import { addMessageReceived, newLogin } from './actions.js';
-import * as transport from './transport.js';
+import transport from './transport.js';
 
 function propsFromState(state) {
   return {
@@ -27,13 +26,9 @@ const rootElement = document.getElementById('content');
 
 const app = (
   <Provider store={store}>
-    {() => <SmartApp addMessage={transport.sendMessage} />}
+    {() => <SmartApp addMessage={transport.message} />}
   </Provider>
 );
-
-transport.loginReq();
-transport.loginRes(store, newLogin);
-transport.onMessage(store, addMessageReceived);
 
 React.render(app, rootElement);
 
