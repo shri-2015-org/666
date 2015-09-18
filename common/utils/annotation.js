@@ -27,7 +27,7 @@ const generalizedAnnotator = wrap => function(...invs) {
       throw new Error(`The number of arguments does not match the annotation: ` +
                       `${args.length} vs. ${N}.`);
     }
-    for (const i = 0; i < N; i++) {
+    for (let i = 0; i < N; i++) {
       const arg = args[i];
       const inv = invs[i];
       assertInvariant(arg, inv);

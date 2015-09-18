@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import * as actions from './actions';
-import { Shape, Num, ArrayOf } from '~/common/utils/invariants';
+import { Shape, Num, Str, ArrayOf } from '~/common/utils/invariants';
 
 const PendingMessage = Shape({
   id: Str,

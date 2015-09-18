@@ -1,4 +1,5 @@
 import { Shape, Num, Str } from '~/common/utils/invariants';
+import { exchange, notification, UP, DOWN } from '~/common/utils/protocols';
 
 export const Message = Shape({
   mid: Str,

@@ -1,5 +1,5 @@
 import io from 'socket.io-client';
-import * as API from '~/transportAPI';
+import * as API from '~/common/transport/api';
 import { addMessageReceived, newLogin } from './actions.js';
 import { buildTransport, CLIENT } from '~/common/transport/builder';
 
@@ -16,7 +16,7 @@ function _getUID() {
   return localStorage.getItem('user_uid');
 }
 
-export default transport = buildTransport(socket, CLIENT, API.protocol, {
+export default buildTransport(socket, CLIENT, API.protocol, {
   login: data => {
     assertInvariant(data, API.User);
     log('On: login', data);

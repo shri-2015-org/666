@@ -1,4 +1,4 @@
-import { Enum } from '~/common/utils/invariants';
+import { Shape, Enum, Exactly, Invariant, MapOf, OneOf } from './invariants';
 
 export const NOTIFICATION = 'NOTIFICATION';
 export const EXCHANGE = 'EXCHANGE';
@@ -23,7 +23,7 @@ export const Exchange = Shape({
 });
 
 export const Api = MapOf(
-  AnyOf(
+  OneOf(
     Exchange,
     Notification,
   )

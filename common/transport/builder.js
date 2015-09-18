@@ -1,5 +1,10 @@
-import { UP, DOWN } from './api';
-export { SERVER, CLIENT } from '~/common/utils/protocols';
+import { SERVER, CLIENT, UP, DOWN, NOTIFICATION, EXCHANGE }
+  from '../utils/protocols';
+export { SERVER, CLIENT };
+import { annotate } from '../utils/annotation';
+
+const forEach = (object, f) =>
+  Object.keys(object).forEach(key => f(key, object[key]));
 
 export function buildTransport(socket, role, protocol, receiveCallbacks) {
   const sendCallbacks = {};
@@ -7,19 +12,19 @@ export function buildTransport(socket, role, protocol, receiveCallbacks) {
   const IN  = role === CLIENT ? DOWN : UP;
   const OUT = role === CLIENT ? UP : DOWN;
 
-  const connectIn = (name, invariant) => {
-    const callback = receiveCallbacks[name];
+  const connectIn = (key, name, invariant) => {
+    const callback = receiveCallbacks[key];
     if (callback === undefined) {
       throw new Error(`buildTransport: the callback at '${name}' ` +
                       `was not defined`);
     }
-    annotatedCallback = annotate(invariant)()(callback);
+    const annotatedCallback = annotate(invariant)()(callback);
     socket.on(name, annotatedCallback);
   };
 
-  const connectOut = (name, invariant) => {
+  const connectOut = (key, name, invariant) => {
     const callback = data => socket.emit(name, data);
-    sendCallbacks[name] = annotate(invariant)()(callback);
+    sendCallbacks[key] = annotate(invariant)()(callback);
   };
 
   const connect = dir => dir === IN  ? connectIn : connectOut;
@@ -30,13 +35,15 @@ export function buildTransport(socket, role, protocol, receiveCallbacks) {
 
     if (value.type === NOTIFICATION) {
       const name = `notification-${dir}:${name}`;
-      connect(dir)(name, value.dataInvariant);
+      connect(dir)(key, name, value.dataInvariant);
     } else if (value.type === EXCHANGE) {
       const nameRequest = `request-${dir}:${name}`;
       const nameReply   = `reply-${dir}:${name}`;
-      connect(dir)(nameRequest, value.requestInvariant);
-      connectReverse(dir)(nameReply, value.replyInvariant);
+      connect(dir)(key, nameRequest, value.requestInvariant);
+      connectReverse(dir)(key, nameReply, value.replyInvariant);
     }
   });
+
+  return sendCallbacks;
 }
 
