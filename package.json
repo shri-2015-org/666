@@ -5,7 +5,10 @@
   "main": "node_server.js",
   "scripts": {
     "lint": "eslint .",
-    "server": "babel-node server"
+    "server": "babel-node server",
+    "test": "npm run test-server; npm run test-client",
+    "test-server": "mocha --compilers js:babel/register 'server/**/*.test.js'",
+    "test-client": "mocha --compilers js:babel/register 'client/js/**/*.test.js'"
   },
   "config": {
     "serverPort": "3001"
@@ -23,6 +26,7 @@
     "babel-eslint": "^4.1.1",
     "babel-loader": "5.3.2",
     "babel-runtime": "5.8.20",
+    "chai": "^3.2.0",
     "chalk": "1.1.1",
     "css-loader": "0.18.0",
     "eslint": "^1.4.1",
@@ -47,6 +51,7 @@
     "imports-loader": "0.6.4",
     "jquery": "2.1.4",
     "js-cookie": "2.0.3",
+    "mocha": "^2.3.2",
     "node-sass": "3.3.2",
     "precommit-hook": "^3.0.0",
     "react": "0.13.3",
