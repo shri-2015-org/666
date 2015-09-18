@@ -1,5 +1,6 @@
 const dest = './build';
 const src = './source';
+const stat = './static';
 
 module.exports = {
   source: src,
@@ -10,6 +11,11 @@ module.exports = {
   images: {
     src: src + '/img/**/**',
     dest: dest + '/img'
+  },
+  files: {
+    stat: stat,
+    src: stat + '/**/*',
+    dest: dest,
   },
   iconFonts: {
     name: 'mvideo_-_icons',

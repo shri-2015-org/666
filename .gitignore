@@ -13,3 +13,4 @@ tmp/**/*.*
 upload/
 .tmp
 *.swp
+build/

@@ -10,7 +10,7 @@ const io = socketIO(httpServer);
 
 const PORT = process.env.npm_package_config_serverPort || 3001;
 
-app.use('/', express.static(__dirname + '/mock'));
+app.use('/', express.static(__dirname + '/../build'));
 
 io.on('connection', function onConnection(socket) {
   socket.on('loginReq', function onLoginReq(data) {

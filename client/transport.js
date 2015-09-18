@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
 
-/* eslint no-console: 0 */
-const log = console.log.bind(console, 'transport:');
+/* eslint dot-notation: 0 */
+const log = window['console'].log.bind(console, 'transport:');
 const socket = io('localhost:3001');
 log('socket connection');
 
