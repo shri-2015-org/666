@@ -83,13 +83,30 @@ export const Func = () => ({
   description: 'Func(?)',
 });
 
-export const Invariant = ({ // TODO
-  reactChecker: PropTypes.any.isRequired,
-  description: 'Invariant',
-});
+// a la createObjectOfTypeChecker: https://github.com/facebook/react/blob/0.13-stable/src/classic/types/ReactPropTypes.js
+function createMapOfTypeChecker(typeChecker, inv) {
+  function validate(props, propName, componentName, location) {
+    const propValue = props[propName];
+    if ((typeof propValue !== 'object') || (propValue === null)) {
+      return new Error(
+        `Invalid \`${propName}\`, expected a Map/object.`
+      );
+    }
 
-export const MapOf = inv => ({ // TODO
-  reactChecker: PropTypes.any.isRequired,
+    let error = null;
+    Object.keys(propValue).forEach(key => {
+      error = error || typeChecker(propValue, key, componentName, location);
+    });
+    return error;
+  }
+
+  const chained = validate;
+  chained.isRequired = validate;
+  return chained;
+};
+
+export const MapOf = inv => ({
+  reactChecker: createMapOfTypeChecker(inv.reactChecker, inv).isRequired,
   description: `MapOf(${toString(inv)})`,
 });
 
@@ -98,4 +115,8 @@ export const Any = ({
   description: 'Any',
 });
 
+export const Invariant = Named('Invariant', Shape({
+  reactChecker: Func(),
+  description: Str,
+}));
 

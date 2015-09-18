@@ -4,10 +4,13 @@ export const NOTIFICATION = 'NOTIFICATION';
 export const EXCHANGE = 'EXCHANGE';
 export const UP = 'UP';
 export const DOWN = 'DOWN';
+export const SERVER = 'SERVER';
+export const CLIENT = 'CLIENT';
 
 // Invariants
 
 export const Direction = Enum([UP, DOWN]);
+export const Role = Enum([SERVER, CLIENT]);
 
 export const Notification = Shape({
   type: Exactly(NOTIFICATION),
@@ -22,7 +25,7 @@ export const Exchange = Shape({
   replyInvariant: Invariant,
 });
 
-export const Api = MapOf(
+export const Protocol = MapOf(
   OneOf([
     Exchange,
     Notification,

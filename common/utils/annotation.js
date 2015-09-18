@@ -49,8 +49,7 @@ export const annotated = generalizedAnnotator(decoratorWrap);
 
   class X {
   @annotated(Str, Num)(Str)
-  static someStaticMethod...
-      static someStaticMethod(...) {...}
+  static someStaticMethod(...) {...}
   }
 */
 
