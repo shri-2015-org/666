@@ -1,6 +1,6 @@
 import React, { findDOMNode, Component, PropTypes } from 'react';
 
-export default class Input extends Component {
+export default class RoomInput extends Component {
 
   handleClick() {
     const node = findDOMNode(this.refs.input);
@@ -28,7 +28,7 @@ export default class Input extends Component {
   }
 }
 
-Input.propTypes = {
+RoomInput.propTypes = {
   onSend: PropTypes.func.isRequired,
 };
 
