@@ -27,7 +27,7 @@ module.exports = {
     context: __dirname, // This option allows to write relative paths in the "entry" prop. Note: Doesn't affect "output"
     entry: {
         bundle: [
-            './client/js/main.js'
+            './client/main.js'
         ]
     },
     output: {
