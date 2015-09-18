@@ -1,4 +1,4 @@
-import { Shape, ArrayOf, Str } from '../types';
+import { Shape, ArrayOf, Str } from '~/common/utils/invariants';
 import React, { Component } from 'react';
 import Message from './Message';
 

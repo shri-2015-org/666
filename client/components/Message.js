@@ -1,4 +1,4 @@
-import { Str } from '../types';
+import { Str } from '~/common/utils/invariants';
 import React, { Component } from 'react';
 
 export default class Message extends Component {

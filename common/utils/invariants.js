@@ -12,7 +12,7 @@ function checkIt(value, reactChecker) {
   return reactChecker({standalone: value}, 'standalone', 'the typechecker', '');
 }
 
-export function assertType(value, reactChecker) {
+export function assertInvariant(value, reactChecker) {
   const error = checkIt(value, reactChecker);
   if (error !== null) {
     console.log('assertType failed!');
@@ -22,7 +22,7 @@ export function assertType(value, reactChecker) {
   }
 }
 
-export function checkType(value, reactChecker) {
+export function checkInvariant(value, reactChecker) {
   const error = checkIt(value, reactChecker);
   return (error !== null);
 }

@@ -1,6 +1,5 @@
 import io from 'socket.io-client';
-import { assertType } from './types';
-import { Shape, Num, Str } from './types';
+import { assertInvariant, Shape, Num, Str } from '~/common/utils/invariants';
 
 /* eslint no-console: 0 */
 const log = console.log.bind(console, 'transport:');
@@ -37,7 +36,7 @@ function emit(type, data) {
 export function onMessage(store, action) {
   socket.on('message', data => {
     log('On: message', data);
-    assertType(data, TransportMessageT);
+    assertInvariant(data, TransportMessageT);
     store.dispatch(action(data));
   });
 }
@@ -45,7 +44,7 @@ export function onMessage(store, action) {
 export function loginRes(store, action) {
   socket.on('loginRes', user => {
     log('On: loginRes', user);
-    assertType(user, TransportUserT);
+    assertInvariant(user, TransportUserT);
     _setUID(user.uid);
     store.dispatch(action(user));
   });

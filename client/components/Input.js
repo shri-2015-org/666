@@ -1,4 +1,4 @@
-import { Func, Str } from '../types';
+import { Func, Str } from '~/common/utils/invariants';
 import React, { findDOMNode, Component } from 'react';
 
 export default class Input extends Component {
