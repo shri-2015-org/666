@@ -1,4 +1,4 @@
-import { Func, Str } from '~/common/utils/invariants';
+import { Func, Str, toPropTypes } from '~/common/utils/invariants';
 import React, { findDOMNode, Component } from 'react';
 
 export default class Input extends Component {
@@ -31,6 +31,6 @@ export default class Input extends Component {
 
 export const OnSendT = Func([Str]);
 
-Input.propTypes = {
+Input.propTypes = toPropTypes({
   onSend: OnSendT,
-};
+});

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import MessageList, { MessagesT } from './MessageList';
 export { MessagesT } from './MessageList';
 import Input, { OnSendT } from './Input';
+import { toPropTypes } from '~/common/utils/invariants';
 
 export default class Room extends Component {
   render() {
@@ -24,8 +25,8 @@ export default class Room extends Component {
 
 export const OnAddMessageT = OnSendT;
 
-Room.propTypes = {
+Room.propTypes = toPropTypes({
   addMessage: OnAddMessageT,
   messages: MessagesT,
-};
+});
 

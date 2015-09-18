@@ -1,4 +1,4 @@
-import { Shape, ArrayOf, Str } from '~/common/utils/invariants';
+import { Shape, ArrayOf, Str, toPropTypes } from '~/common/utils/invariants';
 import React, { Component } from 'react';
 import Message from './Message';
 
@@ -24,6 +24,6 @@ const MessageT =
 
 export const MessagesT = ArrayOf(MessageT);
 
-MessageList.propTypes = {
+MessageList.propTypes = toPropTypes({
   messages: MessagesT,
-};
+});

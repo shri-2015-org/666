@@ -17,14 +17,17 @@ export const User = Shape({
 export const protocol = {
   login: exchange(UP,
     Shape({uid: Str}),
-    Shape({user: User})
+    User
   ),
 
   sendMessage: notification(UP,
-    Shape({text: Str}),
+    Shape({
+      text: Str,
+      uid: Str,
+    })
   ),
 
   message: notification(DOWN, // bad name?
-    Message,
+    Message
   ),
 };

@@ -1,4 +1,4 @@
-import { Str } from '~/common/utils/invariants';
+import { Str, toPropTypes } from '~/common/utils/invariants';
 import React, { Component } from 'react';
 
 export default class Message extends Component {
@@ -23,6 +23,6 @@ export default class Message extends Component {
   }
 }
 
-Message.propTypes = {
+Message.propTypes = toPropTypes({
   text: Str,
-};
+});

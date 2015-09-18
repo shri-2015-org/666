@@ -13,26 +13,26 @@ const PORT = process.env.npm_package_config_serverPort || 3001;
 app.use('/', express.static(__dirname + '/mock'));
 
 io.on('connection', function onConnection(socket) {
-  socket.on('loginReq', function onLoginReq(data) {
+  socket.on('request-UP:login', function onLoginReq(data) {
     const uid = _.result(data, 'uid');
 
     storage.getUser(uid).then( function onGetUser(user) {
       if (user) {
-        socket.emit('loginRes', user);
+        socket.emit('reply-DOWN:login', user);
         io.emit('newUser', user);
       }
     }).catch( function createNewUser() {
       storage.createUser(socket.id + Date.now()).then( function onCreateUser(user) {
-        socket.emit('loginRes', user);
+        socket.emit('reply-DOWN:login', user);
         io.emit('newUser', user);
       });
     });
   });
 
-  socket.on('sendMessage', function onSendMessage(data) {
+  socket.on('notification-UP:sendMessage', function onSendMessage(data) {
     if (data && data.uid) {
       storage.addUnreadMessage(data).then( function onAddUnreadMessage(message) {
-        io.emit('message', message);
+        io.emit('notification-DOWN:message', message);
       });
     }
   });

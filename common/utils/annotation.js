@@ -1,4 +1,4 @@
-import { assertInvariant } from './invariants.js';
+import { assertInvariant, Any } from './invariants.js';
 
 const decoratorWrap = f => (_1, _2, d) => Object.assign({}, d, {value: f(d.value) });
 const noWrap = f => f;
@@ -20,8 +20,8 @@ function setMagic(invs, retInv, f) {
   return f;
 }
 
-const generalizedAnnotator = wrap => function(...invs) {
-  return retInv => wrap(f => setMagic(invs, retInv, function(...args) {
+const generalizedAnnotator = wrap => (...invs) => retInv =>
+  wrap(f => setMagic(invs, retInv, (...args) => {
     const N = invs.length;
     if (args.length !== N) {
       throw new Error(`The number of arguments does not match the annotation: ` +
@@ -33,10 +33,10 @@ const generalizedAnnotator = wrap => function(...invs) {
       assertInvariant(arg, inv);
     }
     const retVal = f(...args);
-    assertInvariant(retVal, retInv);
+    assertInvariant(retVal, retInv || Any);
     return retVal;
   }));
-};
+
 
 export const annotate = generalizedAnnotator(noWrap);
 export const annotated = generalizedAnnotator(decoratorWrap);

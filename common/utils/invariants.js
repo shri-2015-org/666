@@ -1,4 +1,5 @@
 import { PropTypes } from 'react';
+import _ from 'lodash';
 
 function checkIt(value, reactChecker) {
   return reactChecker({standalone: value}, 'standalone', 'the typechecker', '');
@@ -9,9 +10,9 @@ export function assertInvariant(value, invariant) {
   const error = checkIt(value, reactChecker);
   if (error !== null) {
     console.log('assertType failed!');
-    console.log('Value: ', value);
-    console.log('Invariant Description: ', description);
     if (name) { console.log('Invariant Name: ', name); }
+    console.log('Invariant Description: ', description);
+    console.log('Value: ', value);
     throw error;
   }
 }
@@ -22,22 +23,23 @@ export function checkInvariant(value, invariant) {
   return (error !== null);
 }
 
-function shapeToString(shape) {
-  return 'Shape'; // TODO
+function toString(inv) {
+  return inv.name || inv.description;
 }
+
+export const toPropTypes = object => _.mapValues(object, inv => inv.reactChecker);
+
+const shapeToString = shape =>
+  'Shape(' + JSON.stringify(_.mapValues(shape, inv => toString(inv))) + ')';
 
 function listToString(list) {
   return '[...]'; // TODO
 }
 
-function toString(t) {
-  return t.name || t.description;
-}
-
-export const Named = (name, t) => Object.assign({}, t, {name});
+export const Named = (name, inv) => Object.assign({}, inv, {name});
 
 export const Shape = s => ({
-  reactChecker: PropTypes.shape(s).isRequired,
+  reactChecker: PropTypes.shape(_.mapValues(s, inv => inv.reactChecker)).isRequired,
   description: shapeToString(s),
 });
 
@@ -56,29 +58,29 @@ export const Bool = ({
   description: 'Bool',
 });
 
-export const Exactly = t => ({
-  reactChecker: PropTypes.oneOf([t]).isRequired,
-  description: `Exactly(${toString(t)})`,
+export const Exactly = value => ({
+  reactChecker: PropTypes.oneOf([value]).isRequired,
+  description: `Exactly(${value})`,
 });
 
 export const ArrayOf = t => ({
-  reactChecker: PropTypes.arrayOf(t).isRequired,
+  reactChecker: PropTypes.arrayOf(t.reactChecker).isRequired,
   description: `ArrayOf(${toString(t)})`,
 });
 
-export const OneOf = (ts) => ({
-  reactChecker: PropTypes.oneOfType(ts).isRequired,
-  description: `OneOf(${listToString(ts)})`,
+export const OneOf = (invs) => ({
+  reactChecker: PropTypes.oneOfType(_.map(invs, inv => inv.reactChecker)).isRequired,
+  description: `OneOf(${listToString(invs)})`,
 });
 
-export const Enum = (ts) => ({
-  reactChecker: PropTypes.oneOf(ts).isRequired,
-  description: `Enum(...)`,
+export const Enum = (values) => ({
+  reactChecker: PropTypes.oneOf(values).isRequired,
+  description: `Enum(${values})`,
 });
 
-export const Func = () => ({ // TODO
+export const Func = () => ({
   reactChecker: PropTypes.func.isRequired,
-  description: 'Func(...)',
+  description: 'Func(?)',
 });
 
 export const Invariant = ({ // TODO
@@ -86,8 +88,14 @@ export const Invariant = ({ // TODO
   description: 'Invariant',
 });
 
-export const MapOf = t => ({ // TODO
+export const MapOf = inv => ({ // TODO
   reactChecker: PropTypes.any.isRequired,
-  description: `MapOf(${toString(t)})`,
+  description: `MapOf(${toString(inv)})`,
 });
+
+export const Any = ({
+  reactChecker: PropTypes.any,
+  description: 'Any',
+});
+
 

@@ -18,12 +18,21 @@ export function buildTransport(socket, role, protocol, receiveCallbacks) {
       throw new Error(`buildTransport: the callback at '${name}' ` +
                       `was not defined`);
     }
-    const annotatedCallback = annotate(invariant)()(callback);
+    console.log(`transport can receive from: ${name}`);
+    const callbackPlus = data => {
+      console.log(`packet received: ${name}, ${data}`);
+      callback(data);
+    };
+    const annotatedCallback = annotate(invariant)()(callbackPlus);
     socket.on(name, annotatedCallback);
   };
 
   const connectOut = (key, name, invariant) => {
-    const callback = data => socket.emit(name, data);
+    console.log(`transport can send to: ${name}`);
+    const callback = data => {
+      console.log(`packet sent: ${name}, ${data}`);
+      socket.emit(name, data);
+    };
     sendCallbacks[key] = annotate(invariant)()(callback);
   };
 
@@ -34,11 +43,12 @@ export function buildTransport(socket, role, protocol, receiveCallbacks) {
     const dir = value.direction;
 
     if (value.type === NOTIFICATION) {
-      const name = `notification-${dir}:${name}`;
+      const name = `notification-${dir}:${key}`;
       connect(dir)(key, name, value.dataInvariant);
     } else if (value.type === EXCHANGE) {
-      const nameRequest = `request-${dir}:${name}`;
-      const nameReply   = `reply-${dir}:${name}`;
+      const rid = dir === UP ? DOWN : UP;
+      const nameRequest = `request-${dir}:${key}`;
+      const nameReply   = `reply-${rid}:${key}`;
       connect(dir)(key, nameRequest, value.requestInvariant);
       connectReverse(dir)(key, nameReply, value.replyInvariant);
     }
