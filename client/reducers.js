@@ -1,5 +1,16 @@
 import { combineReducers } from 'redux';
 import * as actions from './actions';
+import { Shape, Num, ArrayOf } from '~/common/utils/invariants';
+
+const PendingMessage = Shape({
+  id: Str,
+  text: Str,
+});
+
+const Pending = Shape({
+  count: Num,
+  messages: ArrayOf(PendingMessage),
+});
 
 const initialPending = {
   count: 0,
