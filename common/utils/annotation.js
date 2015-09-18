@@ -17,6 +17,7 @@ const noWrap = f => f;
 function setMagic(invs, retInv, f) {
   f._annotationArgs = invs;
   f._annotationRet = retInv;
+  return f;
 }
 
 const generalizedAnnotator = wrap => function(...invs) {
