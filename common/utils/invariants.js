@@ -103,7 +103,7 @@ function createMapOfTypeChecker(typeChecker, inv) {
   const chained = validate;
   chained.isRequired = validate;
   return chained;
-};
+}
 
 export const MapOf = inv => ({
   reactChecker: createMapOfTypeChecker(inv.reactChecker, inv).isRequired,
