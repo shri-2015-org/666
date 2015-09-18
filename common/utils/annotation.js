@@ -14,8 +14,13 @@ const noWrap = f => f;
   }
 */
 
+function setMagic(invs, retInv, f) {
+  f._annotationArgs = invs;
+  f._annotationRet = retInv;
+}
+
 const generalizedAnnotator = wrap => function(...invs) {
-  return retInv => wrap(f => function(...args) {
+  return retInv => wrap(f => setMagic(invs, retInv, function(...args) {
     const N = invs.length;
     if (args.length !== N) {
       throw new Error(`The number of arguments does not match the annotation: ` +
@@ -29,7 +34,7 @@ const generalizedAnnotator = wrap => function(...invs) {
     const retVal = f(...args);
     assertInvariant(retVal, retInv);
     return retVal;
-  });
+  }));
 };
 
 export const annotate = generalizedAnnotator(noWrap);
