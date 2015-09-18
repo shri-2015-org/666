@@ -46,13 +46,10 @@ module.exports = {
             {
                 test: /\.scss$/,
                 exclude: /vendor/,
-                loader: ExtractTextPlugin.extract(
-                    'style-loader',
-                    'css-loader!autoprefixer-loader?{browsers: ["last 2 version", "IE 9"]}!sass-loader?outputStyle=compressed',
-                    {
-                        publicPath: '/'
-                    }
-                )
+                loader: 'style!'+
+                        'css?sourceMap!'+
+                        'autoprefixer?{browsers: ["last 2 version", "IE 9"]}!'+
+                        'sass?sourceMap&outputStyle=compressed'
             },
             {
                 test: /\.(svg|png|jpg)$/,
@@ -80,9 +77,6 @@ module.exports = {
     plugins: [
         bowerPlugins,
         commonsPlugin,
-        new ExtractTextPlugin("css/bundle.css", {
-            allChunks: true
-        }),
         new webpack.ProvidePlugin({
             $: "jquery",
             jQuery: "jquery",
