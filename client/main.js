@@ -26,7 +26,7 @@ const rootElement = document.getElementById('content');
 
 const app = (
   <Provider store={store}>
-    {() => <SmartApp addMessage={transport.message} />}
+    {() => <SmartApp addMessage={transport.sendMessage} />}
   </Provider>
 );
 

@@ -7,7 +7,7 @@ export const DOWN = 'DOWN';
 
 // Invariants
 
-export const Direction = Enum(UP, DOWN);
+export const Direction = Enum([UP, DOWN]);
 
 export const Notification = Shape({
   type: Exactly(NOTIFICATION),
@@ -23,10 +23,10 @@ export const Exchange = Shape({
 });
 
 export const Api = MapOf(
-  OneOf(
+  OneOf([
     Exchange,
     Notification,
-  )
+  ])
 );
 
 // Helpers

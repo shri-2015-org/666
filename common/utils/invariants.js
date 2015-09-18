@@ -5,9 +5,9 @@ export const Shape = s => PropTypes.shape(s).isRequired;
 export const Str = PropTypes.string.isRequired;
 export const Num = PropTypes.number.isRequired;
 export const Bool = PropTypes.bool.isRequired;
-export const OneOf = (...ts) => PropTypes.oneOfType(ts).isRequired;
+export const OneOf = (ts) => PropTypes.oneOfType(ts).isRequired;
 export const Func = () => PropTypes.func.isRequired;
-export const Enum = (...ts) => PropTypes.oneOf(ts).isRequired;
+export const Enum = (ts) => PropTypes.oneOf(ts).isRequired;
 export const Exactly = t => PropTypes.oneOf([t]).isRequired;
 
 // not written yet
