@@ -57,6 +57,15 @@ function users(state = [], action) {
   }
 }
 
-const all = combineReducers({login, users, received, pending});
+function ui(state = true, action) {
+  switch (action.type) {
+    case actions.TOGGLE_NAVIGATION: {
+      return !state;
+    }
+    default: return state;
+  }
+}
+
+const all = combineReducers({login, users, ui, received, pending});
 
 export default all;
