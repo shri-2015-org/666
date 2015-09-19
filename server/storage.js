@@ -1,3 +1,4 @@
+import uuid from 'uuid';
 import User from './User';
 import Message from './Message';
 import * as userGenerator from './userGenerator';
@@ -11,7 +12,7 @@ import * as db from './db';
 export function createUser(uid) {
   const user =  new User({
     'name': userGenerator.generateName(),
-    'uid': uid,
+    'uid': uid || uuid.v4(),
     'avatar': userGenerator.generateAvatar(uid),
   });
   return db.addUser(user);
@@ -40,6 +41,8 @@ export function getRoomUsers() {
  * @param {string} data.uid - идентификатор пользователя-отправителя
  */
 export function addUnreadMessage(data) {
+  data.mid = data.mid || uuid.v4();
+  data.status = 'sending';
   const message = new Message(data);
   return db.addUnreadMessage(message);
 }
