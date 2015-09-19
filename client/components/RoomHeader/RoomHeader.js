@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import './RoomHeader.scss';
 
 export default class RoomHeader extends Component {
-  collapseNavigation(e, dispatch) {
+  toggleNavigation(e, dispatch) {
     const action = toggleNavigation();
     dispatch(action);
   }
@@ -13,7 +13,7 @@ export default class RoomHeader extends Component {
 
     return (
       <header className="room-header">
-        <ul onClick={e => this.collapseNavigation(e, dispatch)} className="room-header-bar">
+        <ul onClick={e => this.toggleNavigation(e, dispatch)} className="room-header-bar">
           <li><span className="btn-icon">{this.props.collapsed ? '←' : '→'}</span></li>
           <li><h3 className="room-name"><a href="#!/room/#frontend">#frontend</a></h3></li>
         </ul>

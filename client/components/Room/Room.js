@@ -6,7 +6,7 @@ import MessageList from '../MessageList/MessageList';
 import RoomInput from '../RoomInput/RoomInput';
 import './Room.scss';
 
-const ConnectedRoomHeader = connect(state => ({collapsed: state.ui}))(RoomHeader);
+const ConnectedRoomHeader = connect(state => ({collapsed: state.navigation}))(RoomHeader);
 
 export default class Room extends Component {
   render() {

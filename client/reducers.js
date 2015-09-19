@@ -57,7 +57,7 @@ function users(state = [], action) {
   }
 }
 
-function ui(state = true, action) {
+function navigation(state = true, action) {
   switch (action.type) {
     case actions.TOGGLE_NAVIGATION: {
       return !state;
@@ -66,6 +66,6 @@ function ui(state = true, action) {
   }
 }
 
-const all = combineReducers({login, users, ui, received, pending});
+const all = combineReducers({login, users, navigation, received, pending});
 
 export default all;

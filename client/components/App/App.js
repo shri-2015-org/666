@@ -5,7 +5,7 @@ import Room from '../Room/Room.js';
 import Navigation from '../Navigation/Navigation';
 import './App.scss';
 
-const ConnectedNavigation = connect(state => ({collapsed: state.ui}))(Navigation);
+const ConnectedNavigation = connect(state => ({collapsed: state.navigation}))(Navigation);
 
 export default class App extends Component {
   render() {
@@ -15,7 +15,6 @@ export default class App extends Component {
         <Room
           messages={this.props.messages}
           addMessage={this.props.addMessage}
-          collapseNavigation={this.props.collapseNavigation}
         />
       </div>
     );
