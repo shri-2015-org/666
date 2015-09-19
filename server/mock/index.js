@@ -31,6 +31,7 @@
     socket.emit('sendMessage', {
       text: text,
       uid: uid,
+      mid: Date.now().toString(), //only mock format
     });
   }
 

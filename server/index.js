@@ -22,7 +22,7 @@ io.on('connection', function onConnection(socket) {
         io.emit('newUser', user);
       }
     }).catch( function createNewUser() {
-      storage.createUser(socket.id + Date.now()).then( function onCreateUser(user) {
+      storage.createUser().then( function onCreateUser(user) {
         socket.emit('loginRes', user);
         io.emit('newUser', user);
       });
