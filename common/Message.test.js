@@ -3,7 +3,7 @@ should(); // actually call the function
 
 import Message from './Message';
 
-describe('Message unit tests (server/Message.test.js)', () => {
+describe('Message unit tests (common/Message.test.js)', () => {
   const options = {
     uid: 'some uid',
     text: 'some text',

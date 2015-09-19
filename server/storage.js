@@ -1,6 +1,6 @@
 import uuid from 'uuid';
-import User from './User';
-import Message from './Message';
+import User from '../common/User';
+import Message from '../common/Message';
 import * as userGenerator from './userGenerator';
 import * as db from './db';
 
