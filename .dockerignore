@@ -21,7 +21,5 @@ upload/
 .jscsrc
 .jshintignore
 .jshintrc
-gulp/
-static/
 webpack.config.js
 **/*.test.js

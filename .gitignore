@@ -10,7 +10,9 @@ tmp/**/*.*
 *.log
 *.log.*
 .idea/
-upload/
 .tmp
 *.swp
+.jscsrc
+.jshintignore
+.jshintrc
 build/
