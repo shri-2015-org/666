@@ -11,10 +11,10 @@
  */
 const Message = function Message(options) {
   this.uid = options.uid;
+  this.mid = options.mid;
   this.text = options.text;
   this.time = options.time || Date.now();
   this.read = options.read || false;
-  this.mid = options.mid || this.uid + this.time;
 };
 
 module.exports = Message;

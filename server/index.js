@@ -2,6 +2,7 @@ import express from 'express';
 import http from 'http';
 import socketIO from 'socket.io';
 import _ from 'lodash';
+import uuid from 'uuid';
 import * as storage from './storage';
 
 const app = express();
@@ -22,7 +23,7 @@ io.on('connection', function onConnection(socket) {
         io.emit('newUser', user);
       }
     }).catch( function createNewUser() {
-      storage.createUser(socket.id + Date.now()).then( function onCreateUser(user) {
+      storage.createUser(uuid.v4()).then( function onCreateUser(user) {
         socket.emit('loginRes', user);
         io.emit('newUser', user);
       });
