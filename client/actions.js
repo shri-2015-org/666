@@ -13,11 +13,10 @@ function _addMessage(message) {
   return {
     type: MESSAGE,
     message,
-  }
+  };
 }
 
 export function addMessagePending(text) {
-
   const message = {
     uid: _getUID(),
     mid: uuid.v4(),

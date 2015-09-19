@@ -11,22 +11,24 @@ function login(state = null, action) {
 function messages(state = [], action) {
   switch (action.type) {
     case actions.MESSAGE: {
+      let result;
+
       if (action.message.status === 'pending') {
-        return [
+        result = [
           ...state,
-          action.message
-        ]
+          action.message,
+        ];
       } else {
-        return state.map(message => {
+        result = state.map(message => {
           if (message.mid === action.message.mid && message.uid === action.message.uid) {
             message.status = 'delivered';
-            store.dispatch();
           }
 
           return message;
         });
       }
 
+      return result;
     }
     default: return state;
   }
