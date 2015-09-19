@@ -17,7 +17,7 @@ export function generateName() {
 }
 
 /**
- * Генерирует аватар пользователя в hex в формате '#FFFFFF'
+ * Генерирует ссылку на аватар пользователя
  * @return {string}
  */
 export function generateAvatar(uid) {
