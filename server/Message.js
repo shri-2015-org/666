@@ -8,6 +8,7 @@
  * @param {number=} options.time - время отправки
  * @param {string=} options.read - статус прочтения
  * @param {string=} options.mid - идентификатор сообщения
+ * @param {string=} options.status - статус сообщения
  */
 const Message = function Message(options) {
   this.uid = options.uid;
