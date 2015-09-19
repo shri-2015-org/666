@@ -1,10 +1,5 @@
 import { combineReducers } from 'redux';
-import * as actions from './actions';
-
-const initialPending = {
-  count: 0,
-  messages: [],
-};
+import * as actions from 'actions';
 
 function login(state = null, action) {
   switch (action.type) {
@@ -13,33 +8,24 @@ function login(state = null, action) {
   }
 }
 
-function pending(state = initialPending, action) {
+function messages(state = [], action) {
   switch (action.type) {
-    case actions.ADD_MESSAGE_PENDING: {
-      const id = state.count;
-      const newCount = state.count + 1;
-      return {
-        count: newCount,
-        messages: [
-          ...state.messages,
-          {
-            id,
-            text: action.text,
-          },
-        ],
-      };
-    }
-    default: return state;
-  }
-}
+    case actions.MESSAGE: {
+      if (action.message.status === 'pending') {
+        return [
+          ...state,
+          action.message
+        ]
+      } else {
+        return state.map(message => {
+          if (message.mid === action.message.mid) {
+            message.status = 'delivered';
+          }
 
-function received(state = [], action) {
-  switch (action.type) {
-    case actions.ADD_MESSAGE_RECEIVED: {
-      return [
-        ...state,
-        action.message,
-      ];
+          return message;
+        });
+      }
+
     }
     default: return state;
   }
@@ -57,6 +43,6 @@ function users(state = [], action) {
   }
 }
 
-const all = combineReducers({login, users, received, pending});
+const all = combineReducers({login, users, messages});
 
 export default all;

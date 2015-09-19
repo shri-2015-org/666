@@ -1,20 +1,37 @@
-export const ADD_MESSAGE_PENDING = 'ADD_MESSAGE_PENDING';
-export const ADD_MESSAGE_RECEIVED = 'ADD_MESSAGE_RECEIVED';
+import * as transport from './transport.js';
+import uuid from 'uuid';
+
+export const MESSAGE = 'MESSAGE';
 export const NEW_LOGIN = 'NEW_LOGIN';
 export const ADD_USER = 'ADD_USER';
 
-export function addMessagePending(text) {
+function _getUID() {
+  return localStorage.getItem('user_uid');
+}
+
+function _addMessage(message) {
   return {
-    type: ADD_MESSAGE_PENDING,
+    type: MESSAGE,
+    message,
+  }
+}
+
+export function addMessagePending(text) {
+
+  const message = {
+    uid: _getUID(),
+    mid: uuid.v4(),
+    status: 'pending',
     text,
   };
+
+  transport.sendMessage(message);
+
+  return _addMessage(message);
 }
 
 export function addMessageReceived(message) {
-  return {
-    type: ADD_MESSAGE_RECEIVED,
-    message,
-  };
+  return _addMessage(message);
 }
 
 export function addUser(user) {

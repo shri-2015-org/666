@@ -63,9 +63,7 @@ module.exports = {
     },
     resolve: {
         alias: {
-            'utils': path.join(__dirname, 'client/js/utils/'),
-            'views': path.join(__dirname, 'client/js/views/'),
-            'mixins': path.join(__dirname, 'client/js/mixins/')
+            'actions': path.join(__dirname, 'client/actions.js'),
         },
         modulesDirectories: [
             'node_modules',

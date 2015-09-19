@@ -35,6 +35,7 @@ export function loginRes(store, action) {
   });
 }
 
-export const sendMessage = (text) => emit('sendMessage', { text });
+export const sendMessage = (message) => emit('sendMessage', message);
+
 export const loginReq = () => emit('loginReq');
 
