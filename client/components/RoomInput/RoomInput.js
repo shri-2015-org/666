@@ -2,16 +2,18 @@ import React, { findDOMNode, Component, PropTypes } from 'react';
 
 export default class RoomInput extends Component {
 
-  handleClick() {
+  sendMessage(e) {
     const node = findDOMNode(this.refs.input);
     const text = node.value;
     this.props.onSend(text);
     node.value = '';
+
+    e.preventDefault();
   }
 
   render() {
     return (
-      <div className="room-actions">
+      <form className="room-actions" onSubmit={e => this.sendMessage(e)}>
         <input
           type="text"
           ref="input"
@@ -20,10 +22,9 @@ export default class RoomInput extends Component {
         />
         <button
           className="room-actions-send btn"
-          type="button"
-          onClick={e => this.handleClick(e)}
+          type="submit"
         > Send </button>
-      </div>
+      </form>
     );
   }
 }
