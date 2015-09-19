@@ -4,7 +4,6 @@
   "description": "anonym.club",
   "scripts": {
     "lint": "eslint .",
-    "start": "babel-node server.js",
     "server": "babel-node server",
     "test": "npm run test-server; npm run test-client",
     "test-server": "mocha --compilers js:babel/register 'server/**/*.test.js'",
@@ -32,6 +31,8 @@
     "eslint-config-airbnb": "0.0.8",
     "eslint-plugin-react": "^3.3.2",
     "extract-text-webpack-plugin": "^0.8.2",
+    "file-loader": "^0.8.4",
+    "html-webpack-plugin": "^1.6.1",
     "mocha": "^2.3.2",
     "node-sass": "^3.3.3",
     "react-hot-loader": "^1.3.0",
@@ -41,8 +42,11 @@
     "sass-loader": "^2.0.1",
     "socket.io-client": "^1.3.6",
     "style-loader": "^0.12.4",
+    "url-loader": "^0.5.6",
     "webpack": "^1.12.2",
-    "webpack-dev-server": "^1.11.0"
+    "webpack-dev-middleware": "^1.2.0",
+    "webpack-dev-server": "^1.11.0",
+    "webpack-hot-middleware": "^2.2.0"
   },
   "author": "anonym club star team",
   "pre-commit": [

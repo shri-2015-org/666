@@ -4,13 +4,16 @@ import socketIO from 'socket.io';
 import _ from 'lodash';
 import * as storage from './storage';
 
-const app = express();
-const httpServer = new http.Server(app);
-const io = socketIO(httpServer);
+import webpack from 'webpack';
+import webpackHotMiddleware from 'webpack-hot-middleware';
+import webpackDevMiddleware from 'webpack-dev-middleware';
+import config from '../webpack.config.babel';
 
 const PORT = process.env.PORT || 3001;
 
-app.use('/', express.static(__dirname + '/../build'));
+const app = express();
+const httpServer = new http.Server(app);
+const io = socketIO(httpServer);
 
 io.on('connection', function onConnection(socket) {
   socket.on('loginReq', function onLoginReq(data) {
@@ -59,3 +62,10 @@ io.on('connection', function onConnection(socket) {
 httpServer.listen(PORT, function onListen() {
   console.log('listening on *:' + PORT);
 });
+
+// app.use('/', express.static(__dirname + '/../build'));
+// app.use(webpackHotMiddleware(webpack(config)));
+app.use('/', express.static(__dirname + '/../static'));
+app.use(webpackDevMiddleware(webpack(config)));
+
+
