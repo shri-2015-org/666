@@ -1,15 +1,8 @@
-@import "_core/variables";
-@import "_mixins/color";
+@import "common";
 
 @import "_core/normalize";
 @import "_core/resets";
-@import "_core/base";
-@import "_core/placeholders";
 
+@import "_atoms/misc";
 @import "_atoms/forms";
 @import "_atoms/typography";
-
-@import "_molecules/ava";
-@import "_molecules/messages";
-
-@import "_organisms/room";

@@ -1,0 +1,30 @@
+@import '../../scss/common';
+
+.navigation {
+  @include fix-overflow();
+  
+  min-width: 150px;
+  max-width: 300px;
+  background: #323D4D;
+  color: white;
+  padding: 1em;
+  
+  &-group {
+    & + & {
+      margin-top: 2em;
+    }
+    
+    &-label {
+      font-weight: bold;
+      color: grey;
+      color: rgba(white, .5);
+      margin-bottom: 1em;
+    }
+    
+    &-list {
+      li {
+        margin-bottom: 1em;
+      }
+    }
+  }
+}

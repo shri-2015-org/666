@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import { messagesT } from '../propTypes';
-import MessageList from './MessageList';
-import Input from './Input';
+import { messagesT } from '../../propTypes';
+import MessageList from '../MessageList/MessageList';
+import RoomInput from '../RoomInput/RoomInput';
+import './Room.scss';
 
 export default class Room extends Component {
   render() {
@@ -14,7 +15,7 @@ export default class Room extends Component {
             messages={this.props.messages}
           />
         </div>
-         <Input
+         <RoomInput
           onSend={this.props.addMessage}
           />
       </div>

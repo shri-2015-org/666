@@ -1,14 +1,27 @@
 .input {
+	@include reset-input();
+	
   border-radius: $radius;
   background-color: color(grey, light);
-  padding: .75rem 1rem .9rem;
-  @extend %reset-input;
+  padding: .75em 1em .9em;
+  
+  &--underline {
+    @include reset-input();
+    
+    padding: .5em 0;
+    border-bottom: 2px solid rgba(white, .5);
+    
+    @include placeholder {
+      color: rgba(white, .5);
+    }
+  }
 }
 
 .btn {
+	@include reset-input();
+	
   background-color: color(grey);
   color: white;
   border-radius: $radius;
   padding: .75rem 1rem .9rem;
-  @extend %reset-input;
 }
