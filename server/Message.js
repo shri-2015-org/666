@@ -15,6 +15,7 @@ const Message = function Message(options) {
   this.text = options.text;
   this.time = options.time || Date.now();
   this.read = options.read || false;
+  this.status = options.status;
 };
 
 module.exports = Message;
