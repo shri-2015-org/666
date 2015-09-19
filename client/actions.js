@@ -2,6 +2,7 @@ export const ADD_MESSAGE_PENDING = 'ADD_MESSAGE_PENDING';
 export const ADD_MESSAGE_RECEIVED = 'ADD_MESSAGE_RECEIVED';
 export const NEW_LOGIN = 'NEW_LOGIN';
 export const ADD_USER = 'ADD_USER';
+export const TOGGLE_NAVIGATION = 'TOGGLE_NAVIGATION';
 
 export function addMessagePending(text) {
   return {
@@ -31,3 +32,8 @@ export function newLogin(login) {
   };
 }
 
+export function toggleNavigation() {
+  return {
+    type: TOGGLE_NAVIGATION,
+  };
+}
