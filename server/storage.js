@@ -12,7 +12,7 @@ export function createUser(uid) {
   const user =  new User({
     'name': userGenerator.generateName(),
     'uid': uid,
-    'avatar': userGenerator.generateAvatar(),
+    'avatar': userGenerator.generateAvatar(uid),
   });
   return db.addUser(user);
 }
