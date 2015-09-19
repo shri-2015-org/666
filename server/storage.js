@@ -43,6 +43,8 @@ export function getRoomUsers() {
 export function addUnreadMessage(data) {
   data.mid = data.mid || uuid.v4();
   data.status = 'sending';
+  data.time = Date.now();
+  data.read = false;
   const message = new Message(data);
   return db.addUnreadMessage(message);
 }
