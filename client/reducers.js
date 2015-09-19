@@ -18,8 +18,9 @@ function messages(state = [], action) {
         ]
       } else {
         return state.map(message => {
-          if (message.mid === action.message.mid) {
+          if (message.mid === action.message.mid && message.uid === action.message.uid) {
             message.status = 'delivered';
+            store.dispatch();
           }
 
           return message;
