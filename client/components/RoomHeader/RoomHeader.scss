@@ -12,7 +12,7 @@
     justify-content: space-between;
     align-items: center;
 
-    * + * {
+    > li + li {
       margin-left: 1em;
     }
   }
