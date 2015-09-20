@@ -1,19 +1,21 @@
+/* eslint no-console: 0 */
 import express from 'express';
 import http from 'http';
-import socketIO from 'socket.io';
+import socketIo from 'socket.io';
 import _ from 'lodash';
 import * as storage from './storage';
 
-import webpack from 'webpack';
-import webpackHotMiddleware from 'webpack-hot-middleware';
-import webpackDevMiddleware from 'webpack-dev-middleware';
-import config from '../webpack.config.babel';
+// --- SOCKET SERVER
 
-const PORT = process.env.PORT || 3001;
+const SOCKETHOST = process.env.SOCKETHOST || 'localhost';
+const SOCKETPORT = process.env.SOCKETPORT || 3000;
 
-const app = express();
-const httpServer = new http.Server(app);
-const io = socketIO(httpServer);
+const socketServer = new http.Server();
+const io = socketIo(socketServer);
+
+socketServer.listen(SOCKETPORT, () => {
+  console.log('Socket data listening on ' + SOCKETHOST + ':' + SOCKETPORT);
+});
 
 io.on('connection', function onConnection(socket) {
   socket.on('loginReq', function onLoginReq(data) {
@@ -59,13 +61,33 @@ io.on('connection', function onConnection(socket) {
   });
 });
 
-httpServer.listen(PORT, function onListen() {
-  console.log('listening on *:' + PORT);
+// --- FILE AND HOT RELOAD SERVER
+
+import webpack from 'webpack';
+import webpackHotMiddleware from 'webpack-hot-middleware';
+import webpackDevMiddleware from 'webpack-dev-middleware';
+import config from '../webpack.config.babel';
+
+const FILEHOST = process.env.FILEHOST || 'localhost';
+const FILEPORT = process.env.FILEPORT || 8080;
+const FILEPATH = process.env.FILEPATH || '/../static';
+
+const app = express();
+const httpServer = new http.Server(app);
+socketIo(httpServer);
+
+const serverOptions = {
+  publicPath: config.output.publicPath,
+  hot: true,
+  historyApiFallback: true,
+  stats: {colors: true},
+};
+
+app.use('/', express.static(__dirname + FILEPATH));
+app.use(webpackDevMiddleware(webpack(config), serverOptions));
+app.use(webpackHotMiddleware(webpack(config)));
+
+httpServer.listen(FILEPORT, () => {
+  console.log('FIle and hot reload server listening on ' + FILEHOST + ':' + FILEPORT);
 });
-
-// app.use('/', express.static(__dirname + '/../build'));
-// app.use(webpackHotMiddleware(webpack(config)));
-app.use('/', express.static(__dirname + '/../static'));
-app.use(webpackDevMiddleware(webpack(config)));
-
 

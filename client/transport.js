@@ -1,8 +1,11 @@
 import io from 'socket.io-client';
 
 /* eslint dot-notation: 0 */
-const log = window['console'].log.bind(console, 'transport:');
-const socket = io('46.101.133.72');
+const log = window.console.log.bind(console, 'transport:');
+
+const SOCKETHOST = process.env.SOCKETHOST || 'localhost';
+const SOCKETPORT = process.env.SOCKETPORT || 3000;
+const socket = io('http://' + SOCKETHOST + ':' + SOCKETPORT);
 log('socket connection');
 
 function _setUID(uid) {
