@@ -11,7 +11,7 @@
  * @param {string=} options.status - статус сообщения
  */
 export default class Message {
-  constructor(options) {
+  constructor(options) { // TODO обработка недостающих полей?
     this.uid = options.uid;
     this.mid = options.mid;
     this.text = options.text;
