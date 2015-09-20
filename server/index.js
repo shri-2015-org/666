@@ -64,30 +64,22 @@ io.on('connection', function onConnection(socket) {
 // --- FILE AND HOT RELOAD SERVER
 
 import webpack from 'webpack';
-import webpackHotMiddleware from 'webpack-hot-middleware';
-import webpackDevMiddleware from 'webpack-dev-middleware';
-import config from '../webpack.config.babel';
+import WebpackDevServer from 'webpack-dev-server';
+import { devConfig } from '../webpack.config.babel';
 
 const FILEHOST = process.env.FILEHOST || 'localhost';
 const FILEPORT = process.env.FILEPORT || 8080;
 const FILEPATH = process.env.FILEPATH || '/../static';
 
-const app = express();
-const httpServer = new http.Server(app);
-socketIo(httpServer);
-
-const serverOptions = {
-  publicPath: config.output.publicPath,
+const fileServer = new WebpackDevServer(webpack(devConfig), {
+  publicPath: devConfig.output.publicPath,
   hot: true,
   historyApiFallback: true,
   stats: {colors: true},
-};
+});
 
-app.use('/', express.static(__dirname + FILEPATH));
-app.use(webpackDevMiddleware(webpack(config), serverOptions));
-app.use(webpackHotMiddleware(webpack(config)));
-
-httpServer.listen(FILEPORT, () => {
+fileServer.use('/', express.static(__dirname + FILEPATH));
+fileServer.listen(FILEPORT, FILEHOST, () => {
   console.log('FIle and hot reload server listening on ' + FILEHOST + ':' + FILEPORT);
 });
 

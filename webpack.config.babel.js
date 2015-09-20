@@ -6,7 +6,7 @@ const FILEPORT = process.env.FILEPORT || 8080;
 
 export default {
   debug: true,
-  devtool: 'eval',
+  devtool: 'inline-source-map',
   entry: [
     'webpack-dev-server/client?http://' + FILEHOST + ':' + FILEPORT,
     'webpack/hot/only-dev-server',
@@ -15,6 +15,7 @@ export default {
   output: {
     path: path.join(__dirname, 'build'),
     filename: 'bundle.js',
+    publicPath: '/',
   },
   module: {
     loaders: [{
