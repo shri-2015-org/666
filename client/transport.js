@@ -24,20 +24,20 @@ function emit(type, data) {
 }
 
 export function onMessage(store, action) {
-  socket.on('message', data => {
-    log('On: message', data);
-    store.dispatch(action(data));
+  socket.on('all:message', data => {
+    log('On: message', data.data);
+    store.dispatch(action(data.data));
   });
 }
 
 export function loginRes(store, action) {
-  socket.on('loginRes', user => {
-    log('On: loginRes', user);
-    _setUID(user.uid);
-    store.dispatch(action(user));
+  socket.on('login', data => {
+    log('On: loginRes', data.data);
+    _setUID(data.data.uid);
+    store.dispatch(action(data.data));
   });
 }
 
-export const sendMessage = (text) => emit('sendMessage', { text });
-export const loginReq = () => emit('loginReq');
+export const sendMessage = (text) => emit('message', { text });
+export const loginReq = () => emit('login');
 
