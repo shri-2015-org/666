@@ -8,7 +8,7 @@
     "server": "babel-node server",
     "test": "npm run test-server; npm run test-client",
     "test-server": "mocha --compilers js:babel/register 'server/**/*.test.js'",
-    "test-client": "mocha --compilers js:babel/register 'client/js/**/*.test.js'"
+    "test-client": "mocha --compilers js:babel/register 'client/**/*.test.js'"
   },
   "config": {
     "serverPort": "3001"

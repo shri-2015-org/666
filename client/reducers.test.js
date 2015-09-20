@@ -7,6 +7,7 @@ import reducer from './reducers';
 describe('reducer', () => {
   const test = {
     login: null,
+    navigation: true,
     users: [],
     received: [],
     pending: {
