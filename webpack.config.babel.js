@@ -4,7 +4,7 @@ import webpack from 'webpack';
 const FILEHOST = process.env.FILEHOST || 'localhost';
 const FILEPORT = process.env.FILEPORT || 8080;
 
-export default {
+export const devConfig = {
   debug: true,
   devtool: 'inline-source-map',
   entry: [
