@@ -1,0 +1,27 @@
+@import '../../scss/common';
+
+.room-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .75em 1em .9em;
+  color: color(grey);
+
+  &-bar  {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    > li + li {
+      margin-left: 1em;
+    }
+  }
+}
+
+.user {
+  display: flex;
+
+  &-ava {
+    margin-left: .5em;
+  }
+}

@@ -1,13 +1,9 @@
-.messages {
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-}
+@import '../../scss/common';
 
 .message {
   flex-shrink: 0;
   padding-top: 1rem;
-  
+
   &-meta {
     display: flex;
     justify-content: space-between;
@@ -16,15 +12,15 @@
     padding-left: 1rem;
     color: color(grey);
   }
-  
+
   &-content {
     display: flex;
     align-items: center;
-    
+
     &-ava {
       margin-right: 1rem;
     }
-    
+
     &-text {
       flex: 1;
     }
@@ -36,4 +32,26 @@
   color: white;
   padding: .75rem 1rem .9rem;
   border-radius: $radius;
+
+  line-height: 1.3em;
+
+  p {
+    white-space: pre;
+  }
+}
+
+.ava {
+  display: flex;
+  flex-shrink: 0;
+  width: $ava-width;
+  height: $ava-width;
+  border-radius: 999px;
+  background: color(grey);
+
+  svg,
+  img {
+    opacity: .5;
+    align-self: center;
+    margin: auto;
+  }
 }

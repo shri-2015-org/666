@@ -1,4 +1,4 @@
-require('scss/main.scss');
+import 'scss/main.scss';
 
 import React from 'react';
 import { createStore, applyMiddleware } from 'redux';
@@ -6,7 +6,7 @@ import { Provider, connect } from 'react-redux';
 import loggerMiddleware from 'redux-logger';
 
 import all from './reducers';
-import App from './components/App.js';
+import App from './components/App/App.js';
 import { addMessageReceived, newLogin } from './actions.js';
 import * as transport from './transport.js';
 

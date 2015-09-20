@@ -1,14 +1,52 @@
 .input {
+	@include reset-input();
+
   border-radius: $radius;
   background-color: color(grey, light);
-  padding: .75rem 1rem .9rem;
-  @extend %reset-input;
+  padding: .75em 1em .9em;
+
+  &--underline {
+    @include reset-input();
+
+    padding: .5em 0;
+    border-bottom: 2px solid rgba(white, .5);
+
+    @include placeholder {
+      color: rgba(white, .5);
+    }
+  }
+}
+
+textarea {
+  resize: none;
 }
 
 .btn {
-  background-color: color(grey);
+	@include reset-input();
+
+  background-color: color(blue);
   color: white;
   border-radius: $radius;
   padding: .75rem 1rem .9rem;
-  @extend %reset-input;
+
+  &:disabled {
+    background-color: color(grey);
+  }
+}
+
+.btn-icon {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  border: 2px solid;
+  text-align: center;
+  border-radius: 2px;
+}
+
+.reset-input {
+  @include reset-input();
+}
+
+[class^="btn"] {
+  cursor: pointer;
 }

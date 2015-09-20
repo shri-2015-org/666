@@ -1,0 +1,4 @@
+@mixin fix-overflow() {
+	overflow: auto;
+	-webkit-overflow-scrolling: touch; // fix for iOS rubber band scrolling
+}
