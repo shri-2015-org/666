@@ -12,7 +12,6 @@ tmp/**/*.*
 .idea/
 .tmp
 *.swp
-.jscsrc
 .jshintignore
 .jshintrc
 build/

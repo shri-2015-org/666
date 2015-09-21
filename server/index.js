@@ -1,58 +1,76 @@
 /* eslint no-console: 0 */
 import express from 'express';
 import http from 'http';
-import socketIo from 'socket.io';
+import socketIO from 'socket.io';
+
+import _ from 'lodash';
+import * as storage from './storage';
 
 // --- SOCKET SERVER
 
-import routes from './routes';
-
 const SOCKETHOST = process.env.SOCKETHOST || 'localhost';
-const SOCKETPORT = process.env.SOCKETPORT || 3000;
+const SOCKETPORT = process.env.SOCKETPORT || 3001;
 
 const socketServer = new http.Server();
-const io = socketIo(socketServer);
+const io = socketIO(socketServer);
 
 socketServer.listen(SOCKETPORT, () => {
   console.log('Socket data listening on ' + SOCKETHOST + ':' + SOCKETPORT);
 });
 
-io.on('connection', (socket) => {
-  function err(error) {
-    return {
-      stat: 'ERROR',
-      data: error || 'Undefined error',
-    };
-  }
+io.on('connection', function onConnection(socket) {
+  socket.on('loginReq', function onLoginReq(data) {
+    const uid = _.result(data, 'uid');
 
-  function handle(route, handler) {
-    socket.on(route, (request) => {
-      handler(request)
-        .then((res) => {
-          if (res.broadcast) {
-            io.emit('all:' + route, res.response);
-          }
-          socket.emit(route, res.response);
-        })
-        .catch((error) => {
-          socket.emit(route, err(error));
-        });
+    storage.getUser(uid).then( function onGetUser(user) {
+      if (user) {
+        socket.emit('loginRes', user);
+        io.emit('newUser', user);
+      }
+    }).catch( function createNewUser() {
+      storage.createUser().then( function onCreateUser(user) {
+        socket.emit('loginRes', user);
+        io.emit('newUser', user);
+      });
     });
-  }
+  });
 
-  Object.keys(routes)
-    .forEach((key) => handle(key, routes[key]));
+  socket.on('sendMessage', function onSendMessage(data) {
+    if (data && data.uid) {
+      storage.addUnreadMessage(data).then( function onAddUnreadMessage(message) {
+        io.emit('message', message);
+      });
+    }
+  });
+
+  socket.on('readMessage', function onReadMessage(data) {
+    storage.readMessage(_.result(data, 'mid')).then( function messageRead(message) {
+      socket.emit('messageRead', message);
+    });
+  });
+
+  socket.on('getUser', function onGetUser(data) {
+    storage.getUser(_.result(data, 'uid')).then( function sendUser(user) {
+      socket.emit('user', user);
+    });
+  });
+
+  socket.on('getRoomUsers', function onGetRoomUsers() {
+    storage.getRoomUsers().then( function sendRoomUsers(users) {
+      socket.emit('roomUsers', users);
+    });
+  });
 });
 
-// --- FILE AND HOT RELOAD SERVER
+// --- DEV FILE AND HOT RELOAD SERVER
 
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 import { devConfig } from '../webpack.config.babel';
 
-const FILEHOST = process.env.FILEHOST || 'localhost';
-const FILEPORT = process.env.FILEPORT || 8080;
-const FILEPATH = process.env.FILEPATH || '/../static';
+const FILEHOST = process.env.DEVHOST || 'localhost';
+const FILEPORT = process.env.DEVPORT || 8080;
+const FILEPATH = process.env.DEVPATH || '/../static';
 
 const fileServer = new WebpackDevServer(webpack(devConfig), {
   publicPath: devConfig.output.publicPath,
@@ -64,5 +82,18 @@ const fileServer = new WebpackDevServer(webpack(devConfig), {
 fileServer.use('/', express.static(__dirname + FILEPATH));
 fileServer.listen(FILEPORT, FILEHOST, () => {
   console.log('FIle and hot reload server listening on ' + FILEHOST + ':' + FILEPORT);
+});
+
+// --- MOCK FILE SERVER
+
+const app = express();
+const httpServer = new http.Server(app);
+
+const HOST = process.env.HOST || 'localhost';
+const PORT = process.env.PORT || 3000;
+
+app.use('/', express.static(__dirname + '/mock'));
+httpServer.listen(PORT, function onListen() {
+  console.log('Mock server listening on ' + HOST + ':' + PORT);
 });
 

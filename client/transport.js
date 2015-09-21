@@ -1,11 +1,8 @@
 import io from 'socket.io-client';
 
-/* eslint dot-notation: 0 */
-const log = window.console.log.bind(console, 'transport:');
-
-const SOCKETHOST = process.env.SOCKETHOST || 'localhost';
-const SOCKETPORT = process.env.SOCKETPORT || 3000;
-const socket = io('http://' + SOCKETHOST + ':' + SOCKETPORT);
+/* eslint no-console: 0 */
+const log = console.log.bind(console, 'transport:');
+const socket = io('localhost:3001');
 log('socket connection');
 
 function _setUID(uid) {
@@ -24,20 +21,20 @@ function emit(type, data) {
 }
 
 export function onMessage(store, action) {
-  socket.on('all:message', data => {
-    log('On: message', data.data);
-    store.dispatch(action(data.data));
+  socket.on('message', data => {
+    log('On: message', data);
+    store.dispatch(action(data));
   });
 }
 
 export function loginRes(store, action) {
-  socket.on('login', data => {
-    log('On: loginRes', data.data);
-    _setUID(data.data.uid);
-    store.dispatch(action(data.data));
+  socket.on('loginRes', user => {
+    log('On: loginRes', user);
+    _setUID(user.uid);
+    store.dispatch(action(user));
   });
 }
 
-export const sendMessage = (text) => emit('message', { text });
-export const loginReq = () => emit('login');
+export const sendMessage = (text) => emit('sendMessage', { text });
+export const loginReq = () => emit('loginReq');
 
