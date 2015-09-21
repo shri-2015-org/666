@@ -57,15 +57,16 @@ export function readMessage(mid) {
  * @param {string} rid - идентификатор комнаты
  * @param {string} name - название комнаты
  * @param {string} timeCreate - время создания комнаты
+ * @param {string} timeDeath - время смерти комнаты
  * @param {string} timeLength - время жизни комнаты
  * @return {Room}
  */
-export function createRoom(rid, name, timeCreate, timeLength) {
+export function createRoom(rid, name, timeCreate, timeDeath, timeLength) {
   const room =  new Room({
     'rid': rid,
     'name': name,
     'timeCreate': timeCreate,
-    'timeDeath': timeLength,
+    'timeDeath': timeDeath,
     'timeLength': timeLength
   });
   return db.addRoom(room);
