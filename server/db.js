@@ -1,11 +1,14 @@
 import _ from 'lodash';
 
-const users = {};
-const unreadMessages = [];
+const users = {},
+      unreadMessages = [],
+      rooms = {},
+      roomMessages = {},
+      roomUsers = {};
 
 /**
  * Создает promise для добавления пользователя в БД
- * @param {User}
+ * @param user {User}
  * @return {Promise}
  */
 export function addUser(user) {
@@ -15,10 +18,10 @@ export function addUser(user) {
       return;
     }
 
-    setTimeout( function onAddUserSuccess() {
+    process.nextTick( function onAddUserSuccess() {
       users[user.uid] = user;
       resolve(user);
-    }, 10);
+    });
   });
 
   return promise;
@@ -26,7 +29,7 @@ export function addUser(user) {
 
 /**
  * Создает promise для получения пользователя из БД
- * @param  {string} userId - идентификатор пользователя
+ * @param userId {string} userId - идентификатор пользователя
  * @return {Promise}
  */
 export function getUser(userId) {
@@ -36,9 +39,9 @@ export function getUser(userId) {
       return;
     }
 
-    setTimeout( function onGetUserSuccess() {
+    process.nextTick( function onGetUserSuccess() {
       resolve(users[userId]);
-    }, 10);
+    });
   });
 
   return promise;
@@ -50,9 +53,9 @@ export function getUser(userId) {
  */
 export function getRoomUsers() {
   const promise = new Promise( function onGetRoomUsers(resolve) {
-    setTimeout( function onGetRoomUsersSuccess() {
+    process.nextTick( function onGetRoomUsersSuccess() {
       resolve(users);
-    }, 10);
+    });
   });
 
   return promise;
@@ -60,7 +63,7 @@ export function getRoomUsers() {
 
 /**
  * Создает promise для добавления непрочитаных сообщений в список непрочитанны сообщений
- * @param {Message}
+ * @param message {Message}
  * @return {Promise}
  */
 export function addUnreadMessage(message) {
@@ -70,11 +73,11 @@ export function addUnreadMessage(message) {
       return;
     }
 
-    setTimeout( function onAddUnreadMessageSuccess() {
+    process.nextTick( function onAddUnreadMessageSuccess() {
       unreadMessages.push(message);
       console.log(unreadMessages);
       resolve(message);
-    }, 10);
+    });
   });
 
   return promise;
@@ -82,7 +85,7 @@ export function addUnreadMessage(message) {
 
 /**
  * Создает promise для удаления прочитанных сообщений из списка непрочитанных
- * @param  {string} mid - идентификатор сообщения
+ * @param mid {string} mid - идентификатор сообщения
  * @return {Promise}
  */
 export function readMessage(mid) {
@@ -92,13 +95,159 @@ export function readMessage(mid) {
       return;
     }
 
-    setTimeout( function onGetUserSuccess() {
+    process.nextTick( function onGetUserSuccess() {
       const message = _.remove(unreadMessages, function checkMessageForRemove(el) {
         return el.mid === mid;
       });
       console.log(message);
       resolve(message);
-    }, 10);
+    });
+  });
+
+  return promise;
+}
+
+/**
+ * Создает promise для добавления комнаты
+ * @param room {Room}
+ * @return {Promise}
+ */
+export function addRoom(room) {
+  const promise = new Promise( function onAddRoom(resolve, reject) {
+    if (!room) {
+      reject('Error!');
+      return;
+    }
+
+    process.nextTick( function onAddRoomSuccess() {
+      rooms[room.rid] = room;
+      resolve(room);
+    });
+  });
+
+  return promise;
+}
+
+/**
+ * Создает promise для получения комнаты
+ * @param roomId {string} roomId - идентификатор комнаты
+ * @return {Promise}
+ */
+export function getRoom(roomId) {
+  const promise = new Promise( function onGetRoom(resolve, reject) {
+    if (!roomId || !rooms[roomId]) {
+      reject('Error!');
+      return;
+    }
+
+    process.nextTick( function onGetRoomSuccess() {
+      resolve(rooms[roomId]);
+    });
+  });
+
+  return promise;
+}
+
+/**
+ * Создает promise для получения всех комнат
+ * @return {Promise}
+ */
+export function getAllRooms() {
+  const promise = new Promise( function onGetAllRoom(resolve) {
+    process.nextTick( function onGetAllRoomSuccess() {
+      resolve(rooms);
+    });
+  });
+
+  return promise;
+}
+
+/**
+ * Создает promise для удаления комнаты
+ * @param room {Room}
+ * @return {Promise}
+ */
+export function removeRoom(room) {
+  const promise = new Promise( function onRemoveRoom(resolve, reject) {
+    if (!room) {
+      reject('Error!');
+      return;
+    }
+
+    process.nextTick( function onRemoveRoomSuccess() {
+      delete rooms[room.rid];
+      resolve(room);
+    });
+  });
+
+  return promise;
+}
+
+/**
+ * Создает promise для добавления сообщений в комнаты
+ * @param mid {mid}
+ * @return {Promise}
+ */
+export function addIdMessage(mid) {
+  const promise = new Promise( function onAddIdMessage(resolve, reject) {
+    if (!mid || !roomMessages[mid]) {
+      reject('Error!');
+      return;
+    }
+
+    process.nextTick( function onAddIdMessageSuccess() {
+      roomMessages[mid] = mid;
+      resolve(roomMessages);
+    });
+  });
+
+  return promise;
+}
+
+/**
+ * Создает promise для получения всех сообщений в комнате
+ * @return {Promise}
+ */
+export function getIdMessages() {
+  const promise = new Promise( function onGetMessages(resolve) {
+    process.nextTick( function onGetMessagesSuccess() {
+      resolve(roomMessages);
+    });
+  });
+
+  return promise;
+}
+
+/**
+ * Создает promise для добавления пользователей в комнаты
+ * @param uid {uid}
+ * @return {Promise}
+ */
+export function addIdUser(uid) {
+  const promise = new Promise( function onAddIdUser(resolve, reject) {
+    if (!uid || !roomUsers[uid]) {
+      reject('Error!');
+      return;
+    }
+
+    process.nextTick( function onAddIdUserSuccess() {
+      roomUsers[uid] = uid;
+      resolve(roomUsers);
+    });
+  });
+
+  return promise;
+}
+
+/**
+ * Создает promise для получения всех пользователй в комнате
+ * @return {Promise}
+ */
+export function getIdUsers() {
+  const promise = new Promise( function onGetUsers(resolve) {
+    process.nextTick( function onGetUsersSuccess() {
+      resolve(roomUsers);
+    });
   });
 
   return promise;
