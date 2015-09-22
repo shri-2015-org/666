@@ -1,4 +1,5 @@
 /* eslint no-console: 0 */
+import fs from 'fs';
 import path from 'path';
 import webpack from 'webpack';
 
@@ -14,7 +15,7 @@ webpack({
     './client/main',
   ],
   output: {
-    path: path.join(__dirname, 'build/client'),
+    path: path.join(__dirname, 'build/static'),
     filename: 'bundle.js',
     publicPath: '/',
   },
@@ -22,7 +23,10 @@ webpack({
     loaders: [{
       test: /\.js$/,
       loaders: ['babel'],
-      include: path.join(__dirname, 'client'),
+      include: [
+        path.join(__dirname, 'client'),
+        path.join(__dirname, 'common'),
+      ],
     }, {
       test: /\.scss$/,
       loader: 'style!' +
@@ -37,6 +41,7 @@ webpack({
     modulesDirectories: [
       'node_modules',
       path.join(__dirname, 'client'),
+      path.join(__dirname, 'common'),
     ],
     extensions: ['', '.js', '.jsx', '.json', '.scss', '.css'],
   },
@@ -44,15 +49,14 @@ webpack({
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false,
-        drop_console: false,
+        drop_console: true,
       },
       sourceMap: false,
     }),
     new webpack.optimize.DedupePlugin(),
     new webpack.DefinePlugin({
-      NODE_ENV: process.env.NODE_ENV,
-      SOKETHOST: process.env.SOKETHOST,
-      SOCKETPORT: process.env.SOCKETPORT,
+      NODE_ENV: '"production"',
+      SOCKETPORT: '"3000"',
     }),
   ],
 }, (err, res) => {
@@ -60,3 +64,21 @@ webpack({
   return console.log(res.toString());
 });
 
+fs.readFile('package.json', (err, data) => {
+  if (err) throw err;
+  const orig = JSON.parse(data);
+  const pack = {
+    name: orig.name,
+    version: orig.version,
+    description: orig.description,
+    scripts: {
+      start: 'PORT=8080 SOCKETPORT=3000 babel-node server/server.prod.js',
+    },
+    dependencies: orig.dependencies,
+    author: orig.author,
+  };
+  console.log(pack);
+  fs.writeFile('build/package.json', JSON.stringify(pack, null, 2), () => {
+    console.log('package.json added');
+  });
+});

@@ -21,7 +21,10 @@ export default {
     loaders: [{
       test: /\.js$/,
       loaders: ['react-hot?sourceMap', 'babel?sourceMap'],
-      include: path.join(__dirname, 'client'),
+      include: [
+        path.join(__dirname, 'client'),
+        path.join(__dirname, 'common'),
+      ],
     }, {
       test: /\.scss$/,
       loader: 'style!' +
@@ -36,11 +39,16 @@ export default {
     modulesDirectories: [
       'node_modules',
       path.join(__dirname, 'client'),
+      path.join(__dirname, 'common'),
     ],
     extensions: ['', '.js', '.jsx', '.json', '.scss', '.css'],
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({
+      NODE_ENV: '"development"',
+      SOCKETPORT: '"3001"',
+    }),
   ],
 };
 

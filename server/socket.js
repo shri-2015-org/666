@@ -10,18 +10,12 @@ transform('code', {
   plugins: ['node-env-inline'],
 });
 
-// --- SOCKET SERVER
-
 const SOCKETPORT = process.env.SOCKETPORT || 3001;
 
 const socketServer = new http.Server();
 const io = socketIO(socketServer);
 
-socketServer.listen(SOCKETPORT, () => {
-  console.log('Socket data listening on *:' + SOCKETPORT);
-});
-
-io.on('connection', function onConnection(socket) {
+function onConnection(socket) {
   socket.on('loginReq', function onLoginReq(data) {
     const uid = _.result(data, 'uid');
 
@@ -63,16 +57,12 @@ io.on('connection', function onConnection(socket) {
       socket.emit('roomUsers', users);
     });
   });
-});
+}
 
-// --- FILE SERVER
-
-import devServer from './static.dev.js';
-import prodServer from './static.prod.js';
-
-if (process.env.NODE_ENV === 'development') {
-  devServer();
-} else {
-  prodServer();
+export default function() {
+  socketServer.listen(SOCKETPORT, () => {
+    console.log('Socket data listening on *:' + SOCKETPORT);
+  });
+  io.on('connection', onConnection);
 }
 

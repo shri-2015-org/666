@@ -19,7 +19,10 @@ function propsFromState(state) {
   };
 }
 
-const createStorePlus = applyMiddleware(loggerMiddleware)(createStore);
+const createStorePlus = NODE_ENV === 'production' ?
+                        applyMiddleware()(createStore) :
+                        applyMiddleware(loggerMiddleware)(createStore);
+
 const store = createStorePlus(all);
 const SmartApp = connect(propsFromState)(App);
 const rootElement = document.getElementById('content');
