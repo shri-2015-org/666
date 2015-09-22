@@ -4,12 +4,10 @@ import webpack from 'webpack';
 const FILEHOST = process.env.FILEHOST || 'localhost';
 const FILEPORT = process.env.FILEPORT || 8080;
 
-export const devConfig = {
-  debug: true,
-  devtool: 'inline-source-map',
+// --- BASE CONFIG
+
+const base  = {
   entry: [
-    'webpack-dev-server/client?http://' + FILEHOST + ':' + FILEPORT,
-    'webpack/hot/only-dev-server',
     './client/main',
   ],
   output: {
@@ -40,6 +38,46 @@ export const devConfig = {
     extensions: ['', '.js', '.jsx', '.json', '.scss', '.css'],
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
   ],
 };
+
+// --- EXTEND FOR DEVELOPMENT
+
+export const dev = Object.assign(base, {
+  debug: true,
+  cache: true,
+  devtool: 'inline-source-map',
+  entry: [
+    'webpack-dev-server/client?http://' + FILEHOST + ':' + FILEPORT,
+    'webpack/hot/only-dev-server',
+    './client/main',
+  ],
+  plugins: [
+    ...base.plugins,
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({
+      NODE_ENV: JSON.stringify('development'),
+    }),
+  ],
+});
+
+// --- EXTEND FOR PRODUCTION
+
+export const prod = Object.assign(base, {
+  debug: false,
+  plugins: [
+    ...base.plugins,
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false,
+        drop_console: false,
+      },
+      sourceMap: false,
+    }),
+    new webpack.optimize.DedupePlugin(),
+    new webpack.DefinePlugin({
+      NODE_ENV: JSON.stringify('production'),
+    }),
+  ],
+});
+

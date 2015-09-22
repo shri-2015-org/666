@@ -66,14 +66,14 @@ io.on('connection', function onConnection(socket) {
 
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
-import { devConfig } from '../webpack.config.babel';
+import { dev } from '../webpack.config.babel';
 
 const FILEHOST = process.env.DEVHOST || 'localhost';
 const FILEPORT = process.env.DEVPORT || 8080;
 const FILEPATH = process.env.DEVPATH || '/../static';
 
-const fileServer = new WebpackDevServer(webpack(devConfig), {
-  publicPath: devConfig.output.publicPath,
+const fileServer = new WebpackDevServer(webpack(dev), {
+  publicPath: dev.output.publicPath,
   hot: true,
   historyApiFallback: true,
   stats: {colors: true},
