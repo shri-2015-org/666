@@ -10,8 +10,16 @@ tmp/**/*.*
 *.log
 *.log.*
 .idea/
+upload/
 .tmp
 *.swp
+.bowerrc
+.eslintignore
+.eslintrc
+.git
+.gitignore
+.jscsrc
 .jshintignore
 .jshintrc
-build/
+webpack.config.js
+**/*.test.js
