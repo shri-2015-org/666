@@ -6,15 +6,15 @@ import http from 'http';
 
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
-import { devCfg } from '../webpack.config.babel';
+import dev from '../webpack.config.babel';
 
 const FILEHOST = 'localhost';
 const FILEPORT = 8080;
 const FILEPATH = '/../static';
 
 function execFileServer() {
-  const fileServer = new WebpackDevServer(webpack(devCfg), {
-    publicPath: devCfg.output.publicPath,
+  const fileServer = new WebpackDevServer(webpack(dev), {
+    publicPath: dev.output.publicPath,
     hot: true,
     historyApiFallback: true,
     stats: {colors: true},
