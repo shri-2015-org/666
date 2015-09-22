@@ -1,6 +1,6 @@
 import uuid from 'uuid';
-import User from './User';
-import Message from './Message';
+import User from '../common/User';
+import Message from '../common/Message';
 import * as userGenerator from './userGenerator';
 import * as db from './db';
 
@@ -39,10 +39,13 @@ export function getRoomUsers() {
  * Добавляет id сообщения в список непрочитанных
  * @param {Object} data
  * @param {string} data.uid - идентификатор пользователя-отправителя
+ * @param {string} data.text - тело сообщения
  */
 export function addUnreadMessage(data) {
-  data.mid = data.mid || uuid.v4();
+  data.mid = uuid.v4();
   data.status = 'sending';
+  data.time = Date.now();
+  data.read = false;
   const message = new Message(data);
   return db.addUnreadMessage(message);
 }

@@ -30,7 +30,7 @@ io.on('connection', function onConnection(socket) {
   });
 
   socket.on('sendMessage', function onSendMessage(data) {
-    if (data && data.uid) {
+    if (data && data.uid && data.text) { // TODO обработка ошибок?
       storage.addUnreadMessage(data).then( function onAddUnreadMessage(message) {
         io.emit('message', message);
       });
