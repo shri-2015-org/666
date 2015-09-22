@@ -1,21 +1,24 @@
 /* eslint no-console: 0 */
-import express from 'express';
 import http from 'http';
 import socketIO from 'socket.io';
 
 import _ from 'lodash';
 import * as storage from './storage';
 
+import { transform } from 'babel-core';
+transform('code', {
+  plugins: ['node-env-inline'],
+});
+
 // --- SOCKET SERVER
 
-const SOCKETHOST = process.env.SOCKETHOST || 'localhost';
 const SOCKETPORT = process.env.SOCKETPORT || 3001;
 
 const socketServer = new http.Server();
 const io = socketIO(socketServer);
 
 socketServer.listen(SOCKETPORT, () => {
-  console.log('Socket data listening on ' + SOCKETHOST + ':' + SOCKETPORT);
+  console.log('Socket data listening on *:' + SOCKETPORT);
 });
 
 io.on('connection', function onConnection(socket) {
@@ -62,38 +65,14 @@ io.on('connection', function onConnection(socket) {
   });
 });
 
-// --- DEV FILE AND HOT RELOAD SERVER
+// --- FILE SERVER
 
-import webpack from 'webpack';
-import WebpackDevServer from 'webpack-dev-server';
-import { dev } from '../webpack.config.babel';
+import devServer from './static.dev.js';
+import prodServer from './static.prod.js';
 
-const FILEHOST = process.env.DEVHOST || 'localhost';
-const FILEPORT = process.env.DEVPORT || 8080;
-const FILEPATH = process.env.DEVPATH || '/../static';
-
-const fileServer = new WebpackDevServer(webpack(dev), {
-  publicPath: dev.output.publicPath,
-  hot: true,
-  historyApiFallback: true,
-  stats: {colors: true},
-});
-
-fileServer.use('/', express.static(__dirname + FILEPATH));
-fileServer.listen(FILEPORT, FILEHOST, () => {
-  console.log('FIle and hot reload server listening on ' + FILEHOST + ':' + FILEPORT);
-});
-
-// --- MOCK FILE SERVER
-
-const app = express();
-const httpServer = new http.Server(app);
-
-const HOST = process.env.HOST || 'localhost';
-const PORT = process.env.PORT || 3000;
-
-app.use('/', express.static(__dirname + '/mock'));
-httpServer.listen(PORT, function onListen() {
-  console.log('Mock server listening on ' + HOST + ':' + PORT);
-});
+if (process.env.NODE_ENV === 'development') {
+  devServer();
+} else {
+  prodServer();
+}
 

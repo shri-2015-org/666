@@ -1,8 +1,13 @@
 import path from 'path';
 import webpack from 'webpack';
 
-const FILEHOST = process.env.FILEHOST || 'localhost';
-const FILEPORT = process.env.FILEPORT || 8080;
+// import { transform } from 'babel-core';
+// transform('code', {
+//   plugins: ['node-env-inline'],
+// });
+
+const FILEHOST = 'localhost';
+const FILEPORT = 8080;
 
 // --- BASE CONFIG
 
@@ -11,22 +16,9 @@ const base  = {
     './client/main',
   ],
   output: {
-    path: path.join(__dirname, 'build'),
+    path: path.join(__dirname, 'build/client'),
     filename: 'bundle.js',
     publicPath: '/',
-  },
-  module: {
-    loaders: [{
-      test: /\.js$/,
-      loaders: ['react-hot', 'babel'],
-      include: path.join(__dirname, 'client'),
-    }, {
-      test: /\.scss$/,
-      loader: 'style!' +
-        'css?sourceMap!' +
-        'autoprefixer?{browsers: ["last 2 version", "IE 9"]}!' +
-        'sass?sourceMap&outputStyle=compressed',
-    }],
   },
   resolve: {
     alias: {
@@ -43,30 +35,55 @@ const base  = {
 
 // --- EXTEND FOR DEVELOPMENT
 
-export const dev = Object.assign(base, {
+const dev = Object.assign(base, {
   debug: true,
-  cache: true,
   devtool: 'inline-source-map',
   entry: [
     'webpack-dev-server/client?http://' + FILEHOST + ':' + FILEPORT,
     'webpack/hot/only-dev-server',
-    './client/main',
+    ...base.entry,
   ],
+  module: {
+    loaders: [
+      {
+        test: /\.js$/,
+        loaders: ['react-hot', 'babel'],
+        include: path.join(__dirname, 'client'),
+      }, {
+        test: /\.scss$/,
+        loader: 'style!' +
+                'css?sourceMap!' +
+                'autoprefixer?{browsers: ["last 2 version", "IE 9"]}!' +
+                'sass?sourceMap&outputStyle=compressed',
+      },
+    ],
+  },
   plugins: [
-    ...base.plugins,
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.DefinePlugin({
-      NODE_ENV: JSON.stringify('development'),
-    }),
+    ...base.plugins,
   ],
 });
 
 // --- EXTEND FOR PRODUCTION
 
-export const prod = Object.assign(base, {
+export default Object.assign(base, {
   debug: false,
+  module: {
+    loaders: [
+      {
+        test: /\.js$/,
+        loaders: ['babel'],
+        include: path.join(__dirname, 'client'),
+      }, {
+        test: /\.scss$/,
+        loader: 'style!' +
+                'css?!' +
+                'autoprefixer?{browsers: ["last 2 version", "IE 9"]}!' +
+                'sass?outputStyle=compressed',
+      },
+    ],
+  },
   plugins: [
-    ...base.plugins,
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false,
@@ -76,8 +93,14 @@ export const prod = Object.assign(base, {
     }),
     new webpack.optimize.DedupePlugin(),
     new webpack.DefinePlugin({
-      NODE_ENV: JSON.stringify('production'),
+      NODE_ENV: process.env.NODE_ENV,
+      SOKETHOST: process.env.SOKETHOST,
+      SOCKETPORT: process.env.SOCKETPORT,
+      HOST: process.env.HOST,
     }),
+    ...base.plugins,
   ],
+  // hack export dev without split files
+  devCfg: dev,
 });
 
