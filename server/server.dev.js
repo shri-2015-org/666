@@ -5,7 +5,7 @@ import http from 'http';
 
 // --- SOCKET SERVER
 
-socketServer();
+socketServer(3001);
 
 // --- DEV FILE AND HOT RELOAD SERVER
 

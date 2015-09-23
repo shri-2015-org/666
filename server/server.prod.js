@@ -8,9 +8,11 @@ transform('code', {
   plugins: ['node-env-inline'],
 });
 
+
 // --- SOCKET SERVER
 
-socketServer();
+const SOCKETPORT = process.env.SOCKETPORT || 3001;
+socketServer(SOCKETPORT);
 
 // --- STATIC FILE  SERVER
 

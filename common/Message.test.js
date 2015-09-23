@@ -1,9 +1,10 @@
+/* eslint no-console: 0 */
 import { assert, expect, should } from 'chai';
 should(); // actually call the function
 
 import Message from './Message';
 
-describe('Message unit tests (common/Message.test.js)', () => {
+describe('Message class', () => {
   const options = {
     uid: 'some uid',
     text: 'some text',
@@ -22,7 +23,6 @@ describe('Message unit tests (common/Message.test.js)', () => {
     expect(message.text).to.be.a('string');
     expect(message.time).to.be.a('number');
     expect(message.read).to.be.a('boolean');
-    expect(message.mid).to.be.a('string');
   });
 
   it('value of message fields', () => {
@@ -30,7 +30,8 @@ describe('Message unit tests (common/Message.test.js)', () => {
     assert.equal(message.text, 'some text');
     assert.equal(message.time, options.time);
     assert.equal(message.read, true);
-    assert.equal(message.mid, 'some uid' + options.time);
+    assert.equal(message.mid, undefined);
+    assert.equal(message.status, undefined);
   });
 });
 

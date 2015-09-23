@@ -1,3 +1,4 @@
+/* eslint no-unused-vars: 0 */
 import { assert, expect, should } from 'chai';
 should(); // actually call the function
 

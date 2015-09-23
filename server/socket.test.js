@@ -1,15 +1,18 @@
+/* eslint no-unused-vars: 0 */
 import { assert, expect, should } from 'chai';
 should(); // actually call the function
 
-import { exec } from 'child_process';
+import socketServer from './socket.js';
 import io from 'socket.io-client';
-const socket = io('http://localhost:3001');
 
-describe('Server socket e2e test (server/index.test.js)', () => {
+const port = 3002;
+const socket = io('http://localhost:' + port);
+
+describe('Socket server test on port' + port, () => {
   let uid;
 
   before( () => {
-    exec('npm run server', () => {});
+    socketServer(port);
   });
 
   it('get uid after ask', function checklogin(done) {
@@ -39,13 +42,8 @@ describe('Server socket e2e test (server/index.test.js)', () => {
     });
     socket.emit('sendMessage', {
       uid: uid,
-      test: 'Some text message',
+      text: 'Some text message',
     });
-  });
-
-  after( () => {
-    // fix process.kill() when use babel-node
-    exec('pkill -f \'_babel-node server\'', () => {});
   });
 });
 

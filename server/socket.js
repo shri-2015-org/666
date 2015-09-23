@@ -5,13 +5,6 @@ import socketIO from 'socket.io';
 import _ from 'lodash';
 import * as storage from './storage';
 
-import { transform } from 'babel-core';
-transform('code', {
-  plugins: ['node-env-inline'],
-});
-
-const SOCKETPORT = process.env.SOCKETPORT || 3001;
-
 const socketServer = new http.Server();
 const io = socketIO(socketServer);
 
@@ -59,9 +52,9 @@ function onConnection(socket) {
   });
 }
 
-export default function() {
-  socketServer.listen(SOCKETPORT, () => {
-    console.log('Socket data listening on *:' + SOCKETPORT);
+export default function(port) {
+  socketServer.listen(port, () => {
+    console.log('Socket data listening on *:' + port);
   });
   io.on('connection', onConnection);
 }
