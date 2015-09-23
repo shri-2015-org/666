@@ -2,6 +2,15 @@
 
 # 666 chat
 
+Update all
+```
+git pull -a
+git checkout master
+rm -r node_modules
+npm cache clean
+npm install
+```
+
 ### Dev
 Run dev server:
 ```
