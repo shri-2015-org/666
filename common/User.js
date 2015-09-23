@@ -7,7 +7,7 @@
  * @param {string} options.avatar - аватар пользователя в hex d в формате '#FFFFFF'
  * @param {string} options.uid - идентификатор пользователя
  */
-export default class User {
+export default class {
   constructor(options) { // TODO обработка недостающих полей?
     this.name = options.name;
     this.avatar = options.avatar;

@@ -4,13 +4,13 @@
   "description": "anonym.club",
   "scripts": {
     "lint": "eslint .",
-    "server": "babel-node server",
-    "test": "npm run test-server; npm run test-client",
+    "dev": "babel-node server/server.dev.js",
+    "prod": "npm run build; cd build; npm run start",
+    "build": "npm run lint; npm run test; bash build.sh",
+    "test": "npm run test-server; npm run test-common; npm run test-client",
     "test-server": "mocha --compilers js:babel/register 'server/**/*.test.js'",
+    "test-common": "mocha --compilers js:babel/register 'common/**/*.test.js'",
     "test-client": "mocha --compilers js:babel/register 'client/**/*.test.js'"
-  },
-  "config": {
-    "serverPort": "3001"
   },
   "dependencies": {
     "babel": "5.8.23",
@@ -47,6 +47,7 @@
   },
   "author": "anonym club star team",
   "pre-commit": [
-    "lint"
+    "lint",
+    "test"
   ]
 }

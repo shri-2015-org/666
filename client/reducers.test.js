@@ -1,3 +1,4 @@
+/* eslint no-unused-vars: 0 */
 import { assert, expect, should } from 'chai';
 should(); // actually call the function
 
@@ -7,6 +8,7 @@ import reducer from './reducers';
 describe('reducer', () => {
   const test = {
     login: null,
+    navigation: true,
     users: [],
     received: [],
     pending: {

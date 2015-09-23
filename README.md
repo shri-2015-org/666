@@ -2,15 +2,14 @@
 
 # 666 chat
 
-### Server
-Run server:
+### Dev
+Run dev server:
 ```
-npm run server
+npm run dev
 ```
-Change port:
+
+### Prod
+Run prod server:
 ```
-"config": {
-  "serverPort": "3001"
-}
+npm run prod
 ```
-in ```package.json```

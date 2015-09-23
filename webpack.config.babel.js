@@ -1,33 +1,36 @@
 import path from 'path';
 import webpack from 'webpack';
 
-const FILEHOST = process.env.FILEHOST || 'localhost';
-const FILEPORT = process.env.FILEPORT || 8080;
+const FILEHOST = 'localhost';
+const FILEPORT = 8080;
 
-export const devConfig = {
+export default {
   debug: true,
-  devtool: 'inline-source-map',
+  devtool: 'eval',
   entry: [
     'webpack-dev-server/client?http://' + FILEHOST + ':' + FILEPORT,
     'webpack/hot/only-dev-server',
     './client/main',
   ],
   output: {
-    path: path.join(__dirname, 'build'),
+    path: path.join(__dirname, 'build/client'),
     filename: 'bundle.js',
     publicPath: '/',
   },
   module: {
     loaders: [{
       test: /\.js$/,
-      loaders: ['react-hot', 'babel'],
-      include: path.join(__dirname, 'client'),
+      loaders: ['react-hot?sourceMap', 'babel?sourceMap'],
+      include: [
+        path.join(__dirname, 'client'),
+        path.join(__dirname, 'common'),
+      ],
     }, {
       test: /\.scss$/,
       loader: 'style!' +
-        'css?sourceMap!' +
-        'autoprefixer?{browsers: ["last 2 version", "IE 9"]}!' +
-        'sass?sourceMap&outputStyle=compressed',
+              'css?sourceMap!' +
+              'autoprefixer?{browsers: ["last 2 version", "IE 9"]}!' +
+              'sass?sourceMap&outputStyle=compressed',
     }],
   },
   resolve: {
@@ -36,10 +39,16 @@ export const devConfig = {
     modulesDirectories: [
       'node_modules',
       path.join(__dirname, 'client'),
+      path.join(__dirname, 'common'),
     ],
     extensions: ['', '.js', '.jsx', '.json', '.scss', '.css'],
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({
+      NODE_ENV: '"development"',
+      DATAPORT: '"3001"',
+    }),
   ],
 };
+

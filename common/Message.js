@@ -10,7 +10,7 @@
  * @param {string=} options.mid - идентификатор сообщения
  * @param {string=} options.status - статус сообщения
  */
-export default class Message {
+export default class {
   constructor(options) { // TODO обработка недостающих полей?
     this.uid = options.uid;
     this.mid = options.mid;
