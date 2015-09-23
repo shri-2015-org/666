@@ -47,7 +47,7 @@ export default {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
       NODE_ENV: '"development"',
-      SOCKETPORT: '"3001"',
+      DATAPORT: '"3001"',
     }),
   ],
 };

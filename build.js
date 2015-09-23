@@ -56,7 +56,7 @@ webpack({
     new webpack.optimize.DedupePlugin(),
     new webpack.DefinePlugin({
       NODE_ENV: '"production"',
-      SOCKETPORT: '"3000"',
+      DATAPORT: '"3000"',
     }),
   ],
 }, (err, res) => {
@@ -72,7 +72,7 @@ fs.readFile('package.json', (err, data) => {
     version: orig.version,
     description: orig.description,
     scripts: {
-      start: 'PORT=8080 SOCKETPORT=3000 babel-node server/server.prod.js',
+      start: 'PORT=8080 DATAPORT=3000 babel-node server/server.prod.js',
     },
     dependencies: orig.dependencies,
     author: orig.author,

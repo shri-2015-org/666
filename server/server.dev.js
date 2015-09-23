@@ -1,11 +1,11 @@
 /* eslint no-console: 0 */
-import socketServer from './socket.js';
+import dataServer from './transport.js';
 import express from 'express';
 import http from 'http';
 
-// --- SOCKET SERVER
+// --- DATA SERVER
 
-socketServer(3001);
+dataServer(3001);
 
 // --- DEV FILE AND HOT RELOAD SERVER
 

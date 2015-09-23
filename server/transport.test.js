@@ -2,7 +2,7 @@
 import { assert, expect, should } from 'chai';
 should(); // actually call the function
 
-import socketServer from './socket.js';
+import dataServer from './transport.js';
 import io from 'socket.io-client';
 
 const port = 3002;
@@ -12,7 +12,7 @@ describe('Socket server test on port' + port, () => {
   let uid;
 
   before( () => {
-    socketServer(port);
+    dataServer(port);
   });
 
   it('get uid after ask', function checklogin(done) {

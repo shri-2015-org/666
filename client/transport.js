@@ -1,8 +1,7 @@
 import io from 'socket.io-client';
 
 /* eslint no-console: 0 */
-const socketUrl = window.location.hostname + ':' + (SOCKETPORT || '3001');
-const socket = io(socketUrl);
+const socket = io( window.location.hostname + ':' + DATAPORT );
 console.log('transport: socket connection');
 
 function _setUID(uid) {

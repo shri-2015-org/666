@@ -1,5 +1,5 @@
 /* eslint no-console: 0 */
-import socketServer from './socket.js';
+import dataServer from './transport.js';
 import express from 'express';
 import http from 'http';
 
@@ -9,10 +9,10 @@ transform('code', {
 });
 
 
-// --- SOCKET SERVER
+// --- DATA SERVER
 
-const SOCKETPORT = process.env.SOCKETPORT || 3001;
-socketServer(SOCKETPORT);
+const DATAPORT = process.env.DATAPORT || 3001;
+dataServer(DATAPORT);
 
 // --- STATIC FILE  SERVER
 
