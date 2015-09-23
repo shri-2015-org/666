@@ -1,5 +1,6 @@
 import path from 'path';
 import webpack from 'webpack';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const FILEHOST = 'localhost';
 const FILEPORT = 8080;
@@ -45,6 +46,11 @@ export default {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
+    new HtmlWebpackPlugin({
+      inject: 'body',
+      filename: 'index.html',
+      template: __dirname + '/client/index.html',
+    }),
     new webpack.DefinePlugin({
       NODE_ENV: '"development"',
       DATAPORT: '"3001"',
