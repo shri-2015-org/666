@@ -3,11 +3,6 @@ import fs from 'fs';
 import path from 'path';
 import webpack from 'webpack';
 
-import { transform } from 'babel-core';
-transform('code', {
-  plugins: ['node-env-inline'],
-});
-
 webpack({
   debug: false,
   cache: false,
