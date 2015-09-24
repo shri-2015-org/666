@@ -1,14 +1,20 @@
+%reset-input, .reset-input {
+  @include reset-input();
+}
+
 .input {
-	@include reset-input();
+	@extend %reset-input;
 
   border-radius: $radius;
   background-color: color(grey, light);
   padding: .75em 1em .9em;
 
   &--underline {
-    @include reset-input();
+    @extend %reset-input;
 
     padding: .5em 0;
+    width: 100%;
+
     border-bottom: 2px solid rgba(white, .5);
 
     @include placeholder {
@@ -22,7 +28,7 @@ textarea {
 }
 
 .btn {
-	@include reset-input();
+	@extend %reset-input;
 
   background-color: color(blue);
   color: white;
@@ -36,15 +42,10 @@ textarea {
 
 .btn-icon {
   display: inline-block;
-  width: 22px;
-  height: 22px;
+  padding: 2px;
   border: 2px solid;
   text-align: center;
   border-radius: 2px;
-}
-
-.reset-input {
-  @include reset-input();
 }
 
 [class^="btn"] {

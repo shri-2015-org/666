@@ -1,0 +1,123 @@
+$iconNav-size: 21px;
+$iconNav-breakpoint: 580px;
+
+.iconNav {
+	position: relative;
+	display: inline-block;
+
+	width: $iconNav-size;
+	height: $iconNav-size;
+
+//	overflow: hidden;
+
+	cursor: pointer;
+}
+
+.iconNav-line {
+	position: absolute;
+
+	left: 0;
+	right: 0;
+	top:0;
+	bottom: 0;
+
+	margin: auto;
+
+	display: block;
+
+	width: 100%;
+	height: 3px;
+
+	background: currentcolor;
+
+	transition: all .2s .2s;
+
+	// &:hover {
+	// 	transition-delay: 0;
+	// }
+
+	@media (max-width: $iconNav-breakpoint) {
+		&:nth-of-type(1) {
+			transform: rotate(135deg);
+
+			.iconNav.is-hidden & {
+				transform: translateY(-5px);
+			}
+
+			.iconNav.is-hidden:hover & {
+				transform: translateY(-7px);
+			}
+		}
+
+		&:nth-of-type(2) {
+			opacity: 0;
+		}
+
+		&:nth-of-type(3) {
+			transform: rotate(45deg);
+
+			.iconNav.is-hidden & {
+				transform: translateY(5px);
+			}
+
+			.iconNav.is-hidden:hover & {
+				transform: translateY(7px);
+			}
+		}
+	}
+
+	@media (min-width: $iconNav-breakpoint) {
+
+		&:nth-of-type(1) {
+			transform: rotate(90deg) translateY(-5px);
+
+			.iconNav:hover & {
+			//	transform: rotate(90deg) translateY(-8px);
+			}
+
+			.iconNav.is-hidden & {
+				transform: rotate(90deg) translateY(5px);
+			}
+
+			.iconNav.is-hidden:hover & {
+			//	transform: rotate(90deg) translateY(8px);
+			}
+		}
+
+		&:nth-of-type(2) {
+			transform: rotate(-45deg) scale(.4, 1) translate(4px, 3px);
+			transform-origin: left center;
+
+			.iconNav:hover & {
+				transform: rotate(-45deg) scale(.4, 1) translate(0, 1px);
+			}
+
+			.iconNav.is-hidden & {
+				transform: rotate(-45deg) scale(.4, 1) translate(-4px, -3px);
+				transform-origin: right center;
+			}
+
+			.iconNav.is-hidden:hover & {
+				transform: rotate(-45deg) scale(.4, 1) translate(0, -1px);
+			}
+ 		}
+
+		&:nth-of-type(3) {
+			transform: rotate(45deg) scale(.4, 1) translate(4px, -3px);
+			transform-origin: left center;
+
+			.iconNav:hover & {
+				transform: rotate(45deg) scale(.4, 1) translate(0, -1px);
+			}
+
+			.iconNav.is-hidden & {
+				transform: rotate(45deg) scale(.4, 1) translate(-4px, 3px);
+				transform-origin: right center;
+			}
+
+			.iconNav.is-hidden:hover & {
+				transform: rotate(45deg) scale(.4, 1) translate(0, 1px);
+			}
+		}
+	}
+}

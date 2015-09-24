@@ -11,11 +11,10 @@ export default class Message extends Component {
         </div>
         <div className="message-content">
           <div className="message-content-ava ava"
-            style={{'background-color': '#73DD40'}}>
-            <img src="media/icons/airplane.svg" alt="" />
+            style={{'background-image': 'url(media/icons/water.svg)'}}>
           </div>
           <div className="message-content-text bubble">
-            <p>{this.props.text}</p>
+            <p className="message-content-text-p">{this.props.text}</p>
           </div>
         </div>
       </li>
