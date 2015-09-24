@@ -7,7 +7,11 @@ import reducer from './reducers';
 
 describe('reducer', () => {
   const test = {
-    login: null,
+    login: {
+      avatar: '',
+      name: '',
+      uid: '',
+    },
     navigation: true,
     users: [],
     received: [],

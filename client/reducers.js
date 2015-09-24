@@ -6,7 +6,13 @@ const initialPending = {
   messages: [],
 };
 
-function login(state = null, action) {
+const initialLogin = {
+  avatar: '',
+  name: '',
+  uid: '',
+};
+
+function login(state = initialLogin, action) {
   switch (action.type) {
     case actions.NEW_LOGIN: return action.login;
     default: return state;

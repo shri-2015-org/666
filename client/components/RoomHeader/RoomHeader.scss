@@ -1,6 +1,8 @@
 @import '../../scss/common';
 
 .room-header {
+  position: relative;
+  z-index: 2;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -12,7 +14,11 @@
     justify-content: space-between;
     align-items: center;
 
-    > li + li {
+    & + & {
+      margin-left: 2em;
+    }
+
+    &-item + &-item {
       margin-left: 1em;
     }
   }
