@@ -2,6 +2,8 @@
 import fs from 'fs';
 import path from 'path';
 import webpack from 'webpack';
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 webpack({
   debug: false,
@@ -24,10 +26,13 @@ webpack({
       ],
     }, {
       test: /\.scss$/,
-      loader: 'style!' +
-              'css!' +
-              'autoprefixer?{browsers: ["last 2 version", "IE 9"]}!' +
-              'sass?outputStyle=compressed',
+      loader: ExtractTextPlugin.extract(
+        'style-loader',
+        'css-loader!autoprefixer-loader?{browsers: ["last 2 version", "IE 9"]}!' +
+        'sass-loader?outputStyle=compressed'),
+      include: [
+        path.join(__dirname, 'client'),
+      ],
     }],
   },
   resolve: {
@@ -41,6 +46,13 @@ webpack({
     extensions: ['', '.js', '.jsx', '.json', '.scss', '.css'],
   },
   plugins: [
+    new ExtractTextPlugin('bundle.css', { allChunks: true }),
+    new HtmlWebpackPlugin({
+      inject: 'body',
+      hash: true,
+      filename: 'index.html',
+      template: __dirname + '/client/index.html',
+    }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false,

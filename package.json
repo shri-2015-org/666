@@ -33,6 +33,7 @@
     "eslint-config-airbnb": "0.0.8",
     "eslint-plugin-react": "3.3.2",
     "extract-text-webpack-plugin": "0.8.2",
+    "html-webpack-plugin": "1.6.1",
     "mocha": "2.3.2",
     "node-sass": "3.3.3",
     "pre-commit": "1.1.1",
