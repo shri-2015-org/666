@@ -115,8 +115,9 @@ npm run prod
 
 Пары запрос-ответ. Клиент делает запрос, сервер отвечает только ему.
 Имена socket.io событий нужно начинать с `client-request:` для запросов, `server-response:` для ответов.
+Более того, к ответу в конец нужно дописывать `@{exchangeID}`.
 
-Пример: `client-request:joinRoom`.
+Пример: `client-request:joinRoom` и `server-response:joinRoom@17`
 
 #### `joinRoom`
 * Я хотел бы присоединиться к комнате roomID / к случайной комнате (null).
@@ -135,7 +136,6 @@ npm run prod
 Данные ответа: 
 ```
 {
-	exchangeID: string,
 	status: 'OK',
 	data: {
 		identity: {
@@ -160,7 +160,6 @@ npm run prod
 /* или */
 
 {
-	exchangeID: string,
 	status: 'ERROR',
 	description: string,
 }
@@ -190,14 +189,12 @@ npm run prod
 Данные ответа: 
 ```
 {
-	exchangeID: string,
 	status: 'OK',
 }
 
 /* или */
 
 {
-	exchangeID: string,
 	status: 'ERROR',
 	description: string,
 }
@@ -229,7 +226,6 @@ npm run prod
 Данные ответа: 
 ```
 {
-	exchangeID: string,
 	status: 'OK',
 	data: {
 		roomID: string,
@@ -243,7 +239,6 @@ npm run prod
 /* или */
 
 {
-	exchangeID: string,
 	status: 'ERROR',
 	description: string,
 }
