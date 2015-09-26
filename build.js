@@ -37,6 +37,7 @@ webpack({
   },
   resolve: {
     alias: {
+      'actions': path.join(__dirname, 'client/actions.js'),
     },
     modulesDirectories: [
       'node_modules',

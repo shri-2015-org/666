@@ -70,7 +70,6 @@ export function joinRoom(roomID) {
   return new Promise( (resolve, reject) => {
     socket.once(`server-response:joinRoom@${exchangeID}`, res => {
       assert(res instanceof Object);
-      assert(res.status === 'OK');
       assert(res.data instanceof Object);
       assert(res.data.identity instanceof Object);
       assert(typeof res.data.identity.userID === 'string');

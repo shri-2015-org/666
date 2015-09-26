@@ -7,15 +7,12 @@ import loggerMiddleware from 'redux-logger';
 
 import all from './reducers';
 import App from './components/App/App.js';
-import { addMessageReceived, newLogin } from './actions.js';
+import { addMessagePending, addMessageReceived, newLogin } from 'actions';
 import * as transport from './transport.js';
 
 function propsFromState(state) {
   return {
-    messages: [
-      ...state.received,
-      ...state.pending.messages,
-    ],
+    messages: state.messages,
   };
 }
 
@@ -29,7 +26,7 @@ const rootElement = document.getElementById('content');
 
 const app = (
   <Provider store={store}>
-    {() => <SmartApp addMessage={transport.sendMessage} />}
+    {() => <SmartApp addMessage={text => store.dispatch(addMessagePending(text))} />}
   </Provider>
 );
 
