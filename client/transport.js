@@ -4,14 +4,6 @@ import io from 'socket.io-client';
 const socket = io( window.location.hostname + ':' + DATAPORT );
 console.log('transport: socket connection');
 
-function _setUID(uid) {
-  localStorage.setItem('user_uid', uid);
-}
-
-function _getUID() {
-  return localStorage.getItem('user_uid');
-}
-
 function emit(type, data) {
   const sendData =  Object.assign({ uid: _getUID() }, data);
 
@@ -19,21 +11,52 @@ function emit(type, data) {
   socket.emit(type, sendData);
 }
 
-export function onMessage(store, action) {
-  socket.on('message', data => {
-    console.log('transport: On: message', data);
-    store.dispatch(action(data));
+function assert(condition) {
+  if (!condition) {
+    throw new Error('Assertion failed!');
+  }
+}
+
+export function onTopRooms(handler) {
+  socket.on('broadcast:topRooms', data => {
+    assert(data.rooms instanceof Array);
+    data.rooms.forEach(room => {
+      assert(typeof room.roomID === 'string');
+      assert(typeof room.name === 'string');
+      assert(typeof room.users === 'number');
+      assert(typeof room.rating === 'number');
+    });
+    handler(data);
   });
 }
 
-export function loginRes(store, action) {
-  socket.on('loginRes', user => {
-    console.log('transport: On: loginRes', user);
-    _setUID(user.uid);
-    store.dispatch(action(user));
+export function onMessage(handler) {
+  socket.on('roomcast:message', data => {
+    assert(typeof data.roomID === 'string');
+    assert(typeof data.userID === 'string');
+    assert(typeof data.messageID === 'string');
+    assert(typeof data.text === 'string');
+    assert(typeof data.time === 'number');
+    handler(data);
   });
 }
 
-export const sendMessage = (text) => emit('sendMessage', { text });
-export const loginReq = () => emit('loginReq');
+export function onJoinUser(handler) {
+  socket.on('roomcast:joinUser', data => {
+    assert(typeof data.roomID === 'string');
+    assert(typeof data.userID === 'string');
+    assert(typeof data.avatar === 'string');
+    assert(typeof data.nick === 'string');
+    handler(data);
+  });
+}
+
+export function onLeaveUser(handler) {
+  socket.on('roomcast:leaveUser', data => {
+    assert(typeof data.roomID === 'string');
+    assert(typeof data.userID === 'string');
+    handler(data);
+  });
+}
+
 
