@@ -49,7 +49,7 @@ function newMessage(state, action) {
 }
 
 /*
-  rooms: HashMap('roomID', {
+  joinedRooms: HashMap('roomID', {
     userID: string,
     secret: string,
     roomName: string,
@@ -65,7 +65,7 @@ function newMessage(state, action) {
     }]
   });
 */
-function rooms(state = {}, action) {
+function joinedRooms(state = {}, action) {
   function callReducer(reducer) {
     const room = state[roomID];
     if (!room) {
@@ -86,18 +86,26 @@ function rooms(state = {}, action) {
   }
 }
 
+const initialUi = {
+  navigationCollapsed: false,
+  currentRoomID: null,
+};
 /*
-   navigation: boolean,
+   ui: {
+     navigationCollapsed: boolean,
+     currentRoomID: string || null,
+   }
 */
-function navigation(state = true, action) {
+function ui(state = initialUi, action) {
   switch (action.type) {
     case actions.TOGGLE_NAVIGATION: {
-      return !state;
+      return {
+        ...state,
+        navigationCollapsed: !state.navigationCollapsed,
+      };
     }
     default: return state;
   }
 }
 
-const all = combineReducers({rooms, topRooms, navigation});
-
-export default all;
+export default combineReducers({joinedRooms, topRooms, ui});

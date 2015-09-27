@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import './Navigation.scss';
 
-export default class Navigation extends Component {
+class Navigation extends Component {
   render() {
     return (
       <nav className={this.props.collapsed ? 'navigation' : 'navigation is-collapsed'}>
@@ -74,6 +74,15 @@ export default class Navigation extends Component {
   }
 }
 
-Navigation.propTypes = {
-  collapsed: PropTypes.bool.isRequired,
-};
+export default connect(state => {
+  const collapsed = state.ui.navigationCollapsed;
+  const { currentRoomID } = state.ui;
+  const { topRooms, joinedRooms } = state;
+  return {
+    collapsed,
+    currentRoomID,
+    topRooms,
+    joinedRooms,
+  };
+})(Navigation);
+
