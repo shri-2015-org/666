@@ -30,9 +30,17 @@ const app = (
   </Provider>
 );
 
-transport.loginReq();
-transport.loginRes(store, newLogin);
-transport.onMessage(store, addMessageReceived);
+transport.onTopRooms(data =>
+    store.dispatch(updateTopRooms(data.rooms)));
+
+transport.onMessage(data =>
+    store.dispatch(newMessage(data)));
+
+transport.onJoinUser(data =>
+    store.dispatch(joinUser(data)));
+
+transport.onleaveUser(data =>
+    store.dispatch(leaveUser(data)));
 
 React.render(app, rootElement);
 

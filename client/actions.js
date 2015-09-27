@@ -1,50 +1,53 @@
-import * as transport from './transport.js';
-import uuid from 'uuid';
-
-export const MESSAGE = 'MESSAGE';
-export const NEW_LOGIN = 'NEW_LOGIN';
-export const ADD_USER = 'ADD_USER';
+export const NEW_MESSAGE = 'NEW_MESSAGE';
+export const JOIN_USER = 'JOIN_USER';
+export const LEAVE_USER = 'LEAVE_USER';
 export const TOGGLE_NAVIGATION = 'TOGGLE_NAVIGATION';
+export const UPDATE_TOP_ROOMS = 'UPDATE_TOP_ROOMS';
 
-function _getUID() {
-  return localStorage.getItem('user_uid');
-}
-
-function _addMessage(message) {
+export function joinUser({roomID, userID, avatar, nick}) {
   return {
-    type: MESSAGE,
-    message,
+    type: JOIN_USER,
+    roomID,
+    userID,
+    user: {
+      avatar,
+      nick,
+    },
   };
 }
 
-export function addMessagePending(text) {
-  const message = {
-    uid: _getUID(),
-    mid: uuid.v4(),
-    status: 'pending',
-    text,
+export function leaveUser({roomID, userID}) {
+  return {
+    type: LEAVE_USER,
+    roomID,
+    userID,
   };
-
-  transport.sendMessage(message);
-
-  return _addMessage(message);
 }
 
-export function addMessageReceived(message) {
-  return _addMessage(message);
+export function updateTopRooms(rooms) {
+  return {
+    type: UPDATE_TOP_ROOMS,
+    rooms,
+  };
+}
+
+export function newMessage({roomID, userID, messageID, text, time}) {
+  return {
+    type: NEW_MESSAGE,
+    roomID,
+    message: {
+      userID,
+      messageID,
+      text,
+      time,
+    },
+  };
 }
 
 export function addUser(user) {
   return {
     type: ADD_USER,
     user,
-  };
-}
-
-export function newLogin(login) {
-  return {
-    type: NEW_LOGIN,
-    login,
   };
 }
 

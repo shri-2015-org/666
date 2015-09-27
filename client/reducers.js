@@ -1,57 +1,94 @@
 import { combineReducers } from 'redux';
 import * as actions from 'actions';
 
-const initialLogin = {
-  avatar: '',
-  name: '',
-  uid: '',
-};
-
-function login(state = initialLogin, action) {
+/*
+  topRooms: [{
+    roomID: string,
+    name: string,
+    users: number,
+    rating: number,
+  }] || null,
+*/
+function topRooms(state = null, action) {
   switch (action.type) {
-    case actions.NEW_LOGIN: return action.login;
+    case action.UPDATE_TOP_ROOMS: return action.rooms;
     default: return state;
   }
 }
 
-function messages(state = [], action) {
-  switch (action.type) {
-    case actions.MESSAGE: {
-      let result;
+function joinUser(state, action) {
+  const {userID} = action;
+  return {
+    ...state,
+    roomUsers: {
+      ...state.roomUsers,
+      [userID]: action.user,
+    },
+  };
+}
 
-      if (action.message.status === 'pending') {
-        result = [
-          ...state,
-          action.message,
-        ];
-      } else {
-        result = state.map(message => {
-          if (message.mid === action.message.mid && message.uid === action.message.uid) {
-            message.status = 'delivered';
-          }
+function leaveUser(state, action) {
+  const {userID} = action;
+  const users = state.roomUsers;
+  const newUsers = Object.assign({}, users);
+  delete newUsers[userID];
+  return {
+    ...state,
+    roomUsers: newUsers,
+  };
+}
 
-          return message;
-        });
-      }
+function newMessage(state, action) {
+  return {
+    ...state,
+    roomMessages: [
+      ...state.roomMessages,
+      action.message,
+    ],
+  };
+}
 
-      return result;
+/*
+  rooms: HashMap('roomID', {
+    userID: string,
+    secret: string,
+    roomName: string,
+    roomUsers: HashMap('userID', {
+      avatar: string,
+      nick: string,
+    }),
+    roomMessages:[{
+      userID: string,
+      messageID: string,
+      text: string,
+      time: number,
+    }]
+  });
+*/
+function rooms(state = {}, action) {
+  function callReducer(reducer) {
+    const room = state[roomID];
+    if (!room) {
+      console.log(`rooms ${action.type}: unexpected roomID "${roomID}"`);
+      return state;
     }
-    default: return state;
+    return {
+      ...state,
+      [roomID]: reducer(room, action),
+    };
   }
-}
 
-function users(state = [], action) {
   switch (action.type) {
-    case actions.ADD_USER: {
-      return [
-        ...state,
-        action.user,
-      ];
-    }
+    case actions.JOIN_USER: return callReducer(joinUser);
+    case actions.LEAVE_USER: return callReducer(leaveUser);
+    case actions.NEW_MESSAGE: return callReducer(newMessage);
     default: return state;
   }
 }
 
+/*
+   navigation: boolean,
+*/
 function navigation(state = true, action) {
   switch (action.type) {
     case actions.TOGGLE_NAVIGATION: {
@@ -61,6 +98,6 @@ function navigation(state = true, action) {
   }
 }
 
-const all = combineReducers({login, users, navigation, messages});
+const all = combineReducers({rooms, topRooms, navigation});
 
 export default all;
