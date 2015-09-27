@@ -11,9 +11,7 @@ import { addMessagePending, addMessageReceived, newLogin } from 'actions';
 import * as transport from './transport.js';
 
 function propsFromState(state) {
-  return {
-    messages: state.messages,
-  };
+  return {};
 }
 
 const createStorePlus = NODE_ENV === 'production' ?
@@ -39,7 +37,7 @@ transport.onMessage(data =>
 transport.onJoinUser(data =>
     store.dispatch(joinUser(data)));
 
-transport.onleaveUser(data =>
+transport.onLeaveUser(data =>
     store.dispatch(leaveUser(data)));
 
 React.render(app, rootElement);

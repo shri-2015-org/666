@@ -90,6 +90,7 @@ const initialUi = {
   navigationCollapsed: false,
   currentRoomID: null,
 };
+
 /*
    ui: {
      navigationCollapsed: boolean,
@@ -109,3 +110,4 @@ function ui(state = initialUi, action) {
 }
 
 export default combineReducers({joinedRooms, topRooms, ui});
+

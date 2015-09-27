@@ -1,10 +1,16 @@
+import { connect } from 'react-redux';
 import React, { Component, PropTypes } from 'react';
 import './Navigation.scss';
 
 class Navigation extends Component {
   render() {
+    const { collapsed } = this.props;
     return (
-      <nav className={this.props.collapsed ? 'navigation' : 'navigation is-collapsed'}>
+      <nav className={
+        collapsed ?
+        'navigation is-collapsed' :
+        'navigation'
+      }>
         <div className="navigation-group">
           <input
             type="text"
