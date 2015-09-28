@@ -7,7 +7,9 @@ export const sendMessage = (dispatch, partialMessage) => {
   };
   dispatch(sentMessage(message));
   transport.message(message)
-    .then(data => dispatch(confirmSentMessage(data)))
-    .error(description => dispatch(rejectSentMessage(message, description)));
+    .then(data =>
+      dispatch(confirmSentMessage(data)))
+    .catch(description =>
+      dispatch(rejectSentMessage(message, description)));
 }
 
