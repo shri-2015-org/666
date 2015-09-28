@@ -56,3 +56,26 @@ export function toggleNavigation() {
     type: TOGGLE_NAVIGATION,
   };
 }
+
+export function sentMessage(message) {
+  return {
+    type: SENT_MESSAGE,
+    ???
+  };
+}
+
+export function confirmSentMessage(data) {
+  return {
+    type: CONFIRM_SENT_MESSAGE,
+    ???
+  };
+}
+
+export function rejectSentMessage(message, description) {
+  return {
+    type: REJECT_SENT_MESSAGE,
+    description,
+    ???
+  };
+}
+

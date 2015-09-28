@@ -5,27 +5,35 @@ import RoomHeader from '../RoomHeader/RoomHeader';
 import MessageList from '../MessageList/MessageList';
 import RoomInput from '../RoomInput/RoomInput';
 import './Room.scss';
+import { sendMessage } from '../../smartActions';
 
-export default class Room extends Component {
+class Room extends Component {
   render() {
+    const { dispatch } = this.props;
+    const { roomID, userID, secret } = this.props.room;
+    const onSend = text => sendMessage(dispatch, {
+      roomID,
+      userID,
+      secret,
+      text,
+      // no time here!
+    });
+
     return (
       <div className="room">
-        <ConnectedRoomHeader />
+        <RoomHeader />
         <div className="room-messages">
           <MessageList
-            messages={this.props.messages}
+            messages={messages}
           />
         </div>
         <RoomInput
-         onSend={this.props.addMessage}
+          onSend={onSend}
         />
       </div>
     );
   }
 }
 
-Room.propTypes = {
-  addMessage: PropTypes.func.isRequired,
-  messages: messagesT,
-};
+export default connect()(Room);
 
