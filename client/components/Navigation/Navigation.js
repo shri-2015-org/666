@@ -4,7 +4,7 @@ import './Navigation.scss';
 
 class Navigation extends Component {
   render() {
-    const { collapsed } = this.props;
+    const { collapsed, currentRoomID, joinedRooms, topRooms } = this.props;
     return (
       <nav className={
         collapsed ?
@@ -20,59 +20,23 @@ class Navigation extends Component {
         <div className="navigation-group">
           <h4 className="navigation-group-label"> Joined </h4>
           <ul className="navigation-group-list">
-            <li>
-              <a href="#!/room/#webdev">#webdev </a> <button className="reset-input">x</button>
-            </li>
-            <li className="is-active">
-              <a href="#!/room/#frontend">#frontend </a> <button className="reset-input">x</button>
-            </li>
-            <li>
-              <a href="#!/room/#react_fun_club">#react_fun_club</a> <button className="reset-input">x</button>
-            </li>
-            <li>
-              <a href="#!/room/#css_geeks">#css_geeks</a> <button className="reset-input">x</button>
-            </li>
+            {_.map(joinedRooms, (room, roomID) =>
+              <li className={roomID === currentRoomID ? 'is-active' : ''}>
+                <a href={`#!/room/#${roomID}`}>{`#${roomID}`}</a>
+                <button className="reset-input">x</button>
+              </li>
+            )}
           </ul>
         </div>
         <div className="navigation-group">
           <h4 className="navigation-group-label"> Top Channels </h4>
           <ul className="navigation-group-list">
-            <li>
-              <a href="#!/room/#webdev">#webdev</a> <span className="badge">9000+</span>
-            </li>
-            <li>
-              <a href="#!/room/#frontend">#frontend</a> <span className="badge">30</span>
-            </li>
-            <li>
-              <a href="#!/room/#react_fun_club">#react_fun_club</a>
-            </li>
-            <li>
-              <a href="#!/room/#css_geeks">#css_geeks</a>
-            </li>
-            <li>
-              <a href="#!/room/#webdev">#webdev</a>
-            </li>
-            <li>
-              <a href="#!/room/#frontend">#frontend</a>
-            </li>
-            <li>
-              <a href="#!/room/#react_fun_club">#react_fun_club</a>
-            </li>
-            <li>
-              <a href="#!/room/#css_geeks">#css_geeks</a>
-            </li>
-            <li>
-              <a href="#!/room/#webdev">#webdev</a>
-            </li>
-            <li>
-              <a href="#!/room/#frontend">#frontend</a>
-            </li>
-            <li>
-              <a href="#!/room/#react_fun_club">#react_fun_club</a>
-            </li>
-            <li>
-              <a href="#!/room/#css_geeks">#css_geeks</a>
-            </li>
+            {_.map(topRooms, room =>
+              <li>
+                <a href={`#!/room/#${room.roomID}`}>{`#${roomID}`}</a>
+                <span className="badge">9000+</span>
+              </li>
+            )}
           </ul>
         </div>
       </nav>
