@@ -10,10 +10,19 @@ import { sendMessage } from '../../smartActions';
 class Room extends Component {
   render() {
     const { dispatch } = this.props;
-    const { roomID, userID, secret } = this.props.room;
+    const { roomID, secret, roomMessages, roomUsers } = this.props.room;
+    const myUserID = this.props.room.userID;
+    const messages = roomMessages.map( ({text, time, userID}) => {
+      return {
+        text,
+        time,
+        nick: roomUsers[userID],
+        avatar: roomUsers[userID],
+      };
+    });
     const onSend = text => sendMessage(dispatch, {
       roomID,
-      userID,
+      myUserID,
       secret,
       text,
       // no time here!

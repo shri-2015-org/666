@@ -4,11 +4,12 @@ import './MessageList.scss';
 
 export default class MessageList extends Component {
   render() {
+    const { messages } = this.props;
     return (
       <ul className="messages">
-        {this.props.messages.map((message, index) =>
+        {messages.map((message, index) =>
           <Message
-            {...message}
+            message={message}
             key={index}
           />
         )}
@@ -17,8 +18,3 @@ export default class MessageList extends Component {
   }
 }
 
-MessageList.propTypes = {
-  messages: PropTypes.arrayOf(PropTypes.shape({
-    text: PropTypes.string.isRequired,
-  }).isRequired).isRequired,
-};
