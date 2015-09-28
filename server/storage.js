@@ -4,6 +4,19 @@ import Message from '../common/Message';
 import * as userGenerator from './userGenerator';
 import * as db from './db';
 
+// TODO fix
+export function joinRoom({roomID}) {
+  db.lock();
+  return db.getRoom(roomID)
+    .then(room => {
+      const userID = uuid.v4();
+      const newRoom = undefined; // FIX ME
+      const promise = db.setRoom(roomID, newRoom);
+      db.unlock();
+      return promise;
+    });
+}
+
 /**
  * Создает нового пользователя и добавляет его в БД
  * @param  {string} uid - идентификатор пользователя

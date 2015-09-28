@@ -9,6 +9,39 @@ const socketServer = new http.Server();
 const io = socketIO(socketServer);
 
 function onConnection(socket) {
+  socket.on('client-request:joinRoom', ({ exchangeID, data }) => {
+    // request validation here ?
+    storage.joinRoom(data)
+      .then((res) => {
+        const { roomID } = res.room;
+        const { userID, nick, avatar } = res.identity;
+        const channel = `room:${roomID}`;
+        const responseEvent = `server-response:joinUser@${exchangeID}`;
+
+        socket.join(channel);
+        socket.emit(responseEvent, {
+          status: 'OK',
+          data: res,
+        });
+        io.to(channel).emit('roomcast:joinUser', {
+          roomID,
+          userID,
+          nick,
+          avatar,
+        });
+      })
+      .catch((err) => {
+        socket.emit(responseEvent, {
+          status: 'ERROR',
+          description: err,
+        });
+      });
+  });
+
+  // TODO leaveRoom
+  // TODO message
+  // TODO delete below
+
   socket.on('loginReq', function onLoginReq(data) {
     const uid = _.result(data, 'uid');
 

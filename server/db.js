@@ -1,7 +1,50 @@
 import _ from 'lodash';
 
+/*
+  rooms: HashMap('roomID', {
+    roomName: string,
+    roomUsers: HashMap('userID', {
+      avatar: string,
+      nick: string,
+      secret: string,
+    }),
+    roomMessages: [{
+      userID: string,
+      messageID: string,
+      text: string,
+      time: number,
+    }],
+    rating: number,
+  })
+*/
+const rooms = {};
+
 const users = {};
 const unreadMessages = [];
+
+// TODO FIX ME
+export function getRoomIDs() {
+  return Promise.resolve(Object.keys(rooms));
+}
+
+// TODO PROBLEM: race condition
+/*
+user 1 joined
+  getRoom 1
+user 2 joined
+  getRoom 2
+  setRoom 1
+  setRoom 2
+*/
+
+// TODO FIX ME
+export function getRoom(roomID) {
+  const room = rooms[roomID];
+  if (!room) {
+    return Promise.reject(`No such room: '${roomID}'`);
+  }
+  return Promise.resolve(_.cloneDeep(room));
+}
 
 /**
  * Создает promise для добавления пользователя в БД
