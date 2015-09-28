@@ -3,7 +3,7 @@ import http from 'http';
 import socketIO from 'socket.io';
 
 import _ from 'lodash';
-import * as storage from './storage';
+import * as actions from './actions.mock';
 
 const socketServer = new http.Server();
 const io = socketIO(socketServer);
@@ -11,7 +11,7 @@ const io = socketIO(socketServer);
 function onConnection(socket) {
   socket.on('client-request:joinRoom', ({ exchangeID, data }) => {
     // request validation here ?
-    storage.joinRoom(data)
+    actions.joinRoom(data)
       .then((res) => {
         const { roomID } = res.room;
         const { userID, nick, avatar } = res.identity;
