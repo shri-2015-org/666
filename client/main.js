@@ -10,21 +10,16 @@ import App from './components/App/App.js';
 import { addMessagePending, addMessageReceived, newLogin } from 'actions';
 import * as transport from './transport.js';
 
-function propsFromState(state) {
-  return {};
-}
-
 const createStorePlus = NODE_ENV === 'production' ?
                         applyMiddleware()(createStore) :
                         applyMiddleware(loggerMiddleware)(createStore);
 
 const store = createStorePlus(all);
-const SmartApp = connect(propsFromState)(App);
 const rootElement = document.getElementById('content');
 
 const app = (
   <Provider store={store}>
-    {() => <SmartApp addMessage={text => store.dispatch(addMessagePending(text))} />}
+    {() => <App addMessage={text => store.dispatch(addMessagePending(text))} />}
   </Provider>
 );
 
