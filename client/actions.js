@@ -3,6 +3,34 @@ export const JOIN_USER = 'JOIN_USER';
 export const LEAVE_USER = 'LEAVE_USER';
 export const TOGGLE_NAVIGATION = 'TOGGLE_NAVIGATION';
 export const UPDATE_TOP_ROOMS = 'UPDATE_TOP_ROOMS';
+export const JOIN_ROOM = 'JOIN_ROOM';
+export const CONFIRM_JOIN_ROOM = 'CONFIRM_JOIN_ROOM';
+export const REJECT_JOIN_ROOM = 'REJECT_JOIN_ROOM';
+export const SENT_MESSAGE = 'SENT_MESSAGE';
+export const CONFIRM_SENT_MESSAGE = 'CONFIRM_SENT_MESSAGE';
+export const REJECT_SENT_MESSAGE = 'REJECT_SENT_MESSAGE';
+
+export function joinRoom(roomID) {
+  return {
+    type: JOIN_ROOM,
+    roomID,
+  };
+}
+
+export function confirmJoinRoom({identity, room}) {
+  return {
+    type: CONFIRM_JOIN_ROOM,
+    identity,
+    room,
+  };
+}
+
+export function rejectJoinRoom(description) {
+  return {
+    type: REJECT_JOIN_ROOM,
+    description,
+  };
+}
 
 export function joinUser({roomID, userID, avatar, nick}) {
   return {

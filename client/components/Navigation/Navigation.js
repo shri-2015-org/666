@@ -3,9 +3,15 @@ import React, { Component, PropTypes } from 'react';
 import './Navigation.scss';
 import _ from 'lodash';
 
+function onClick(e, handler) {
+  e.preventDefault();
+  handler();
+}
+
 class Navigation extends Component {
   render() {
-    const { collapsed, currentRoomID, joinedRooms, topRooms } = this.props;
+    const { dispatch, collapsed, currentRoomID,
+            joinedRooms, topRooms } = this.props;
     return (
       <nav className={
         collapsed ?
@@ -34,7 +40,11 @@ class Navigation extends Component {
           <ul className="navigation-group-list">
             {_.map(topRooms, room =>
               <li>
-                <a href={`#!/room/#${room.roomID}`}>{`#${room.roomID}`}</a>
+                <a
+                  onClick={e => onClick(e, () => joinRoom(dispatch, room.roomID))}
+                  href={`#!/room/#${room.roomID}`}>
+                    {`#${room.roomID}`}
+                </a>
                 <span className="badge">9000+</span>
               </li>
             )}
