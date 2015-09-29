@@ -105,3 +105,38 @@ export function leaveRoom({roomID, userID, secret}) {
   });
 }
 
+export function message({roomID, userID, secret, text, time}) {
+  if (roomID && !rooms.hasOwnProperty(roomID)) {
+    return Promise.reject('No room is found');
+  }
+
+  const room = rooms[roomID];
+  const users = room.roomUsers;
+
+  if (!users.hasOwnProperty(userID)) {
+    return Promise.reject('Your userID is wrong');
+  }
+  if (users[userID].secret !== secret) {
+    return Promise.reject('Your secret is wrong');
+  }
+
+  const messageID = uuid.v4();
+
+  // room mutation
+  room.roomMessages.push({
+    userID,
+    messageID,
+    text,
+    time,
+  });
+
+  // return API structure
+  return Promise.resolve({
+    roomID,
+    userID,
+    messageID,
+    text,
+    time,
+  });
+}
+
