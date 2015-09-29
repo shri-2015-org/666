@@ -15,6 +15,13 @@ const handleError = (socket, responseEvent) => (err) => {
   });
 };
 
+const updateTop = () => {
+  actions.getTop()
+    .then((res) => {
+      io.emit('broadcast:topRooms', res);
+    });
+};
+
 function onConnection(socket) {
   socket.on('client-request:joinRoom', ({ exchangeID, data }) => {
     const responseEvent = `server-response:joinRoom@${exchangeID}`;
@@ -36,6 +43,7 @@ function onConnection(socket) {
           nick,
           avatar,
         });
+        updateTop();
       })
       .catch(handleError(socket, responseEvent));
   });
@@ -55,6 +63,7 @@ function onConnection(socket) {
           roomID,
           userID,
         });
+        updateTop();
       })
       .catch(handleError(socket, responseEvent));
   });
@@ -76,6 +85,8 @@ function onConnection(socket) {
       })
       .catch(handleError(socket, responseEvent));
   });
+
+  updateTop();
 }
 
 export default function(port) {

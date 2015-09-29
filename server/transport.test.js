@@ -17,10 +17,20 @@ describe('Socket server test on port' + port, () => {
   let identity1;
   let identity2;
 
+  // --- topRooms
+
+  it('get topRooms at begin', function init(done) {
+    this.timeout(5000);
+    socket.once('broadcast:topRooms', (res) => {
+      res.should.have.property('rooms');
+      // ...
+      done();
+    });
+  });
+
   // --- joinRoom
 
-  it('join random room', function init(done) {
-    this.timeout(5000);
+  it('join random room', (done) => {
     socket.once('server-response:joinRoom@0', (res) => {
       res.should.have.property('status');
       assert.equal(res.status, 'OK');

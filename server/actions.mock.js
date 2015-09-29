@@ -140,3 +140,21 @@ export function message({roomID, userID, secret, text, time}) {
   });
 }
 
+export function getTop() {
+  const topRooms = Object.keys(rooms)
+    .map((key) => {
+      const room = rooms[key];
+      return {
+        roomID: key,
+        name: room.roomName,
+        users: room.roomUsers.length,
+        rating: room.rating,
+      };
+    });
+
+  // return all rooms
+  return Promise.resolve({
+    rooms: topRooms,
+  });
+}
+
