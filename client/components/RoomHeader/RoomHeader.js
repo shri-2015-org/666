@@ -5,7 +5,7 @@ import './RoomHeader.scss';
 
 class RoomHeader extends Component {
   render() {
-    const { dispatch, navigationCollapsed, currentRoomID, nick } = this.props;
+    const { dispatch, navigationCollapsed, currentRoomID, nick, avatar } = this.props;
 
     return (
       <header className="room-header">
@@ -36,7 +36,7 @@ class RoomHeader extends Component {
               <div
                 className="user-ava ava"
                 style={{
-                  backgroundImage: `url( ${ this.props.login.avatar } )`,
+                  backgroundImage: `url(${avatar})`,
                 }}>
               </div>
             </li>
@@ -48,11 +48,14 @@ class RoomHeader extends Component {
 
 export default connect(state => {
   const { navigationCollapsed, currentRoomID } = state.ui;
-  const nick = state.joinedRooms[state.currentRoomID].nick;
+  const room = state.joinedRooms[currentRoomID];
+  const nick = room.roomUsers[room.userID].nick;
+  const avatar = room.roomUsers[room.userID].avatar;
   return {
     navigationCollapsed,
     currentRoomID,
     nick,
+    avatar,
   };
 })(RoomHeader);
 

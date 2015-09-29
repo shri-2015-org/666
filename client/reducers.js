@@ -101,16 +101,52 @@ function joinedRooms(state = {}, action) {
   }
 
   switch (action.type) {
-    case actions.JOIN_USER: return insideRoom(action.roomID, joinUser);
-    case actions.LEAVE_USER: return insideRoom(action.roomID, leaveUser);
-    case actions.NEW_MESSAGE: return insideRoom(action.roomID, newMessage);
-    case actions.SENT_MESSAGE: return insideRoom(action.roomID, sentMessage);
-
+    case actions.JOIN_USER:
+      return insideRoom(action.roomID, joinUser);
+    case actions.LEAVE_USER:
+      return insideRoom(action.roomID, leaveUser);
+    case actions.NEW_MESSAGE:
+      return insideRoom(action.roomID, newMessage);
+    case actions.SENT_MESSAGE:
+      return insideRoom(action.roomID, sentMessage);
     case actions.CONFIRM_SENT_MESSAGE:
       return insideRoom(action.data.roomID, confirmSentMessage);
-
     case actions.REJECT_SENT_MESSAGE: {
       console.log(`Message rejected: ${action.description}`, action.message);
+      return state;
+    }
+    case actions.JOIN_ROOM:
+      return state;
+    case actions.CONFIRM_JOIN_ROOM: {
+      const { room, identity } = action;
+      const { roomID } = room;
+      const { userID, secret } = identity;
+      const roomName = room.name;
+      const roomUsers = room.users
+        .reduce( (result, {userID: key, avatar, nick} ) => {
+          return {
+            ...result,
+            [key]: {
+              avatar,
+              nick,
+            },
+          };
+        }, {});
+
+      return {
+        ...state,
+        [roomID]: {
+          userID,
+          secret,
+          roomName,
+          roomUsers,
+          roomMessages: {},
+          orderedMessages: [],
+        },
+      };
+    }
+    case actions.REJECT_JOIN_ROOM: {
+      console.log(`Join room rejected: ${action.description}`);
       // TODO: show the error to user instead
       return state;
     }
@@ -136,6 +172,12 @@ function ui(state = initialUi, action) {
       return {
         ...state,
         navigationCollapsed: !state.navigationCollapsed,
+      };
+    }
+    case actions.CONFIRM_JOIN_ROOM: {
+      return {
+        ...state,
+        currentRoomID: action.room.roomID,
       };
     }
     default: return state;

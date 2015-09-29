@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import React, { Component, PropTypes } from 'react';
+import {joinRoom} from '../../smartActions';
 import './Navigation.scss';
 import _ from 'lodash';
 
