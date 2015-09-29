@@ -147,7 +147,7 @@ export function getTop() {
       return {
         roomID: key,
         name: room.roomName,
-        users: room.roomUsers.length,
+        users: Object.keys(room.roomUsers).length,
         rating: room.rating,
       };
     });
