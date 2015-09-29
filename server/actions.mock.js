@@ -20,7 +20,21 @@ import * as userGenerator from './userGenerator';
     rating: number,
   })
 */
-const rooms = {};
+// mock start data
+const rooms = {
+  '1289f58a-418d-4b6d-88e9-071418aa62e3': {
+    roomName: 'Main room',
+    roomUsers: {
+      '8cc4dc0b-8263-49d7-90dd-15551913462d': {
+        secret: '48cdbbb9-5e8a-403f-9104-e5ed66019a41',
+        nick: 'Anonym',
+        avatar: 'media/plane.svg',
+      },
+    },
+    roomMessages: [],
+    rating: 0,
+  },
+};
 
 export function joinRoom({roomID}) {
   if (roomID && !rooms.hasOwnProperty(roomID)) {
@@ -34,15 +48,12 @@ export function joinRoom({roomID}) {
   const room = rooms[joinedRoom];
 
   // room mutation
-  rooms[joinedRoom] = {
-    ...room,
-    roomUsers: {
-      ...room.roomUsers,
-      user: {
-        secret: uuid.v4(),
-        nick: userGenerator.generateName(),
-        avatar: userGenerator.generateAvatar(user),
-      },
+  room.roomUsers = {
+    ...room.roomUsers,
+    [user]: {
+      secret: uuid.v4(),
+      nick: userGenerator.generateName(),
+      avatar: userGenerator.generateAvatar(user),
     },
   };
 
@@ -50,9 +61,9 @@ export function joinRoom({roomID}) {
   return Promise.resolve({
     identity: {
       userID: user,
-      secret: room.roomUser[user].secret,
-      nick: room.roomUser[user].nick,
-      avatar: room.roomUser[user].avatar,
+      secret: room.roomUsers[user].secret,
+      nick: room.roomUsers[user].nick,
+      avatar: room.roomUsers[user].avatar,
     },
     room: {
       roomID: joinedRoom,
@@ -62,8 +73,8 @@ export function joinRoom({roomID}) {
           return {
             roomID: joinedRoom,
             userID: key,
-            nick: room.roomUser[key].nick,
-            avatar: room.roomUser[key].avatar,
+            nick: room.roomUsers[key].nick,
+            avatar: room.roomUsers[key].avatar,
           };
         }),
     },

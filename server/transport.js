@@ -10,13 +10,13 @@ const io = socketIO(socketServer);
 
 function onConnection(socket) {
   socket.on('client-request:joinRoom', ({ exchangeID, data }) => {
+    const responseEvent = `server-response:joinRoom@${exchangeID}`;
     // request validation here ?
     actions.joinRoom(data)
       .then((res) => {
         const { roomID } = res.room;
         const { userID, nick, avatar } = res.identity;
         const channel = `room:${roomID}`;
-        const responseEvent = `server-response:joinUser@${exchangeID}`;
 
         socket.join(channel);
         socket.emit(responseEvent, {
@@ -41,7 +41,7 @@ function onConnection(socket) {
   // TODO leaveRoom
   // TODO message
   // TODO delete below
-
+/*
   socket.on('loginReq', function onLoginReq(data) {
     const uid = _.result(data, 'uid');
 
@@ -83,6 +83,7 @@ function onConnection(socket) {
       socket.emit('roomUsers', users);
     });
   });
+*/
 }
 
 export default function(port) {
