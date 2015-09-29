@@ -64,7 +64,7 @@ function onConnection(socket) {
     // TODO request validation here
     actions.message(data)
       .then((res) => {
-        const { roomID } = res.room;
+        const { roomID } = res;
         const channel = `room:${roomID}`;
 
         socket.join(channel);

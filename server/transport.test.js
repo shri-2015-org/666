@@ -14,11 +14,12 @@ describe('Socket server test on port' + port, () => {
   });
 
   const mockRoomID = '1289f58a-418d-4b6d-88e9-071418aa62e3';
-  let identity;
+  let identity1;
+  let identity2;
 
   // --- joinRoom
 
-  it('join random room', function checklogin(done) {
+  it('join random room', function init(done) {
     this.timeout(5000);
     socket.once('server-response:joinRoom@0', (res) => {
       res.should.have.property('status');
@@ -27,6 +28,7 @@ describe('Socket server test on port' + port, () => {
       res.data.should.have.property('identity');
       res.data.should.have.property('room');
       // ...
+      identity1 = res.data.identity;
       done();
     });
     socket.emit('client-request:joinRoom', {
@@ -37,8 +39,7 @@ describe('Socket server test on port' + port, () => {
     });
   });
 
-  it('join existed room', function checklogin(done) {
-    this.timeout(5000);
+  it('join existed room', (done) => {
     socket.once('server-response:joinRoom@1', (res) => {
       res.should.have.property('status');
       assert.equal(res.status, 'OK');
@@ -46,7 +47,7 @@ describe('Socket server test on port' + port, () => {
       res.data.should.have.property('identity');
       res.data.should.have.property('room');
       // ...
-      identity = res.data.identity;
+      identity2 = res.data.identity;
       done();
     });
     socket.emit('client-request:joinRoom', {
@@ -57,8 +58,7 @@ describe('Socket server test on port' + port, () => {
     });
   });
 
-  it('join unknown room', function checklogin(done) {
-    this.timeout(5000);
+  it('join unknown room', (done) => {
     socket.once('server-response:joinRoom@2', (res) => {
       res.should.have.property('status');
       assert.equal(res.status, 'ERROR');
@@ -76,8 +76,7 @@ describe('Socket server test on port' + port, () => {
 
   // --- leaveRoom
 
-  it('leave unknown room', function checklogin(done) {
-    this.timeout(5000);
+  it('leave unknown room', (done) => {
     socket.once('server-response:leaveRoom@3', (res) => {
       res.should.have.property('status');
       assert.equal(res.status, 'ERROR');
@@ -95,8 +94,7 @@ describe('Socket server test on port' + port, () => {
     });
   });
 
-  it('leave room with unknown user', function checklogin(done) {
-    this.timeout(5000);
+  it('leave room with unknown user', (done) => {
     socket.once('server-response:leaveRoom@4', (res) => {
       res.should.have.property('status');
       assert.equal(res.status, 'ERROR');
@@ -114,8 +112,7 @@ describe('Socket server test on port' + port, () => {
     });
   });
 
-  it('leave room with unknown secret', function checklogin(done) {
-    this.timeout(5000);
+  it('leave room with unknown secret', (done) => {
     socket.once('server-response:leaveRoom@5', (res) => {
       res.should.have.property('status');
       assert.equal(res.status, 'ERROR');
@@ -127,14 +124,13 @@ describe('Socket server test on port' + port, () => {
       exchangeID: '5',
       data: {
         roomID: mockRoomID,
-        userID: identity.userID,
+        userID: identity1.userID,
         secret: 'unknown-secret',
       },
     });
   });
 
-  it('leave room -> ok', function checklogin(done) {
-    this.timeout(5000);
+  it('leave room -> ok', (done) => {
     socket.once('server-response:leaveRoom@6', (res) => {
       res.should.have.property('status');
       assert.equal(res.status, 'OK');
@@ -145,13 +141,99 @@ describe('Socket server test on port' + port, () => {
       exchangeID: '6',
       data: {
         roomID: mockRoomID,
-        userID: identity.userID,
-        secret: identity.secret,
+        userID: identity1.userID,
+        secret: identity1.secret,
       },
     });
   });
 
   // --- message
-  // TODO message
+
+  const messageText = 'Some message text';
+  const messageTime = Date.now();
+
+  it('message to unknown room', (done) => {
+    socket.once('server-response:message@7', (res) => {
+      res.should.have.property('status');
+      assert.equal(res.status, 'ERROR');
+      res.should.have.property('description');
+      // ...
+      done();
+    });
+    socket.emit('client-request:message', {
+      exchangeID: '7',
+      data: {
+        roomID: 'unknown-room-id',
+        userID: 'unknown-user-id',
+        secret: 'unknown-secret',
+        text: messageText,
+        time: messageTime,
+      },
+    });
+  });
+
+  it('message to room with unknown user', (done) => {
+    socket.once('server-response:message@8', (res) => {
+      res.should.have.property('status');
+      assert.equal(res.status, 'ERROR');
+      res.should.have.property('description');
+      // ...
+      done();
+    });
+    socket.emit('client-request:message', {
+      exchangeID: '8',
+      data: {
+        roomID: mockRoomID,
+        userID: 'unknown-user-id',
+        secret: 'unknown-secret',
+        text: messageText,
+        time: messageTime,
+      },
+    });
+  });
+
+  it('message to room with unknown secret', (done) => {
+    socket.once('server-response:message@9', (res) => {
+      res.should.have.property('status');
+      assert.equal(res.status, 'ERROR');
+      res.should.have.property('description');
+      // ...
+      done();
+    });
+    socket.emit('client-request:message', {
+      exchangeID: '9',
+      data: {
+        roomID: mockRoomID,
+        userID: identity2.userID,
+        secret: 'unknown-secret',
+        text: messageText,
+        time: messageTime,
+      },
+    });
+  });
+
+  it('message to room -> ok', (done) => {
+    socket.once('server-response:message@10', (res) => {
+      res.should.have.property('status');
+      assert.equal(res.status, 'OK');
+      res.should.have.property('data');
+      res.data.should.have.property('text');
+      assert.equal(res.data.text, messageText);
+      res.data.should.have.property('time');
+      assert.equal(res.data.time, messageTime);
+      // ...
+      done();
+    });
+    socket.emit('client-request:message', {
+      exchangeID: '10',
+      data: {
+        roomID: mockRoomID,
+        userID: identity2.userID,
+        secret: identity2.secret,
+        text: messageText,
+        time: messageTime,
+      },
+    });
+  });
 });
 
