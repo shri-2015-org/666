@@ -11,7 +11,7 @@ import * as actions from 'actions';
 */
 function topRooms(state = null, action) {
   switch (action.type) {
-    case action.UPDATE_TOP_ROOMS: return action.rooms;
+    case actions.UPDATE_TOP_ROOMS: return action.rooms;
     default: return state;
   }
 }

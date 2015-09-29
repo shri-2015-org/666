@@ -34,7 +34,7 @@ class Navigation extends Component {
           <ul className="navigation-group-list">
             {_.map(topRooms, room =>
               <li>
-                <a href={`#!/room/#${room.roomID}`}>{`#${roomID}`}</a>
+                <a href={`#!/room/#${room.roomID}`}>{`#${room.roomID}`}</a>
                 <span className="badge">9000+</span>
               </li>
             )}

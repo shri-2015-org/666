@@ -7,7 +7,7 @@ import loggerMiddleware from 'redux-logger';
 
 import all from './reducers';
 import App from './components/App/App.js';
-import { addMessagePending, addMessageReceived, newLogin } from 'actions';
+import { updateTopRooms, newMessage, joinUser, leaveUser } from 'actions';
 import * as transport from './transport.js';
 
 const createStorePlus = NODE_ENV === 'production' ?
