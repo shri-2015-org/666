@@ -39,13 +39,34 @@ function leaveUser(state, action) {
 }
 
 function newMessage(state, action) {
+  const { message } = action;
+  const { messageID } = message;
+  if (state.roomMessages[messageID]) {
+    // TODO: handle existing message.
+    return state;
+  }
   return {
     ...state,
+    // TODO: insert at correct time, not last in list.
+    orderedMessages: [
+      ...state.orderedMessages,
+      messageID,
+    ],
     roomMessages: [
       ...state.roomMessages,
-      action.message,
+      [messageID]: message,
     ],
   };
+}
+
+function sentMessage(state, action) {
+  // TODO: show the sent, but not yet confirmed message
+  return state;
+}
+
+function confirmSentMessage(state, action) {
+  // TODO: change the status of unconfirmed message
+  return state;
 }
 
 /*
@@ -57,16 +78,17 @@ function newMessage(state, action) {
       avatar: string,
       nick: string,
     }),
-    roomMessages:[{
+    roomMessages: HashMap('messageID', {
       userID: string,
       messageID: string,
       text: string,
       time: number,
-    }]
+    })],
+    orderedMessages: ['messageID'],
   });
 */
 function joinedRooms(state = {}, action) {
-  function callReducer(reducer) {
+  function insideRoom(roomID, reducer) {
     const room = state[roomID];
     if (!room) {
       console.log(`rooms ${action.type}: unexpected roomID "${roomID}"`);
@@ -79,9 +101,20 @@ function joinedRooms(state = {}, action) {
   }
 
   switch (action.type) {
-    case actions.JOIN_USER: return callReducer(joinUser);
-    case actions.LEAVE_USER: return callReducer(leaveUser);
-    case actions.NEW_MESSAGE: return callReducer(newMessage);
+    case actions.JOIN_USER: return insideRoom(action.roomID, joinUser);
+    case actions.LEAVE_USER: return insideRoom(action.roomID, leaveUser);
+    case actions.NEW_MESSAGE: return insideRoom(action.roomID, newMessage);
+    case actions.SENT_MESSAGE: return insideRoom(action.roomID, sentMessage);
+
+    case actions.CONFIRM_SENT_MESSAGE:
+      return insideRoom(action.data.roomID, confirmSentMessage);
+
+    case actions.REJECT_SENT_MESSAGE: {
+      console.log(`Message rejected: ${action.description}`, action.message);
+      // TODO: show the error to user instead
+      return state;
+    }
+
     default: return state;
   }
 }

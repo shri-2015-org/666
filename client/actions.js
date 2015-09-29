@@ -57,17 +57,20 @@ export function toggleNavigation() {
   };
 }
 
-export function sentMessage(message) {
+export function sentMessage({roomID, text, time}) {
   return {
     type: SENT_MESSAGE,
-    ???
+    roomID,
+    text,
+    time,
   };
 }
 
-export function confirmSentMessage(data) {
+export function confirmSentMessage({roomID, messageID}) {
   return {
     type: CONFIRM_SENT_MESSAGE,
-    ???
+    roomID,
+    messageID,
   };
 }
 
@@ -75,7 +78,6 @@ export function rejectSentMessage(message, description) {
   return {
     type: REJECT_SENT_MESSAGE,
     description,
-    ???
   };
 }
 
