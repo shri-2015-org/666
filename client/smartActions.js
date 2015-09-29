@@ -3,7 +3,7 @@ import { sentMessage, confirmSentMessage, rejectSentMessage } from './actions.js
 export const sendMessage = (dispatch, partialMessage) => {
   const message = {
     ...partialMessage,
-    time = Time.now();
+    time: Date.now(),
   };
   dispatch(sentMessage(message));
   transport.message(message)
@@ -11,5 +11,5 @@ export const sendMessage = (dispatch, partialMessage) => {
       dispatch(confirmSentMessage(data)))
     .catch(description =>
       dispatch(rejectSentMessage(message, description)));
-}
+};
 
