@@ -1,3 +1,4 @@
+import { connect } from 'react-redux';
 import { toggleNavigation } from '../../actions';
 import React, { Component } from 'react';
 import './RoomHeader.scss';
@@ -9,7 +10,7 @@ class RoomHeader extends Component {
     return (
       <header className="room-header">
         <ul className="room-header-bar"
-            onClick={() => dispatch(toggleNavigation())} />
+            onClick={() => dispatch(toggleNavigation())}>
           <li className="room-header-bar-item">
             <i className={navigationCollapsed ? 'iconNav' : 'iconNav is-hidden'}>
               <b className="iconNav-line"></b>
@@ -19,7 +20,7 @@ class RoomHeader extends Component {
           </li>
           <li className="room-header-bar-item">
             <h3 className="room-name">
-              <a href={`#!/room/#${currentRoomID}`}">
+              <a href="{`#!/room/#${currentRoomID}`}">
                 {`#${currentRoomID}`}
               </a>
             </h3>
@@ -35,7 +36,7 @@ class RoomHeader extends Component {
               <div
                 className="user-ava ava"
                 style={{
-                  backgroundImage: `url( ${ this.props.login.avatar } )`
+                  backgroundImage: `url( ${ this.props.login.avatar } )`,
                 }}>
               </div>
             </li>

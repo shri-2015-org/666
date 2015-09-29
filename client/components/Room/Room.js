@@ -14,7 +14,7 @@ class Room extends Component {
             roomMessages, roomUsers } = this.props.room;
     const myUserID = this.props.room.userID;
     const messages = orderedMessages.map(messageID => {
-      const { text, time, userID } = roomMessages[messageID]
+      const { text, time, userID } = roomMessages[messageID];
       return {
         text,
         time,

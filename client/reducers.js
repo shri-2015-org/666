@@ -52,10 +52,10 @@ function newMessage(state, action) {
       ...state.orderedMessages,
       messageID,
     ],
-    roomMessages: [
+    roomMessages: {
       ...state.roomMessages,
       [messageID]: message,
-    ],
+    },
   };
 }
 

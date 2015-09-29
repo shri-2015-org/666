@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import React, { Component, PropTypes } from 'react';
 import './Navigation.scss';
+import _ from 'lodash';
 
 class Navigation extends Component {
   render() {
