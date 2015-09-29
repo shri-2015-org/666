@@ -11,7 +11,7 @@ const io = socketIO(socketServer);
 function onConnection(socket) {
   socket.on('client-request:joinRoom', ({ exchangeID, data }) => {
     const responseEvent = `server-response:joinRoom@${exchangeID}`;
-    // request validation here ?
+    // TODO request validation here
     actions.joinRoom(data)
       .then((res) => {
         const { roomID } = res.room;
@@ -38,7 +38,30 @@ function onConnection(socket) {
       });
   });
 
-  // TODO leaveRoom
+  socket.on('client-request:leaveRoom', ({ exchangeID, data }) => {
+    const responseEvent = `server-response:leaveRoom@${exchangeID}`;
+    // TODO request validation here
+    actions.leaveRoom(data)
+      .then(({roomID, userID}) => {
+        const channel = `room:${roomID}`;
+
+        socket.leave(channel);
+        socket.emit(responseEvent, {
+          status: 'OK',
+        });
+        io.to(channel).emit('roomcast:leaveUser', {
+          roomID,
+          userID,
+        });
+      })
+      .catch((err) => {
+        socket.emit(responseEvent, {
+          status: 'ERROR',
+          description: err,
+        });
+      });
+  });
+
   // TODO message
   // TODO delete below
 /*

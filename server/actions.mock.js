@@ -81,3 +81,27 @@ export function joinRoom({roomID}) {
   });
 }
 
+export function leaveRoom({roomID, userID, secret}) {
+  if (!roomID || !rooms.hasOwnProperty(roomID)) {
+    return Promise.reject('No room is found');
+  }
+
+  const users = rooms[roomID].roomUsers;
+
+  if (!users.hasOwnProperty(userID)) {
+    return Promise.reject('Your userID is wrong');
+  }
+  if (users[userID].secret !== secret) {
+    return Promise.reject('Your secret is wrong');
+  }
+
+  // room mutation
+  delete users[userID];
+
+  // return API structure
+  return Promise.resolve({
+    roomID,
+    userID,
+  });
+}
+
