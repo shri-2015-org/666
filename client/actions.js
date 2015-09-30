@@ -101,26 +101,29 @@ export function toggleNavigation() {
   };
 }
 
-export function sentMessage({roomID, text, time}) {
+export function sentMessage(pendingID, {roomID, text, time}) {
   return {
     type: SENT_MESSAGE,
+    pendingID,
     roomID,
     text,
     time,
   };
 }
 
-export function confirmSentMessage({roomID, messageID}) {
+export function confirmSentMessage(pendingID, {roomID, messageID}) {
   return {
     type: CONFIRM_SENT_MESSAGE,
+    pendingID,
     roomID,
     messageID,
   };
 }
 
-export function rejectSentMessage(message, description) {
+export function rejectSentMessage(pendingID, description) {
   return {
     type: REJECT_SENT_MESSAGE,
+    pendingID,
     description,
   };
 }

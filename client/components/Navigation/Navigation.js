@@ -29,7 +29,9 @@ class Navigation extends Component {
           <h4 className="navigation-group-label"> Joined </h4>
           <ul className="navigation-group-list">
             {_.map(joinedRooms, ({roomName}, roomID) =>
-              <li className={roomID === currentRoomID ? 'is-active' : ''}>
+                <li 
+                  key={roomID}
+                  className={roomID === currentRoomID ? 'is-active' : ''}>
                 <a
                   onClick={e => onClick(e, () => dispatch(switchToRoom(roomID)))}
                   href={`#!/room/#${roomID}`}>{`#${roomName}`}
@@ -46,8 +48,8 @@ class Navigation extends Component {
         <div className="navigation-group">
           <h4 className="navigation-group-label"> Top Channels </h4>
           <ul className="navigation-group-list">
-            {_.map(topRooms, ({name, users, roomID}) =>
-              <li>
+            {_.map(topRooms, ({name, users, roomID}, index) =>
+              <li key={index}>
                 <a
                   onClick={e => onClick(e, () => dispatch(switchToRoom(roomID)))}
                   href={`#!/room/#${roomID}`}>

@@ -10,12 +10,12 @@ export const switchToRoom = roomID => (dispatch, getState) => {
   if (needToJoin) {
     dispatch(actions.joinRoom(roomID));
     transport.joinRoom(roomID)
+      .catch(description =>
+        dispatch(actions.rejectJoinRoom(description)))
       .then(data => {
         dispatch(actions.confirmJoinRoom(data));
         dispatch(actions.switchToJoinedRoom(roomID));
-      })
-      .catch(description =>
-        dispatch(actions.rejectJoinRoom(description)));
+      });
   } else {
     dispatch(actions.switchToJoinedRoom(roomID));
   }
@@ -26,6 +26,7 @@ export const leaveRoom = roomID => (dispatch, getState) => {
   const room = state.joinedRooms[roomID]
   if (!room) {
     console.log("Cannot leave room ${roomID}: we are not in it!?");
+    return;
   }
   const { secret, userID } = room;
   dispatch(actions.leaveRoom(roomID));
@@ -33,16 +34,22 @@ export const leaveRoom = roomID => (dispatch, getState) => {
   // TODO handle replies?
 };
 
+let _totalSent = 0;
+function newPendingID() {
+  return _totalSent++;
+}
+
 export const sendMessage = partialMessage => dispatch => {
+  const pendingID = `pending-message:${newPendingID()}`;
   const message = {
     ...partialMessage,
     time: Date.now(),
   };
-  dispatch(actions.sentMessage(message));
+  dispatch(actions.sentMessage(pendingID, message));
   transport.message(message)
-    .then(data =>
-      dispatch(actions.confirmSentMessage(data)))
     .catch(description =>
-      dispatch(actions.rejectSentMessage(message, description)));
+      dispatch(actions.rejectSentMessage(pendingID, description)))
+    .then(data =>
+      dispatch(actions.confirmSentMessage(pendingID, data)));
 };
 

@@ -3,13 +3,18 @@ import 'scss/main.scss';
 import React from 'react';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider, connect } from 'react-redux';
-import loggerMiddleware from 'redux-logger';
+import createLogger from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 
 import all from './reducers';
 import App from './components/App/App.js';
 import { updateTopRooms, newMessage, joinUser, leaveUser } from 'actions';
 import * as transport from './transport.js';
+
+const loggerMiddleware = createLogger({
+  level: 'info',
+  collapsed: true,
+});
 
 const applyMiddlewares = NODE_ENV === 'production' ?
                          applyMiddleware(thunkMiddleware) :

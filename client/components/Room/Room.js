@@ -14,13 +14,14 @@ class Room extends Component {
             roomMessages, roomUsers } = room;
     const userID = this.props.room.userID;
     const messages = orderedMessages.map(messageID => {
-      const { text, time, userID: key } = roomMessages[messageID];
+      const { text, time, userID: key, status } = roomMessages[messageID];
       const { nick, avatar } = roomUsers[key];
       return {
         text,
         time,
         nick,
         avatar,
+        status,
       };
     });
     const onSend = text => dispatch(sendMessage({
