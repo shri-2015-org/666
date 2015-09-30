@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import React, { Component, PropTypes } from 'react';
-import { switchToRoom } from '../../smartActions';
+import { switchToRoom, leaveRoom } from '../../smartActions';
 import './Navigation.scss';
 import _ from 'lodash';
 
@@ -11,7 +11,6 @@ function onClick(e, handler) {
 
 class Navigation extends Component {
   render() {
-
     const { dispatch, collapsed, currentRoomID,
             joinedRooms, topRooms } = this.props;
     return (

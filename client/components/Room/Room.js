@@ -9,9 +9,9 @@ import { sendMessage } from '../../smartActions';
 
 class Room extends Component {
   render() {
-    const { dispatch } = this.props;
+    const { dispatch, room } = this.props;
     const { roomID, secret, orderedMessages,
-            roomMessages, roomUsers } = this.props.room;
+            roomMessages, roomUsers } = room;
     const userID = this.props.room.userID;
     const messages = orderedMessages.map(messageID => {
       const { text, time, userID: key } = roomMessages[messageID];
@@ -33,7 +33,7 @@ class Room extends Component {
 
     return (
       <div className="room">
-        <RoomHeader />
+        <RoomHeader room={room} />
         <div className="room-messages">
           <MessageList
             messages={messages}

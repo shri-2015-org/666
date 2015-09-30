@@ -5,7 +5,9 @@ import './RoomHeader.scss';
 
 class RoomHeader extends Component {
   render() {
-    const { dispatch, navigationCollapsed, currentRoomID, roomName, nick, avatar } = this.props;
+    const { dispatch, navigationCollapsed, room } = this.props;
+    const { roomName } = room;
+    const { nick, avatar } = room.roomUsers[room.userID];
 
     return (
       <header className="room-header">
@@ -47,17 +49,9 @@ class RoomHeader extends Component {
 }
 
 export default connect(state => {
-  const { navigationCollapsed, currentRoomID } = state.ui;
-  const room = state.joinedRooms[currentRoomID];
-  const roomName = room.roomName
-  const nick = room.roomUsers[room.userID].nick;
-  const avatar = room.roomUsers[room.userID].avatar;
+  const { navigationCollapsed } = state.ui;
   return {
     navigationCollapsed,
-    currentRoomID,
-    roomName,
-    nick,
-    avatar,
   };
 })(RoomHeader);
 

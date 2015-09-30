@@ -117,6 +117,12 @@ function joinedRooms(state = {}, action) {
     }
     case actions.JOIN_ROOM:
       return state;
+    case actions.LEAVE_ROOM: {
+      const { roomID } = action;
+      const newState = Object.assign({}, state);
+      delete newState[roomID];
+      return newState;
+    }
     case actions.CONFIRM_JOIN_ROOM: {
       const { room, identity } = action;
       const { roomID } = room;
@@ -178,6 +184,13 @@ function ui(state = initialUi, action) {
       return {
         ...state,
         currentRoomID: action.roomID,
+      };
+    }
+    case actions.LEAVE_ROOM: {
+      if (state.currentRoomID !== action.roomID) return state;
+      return {
+          ...state,
+          currentRoomID: null,
       };
     }
     default: return state;

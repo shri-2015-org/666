@@ -21,6 +21,18 @@ export const switchToRoom = roomID => (dispatch, getState) => {
   }
 };
 
+export const leaveRoom = roomID => (dispatch, getState) => {
+  const state = getState();
+  const room = state.joinedRooms[roomID]
+  if (!room) {
+    console.log("Cannot leave room ${roomID}: we are not in it!?");
+  }
+  const { secret, userID } = room;
+  dispatch(actions.leaveRoom(roomID));
+  transport.leaveRoom({roomID, userID, secret})
+  // TODO handle replies?
+};
+
 export const sendMessage = partialMessage => dispatch => {
   const message = {
     ...partialMessage,
