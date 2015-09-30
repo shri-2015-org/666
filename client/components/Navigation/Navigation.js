@@ -29,13 +29,17 @@ class Navigation extends Component {
         <div className="navigation-group">
           <h4 className="navigation-group-label"> Joined </h4>
           <ul className="navigation-group-list">
-            {_.map(joinedRooms, {room, roomID} =>
+            {_.map(joinedRooms, ({roomName}, roomID) =>
               <li className={roomID === currentRoomID ? 'is-active' : ''}>
                 <a
                   onClick={e => onClick(e, () => dispatch(switchToRoom(roomID)))}
-                  href={`#!/room/#${roomID}`}>{`#${room.roomName}`}
+                  href={`#!/room/#${roomID}`}>{`#${roomName}`}
                 </a>
-                <button className="reset-input">x</button>
+                <button
+                  className="reset-input"
+                  onClick={() => dispatch(leaveRoom(roomID))}>
+                    x
+                </button>
               </li>
             )}
           </ul>
@@ -43,14 +47,14 @@ class Navigation extends Component {
         <div className="navigation-group">
           <h4 className="navigation-group-label"> Top Channels </h4>
           <ul className="navigation-group-list">
-            {_.map(topRooms, {name, roomID} =>
+            {_.map(topRooms, ({name, users, roomID}) =>
               <li>
                 <a
                   onClick={e => onClick(e, () => dispatch(switchToRoom(roomID)))}
                   href={`#!/room/#${roomID}`}>
                     {`#${name}`}
                 </a>
-                <span className="badge">{room.users}</span>
+                <span className="badge">{users}</span>
               </li>
             )}
           </ul>
