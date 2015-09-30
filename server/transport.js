@@ -3,53 +3,90 @@ import http from 'http';
 import socketIO from 'socket.io';
 
 import _ from 'lodash';
-import * as storage from './storage';
+import actions from './mock/wrapper';
 
 const socketServer = new http.Server();
 const io = socketIO(socketServer);
 
+const handleError = (socket, responseEvent) => (err) => {
+  socket.emit(responseEvent, {
+    status: 'ERROR',
+    description: err,
+  });
+};
+
+const updateTop = () => {
+  actions.getTop()
+    .then((res) => {
+      io.emit('broadcast:topRooms', res);
+    });
+};
+
 function onConnection(socket) {
-  socket.on('loginReq', function onLoginReq(data) {
-    const uid = _.result(data, 'uid');
+  socket.on('client-request:joinRoom', ({ exchangeID, data }) => {
+    const responseEvent = `server-response:joinRoom@${exchangeID}`;
+    // TODO request validation here
+    actions.joinRoom(data)
+      .then((res) => {
+        const { roomID } = res.room;
+        const { userID, nick, avatar } = res.identity;
+        const channel = `room:${roomID}`;
 
-    storage.getUser(uid).then( function onGetUser(user) {
-      if (user) {
-        socket.emit('loginRes', user);
-        io.emit('newUser', user);
-      }
-    }).catch( function createNewUser() {
-      storage.createUser().then( function onCreateUser(user) {
-        socket.emit('loginRes', user);
-        io.emit('newUser', user);
-      });
-    });
+        socket.join(channel);
+        socket.emit(responseEvent, {
+          status: 'OK',
+          data: res,
+        });
+        io.to(channel).emit('roomcast:joinUser', {
+          roomID,
+          userID,
+          nick,
+          avatar,
+        });
+        updateTop();
+      })
+      .catch(handleError(socket, responseEvent));
   });
 
-  socket.on('sendMessage', function onSendMessage(data) {
-    if (data && data.uid && data.text) { // TODO обработка ошибок?
-      storage.addUnreadMessage(data).then( function onAddUnreadMessage(message) {
-        io.emit('message', message);
-      });
-    }
+  socket.on('client-request:leaveRoom', ({ exchangeID, data }) => {
+    const responseEvent = `server-response:leaveRoom@${exchangeID}`;
+    // TODO request validation here
+    actions.leaveRoom(data)
+      .then(({roomID, userID}) => {
+        const channel = `room:${roomID}`;
+
+        socket.leave(channel);
+        socket.emit(responseEvent, {
+          status: 'OK',
+        });
+        io.to(channel).emit('roomcast:leaveUser', {
+          roomID,
+          userID,
+        });
+        updateTop();
+      })
+      .catch(handleError(socket, responseEvent));
   });
 
-  socket.on('readMessage', function onReadMessage(data) {
-    storage.readMessage(_.result(data, 'mid')).then( function messageRead(message) {
-      socket.emit('messageRead', message);
-    });
+  socket.on('client-request:message', ({ exchangeID, data }) => {
+    const responseEvent = `server-response:message@${exchangeID}`;
+    // TODO request validation here
+    actions.message(data)
+      .then((res) => {
+        const { roomID } = res;
+        const channel = `room:${roomID}`;
+
+        socket.join(channel);
+        socket.emit(responseEvent, {
+          status: 'OK',
+          data: res,
+        });
+        io.to(channel).emit('roomcast:message', res);
+      })
+      .catch(handleError(socket, responseEvent));
   });
 
-  socket.on('getUser', function onGetUser(data) {
-    storage.getUser(_.result(data, 'uid')).then( function sendUser(user) {
-      socket.emit('user', user);
-    });
-  });
-
-  socket.on('getRoomUsers', function onGetRoomUsers() {
-    storage.getRoomUsers().then( function sendRoomUsers(users) {
-      socket.emit('roomUsers', users);
-    });
-  });
+  updateTop();
 }
 
 export default function(port) {

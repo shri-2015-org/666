@@ -3,39 +3,45 @@ import 'scss/main.scss';
 import React from 'react';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider, connect } from 'react-redux';
-import loggerMiddleware from 'redux-logger';
+import createLogger from 'redux-logger';
+import thunkMiddleware from 'redux-thunk';
 
 import all from './reducers';
 import App from './components/App/App.js';
-import { addMessageReceived, newLogin } from './actions.js';
+import { updateTopRooms, newMessage, joinUser, leaveUser } from 'actions';
 import * as transport from './transport.js';
 
-function propsFromState(state) {
-  return {
-    messages: [
-      ...state.received,
-      ...state.pending.messages,
-    ],
-  };
-}
+const loggerMiddleware = createLogger({
+  level: 'info',
+  collapsed: true,
+});
 
-const createStorePlus = NODE_ENV === 'production' ?
-                        applyMiddleware()(createStore) :
-                        applyMiddleware(loggerMiddleware)(createStore);
+const applyMiddlewares = NODE_ENV === 'production' ?
+                         applyMiddleware(thunkMiddleware) :
+                         applyMiddleware(thunkMiddleware, loggerMiddleware);
+
+const createStorePlus = applyMiddlewares(createStore);
 
 const store = createStorePlus(all);
-const SmartApp = connect(propsFromState)(App);
 const rootElement = document.getElementById('content');
 
 const app = (
   <Provider store={store}>
-    {() => <SmartApp addMessage={transport.sendMessage} />}
+    {() => <App />}
   </Provider>
 );
 
-transport.loginReq();
-transport.loginRes(store, newLogin);
-transport.onMessage(store, addMessageReceived);
+transport.onTopRooms(data =>
+    store.dispatch(updateTopRooms(data.rooms)));
+
+transport.onMessage(data =>
+    store.dispatch(newMessage(data)));
+
+transport.onJoinUser(data =>
+    store.dispatch(joinUser(data)));
+
+transport.onLeaveUser(data =>
+    store.dispatch(leaveUser(data)));
 
 React.render(app, rootElement);
 

@@ -28,15 +28,3 @@ fileServer.listen(FILEPORT, () => {
   console.log('FIle and hot reload server listening on *:' + FILEPORT);
 });
 
-// --- MOCK FILE SERVER
-
-const app = express();
-const mockServer = new http.Server(app);
-
-const MOCKPORT = 3000;
-
-app.use('/', express.static(__dirname + '/mock'));
-mockServer.listen(MOCKPORT, () => {
-  console.log('Mock server listening on *:' + MOCKPORT);
-});
-

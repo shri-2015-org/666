@@ -16,6 +16,20 @@ Run dev server:
 ```
 npm run dev
 ```
+Set delay for server replies:
+```
+SERVER_DELAY_ACTIONS='message' npm run dev # по умолчанию 750 мс
+SERVER_DELAY=2000 SERVER_DELAY_ACTIONS='*' npm run dev
+```
+Set failure for server replies:
+```
+SERVER_FAILURE_ACTIONS='message topRooms'
+```
+Allow socket debug
+```
+(в браузере)
+localStorage.debug = 'socket.io-parser decoded*'
+```
 
 ### Prod
 Run prod server:

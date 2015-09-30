@@ -1,28 +1,33 @@
 import { connect } from 'react-redux';
 import React, { Component, PropTypes } from 'react';
-import { messagesT } from '../../propTypes';
 import Room from '../Room/Room.js';
 import Navigation from '../Navigation/Navigation';
+import Welcome from '../Welcome/Welcome';
 import './App.scss';
 
-const ConnectedNavigation = connect(state => ({collapsed: state.navigation}))(Navigation);
-
-export default class App extends Component {
+class App extends Component {
   render() {
+    const { showWelcome, room } = this.props;
     return (
       <div className="app">
-        <ConnectedNavigation />
-        <Room
-          messages={this.props.messages}
-          addMessage={this.props.addMessage}
-        />
+        <Navigation />
+        { showWelcome ?
+          <Welcome /> :
+          <Room room={room} />
+        }
       </div>
     );
   }
 }
 
-App.propTypes = {
-  addMessage: PropTypes.func.isRequired,
-  messages: messagesT,
-};
+export default connect(state => {
+  const roomID = state.ui.currentRoomID;
+  return {
+    showWelcome: roomID === null,
+    room: {
+      ...state.joinedRooms[roomID],
+      roomID,
+    },
+  };
+})(App);
 
