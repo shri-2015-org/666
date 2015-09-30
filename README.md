@@ -261,3 +261,41 @@ npm run prod
 Поддержка клиентом | Поддержка сервером
 --- | ---
 :white_check_mark: | :white_check_mark: :exclamation: (mock)
+
+#### `searchRoomID`
+* Какие комнаты начинаются с букв `partialRoomID`?
+* Да вот такие.
+
+Данные запроса:
+```
+{
+	exchangeID: string,
+	data: {
+		partialRoomID: string,
+	}
+}  
+```
+ 
+Данные ответа: 
+```
+{
+	status: 'OK',
+	data: [{
+		roomID: string,
+		name: string,
+		users: number,
+		rating: number,
+	}],
+}
+
+/* или */
+
+{
+	status: 'ERROR',
+	description: string,
+}
+```
+
+Поддержка клиентом | Поддержка сервером
+--- | ---
+:no_entry_sign: | :no_entry_sign:
