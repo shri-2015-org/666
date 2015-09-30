@@ -50,23 +50,92 @@ function newMessage(room, action) {
     // TODO: insert at correct time, not last in list.
     orderedMessages: [
       ...room.orderedMessages,
-      messageID,
+      messageID, // ! appended to the end.
     ],
     roomMessages: {
       ...room.roomMessages,
-      [messageID]: message,
+      [messageID]: {
+        ...message,
+        status: 'confirmed',
+        index: room.orderedMessages.length, // ! appended to the end.
+      },
     },
   };
 }
 
-function sentMessage(state, action) {
-  // TODO: show the sent, but not yet confirmed message
-  return state;
+function sentMessage(room, action) {
+  const { text, time, pendingID } = action;
+  const { userID } = room;
+  const messageID = pendingID;
+  const message = {
+    userID,
+    messageID,
+    text,
+    time,
+  };
+  return {
+    ...room,
+    orderedMessages: [
+      ...room.orderedMessages,
+      messageID, // ! appended to the end.
+    ],
+    roomMessages: {
+      ...room.roomMessages,
+      [messageID]: {
+        ...message,
+        status: 'sent',
+        index: room.orderedMessages.length, // ! appended to the end.
+      },
+    },
+  };
 }
 
 function confirmSentMessage(room, action) {
-  // TODO: change the status of unconfirmed message
-  return room;
+  const { pendingID, messageID } = action;
+  const { roomMessages, orderedMessages } = room;
+  const { index } = roomMessages[pendingID];
+
+  // TODO переписать покрасивее (без мутирования промежуточных значений?)
+
+  const newRoomMessages = (() => {
+    const tmp = Object.assign({}, roomMessages);
+    tmp[messageID] = {
+      ...tmp[pendingID],
+      status: 'confirmed',
+      messageID,
+    };
+    delete tmp[pendingID];
+    return tmp;
+  })();
+
+  const newOrderedMessages = (() => {
+    const tmp = [ ...orderedMessages ];
+    tmp[index] = messageID;
+    return tmp;
+  })();
+
+  return {
+    ...room,
+    roomMessages: newRoomMessages,
+    orderedMessages: newOrderedMessages,
+  };
+}
+
+function rejectSentMessage(room, action) {
+  const { pendingID } = action;
+  const { roomMessages } = room;
+  const message = roomMessages[pendingID];
+
+  return {
+    ...room,
+    roomMessages: {
+      ...roomMessages,
+      [pendingID]: {
+        ...message,
+        status: 'rejected',
+      },
+    },
+  };
 }
 
 /*
@@ -83,6 +152,8 @@ function confirmSentMessage(room, action) {
       messageID: string,
       text: string,
       time: number,
+      index: number,
+      status: 'sent' | 'confirmed' | 'rejected',
     })],
     orderedMessages: ['messageID'],
   });
@@ -112,8 +183,7 @@ function joinedRooms(state = {}, action) {
     case actions.CONFIRM_SENT_MESSAGE:
       return insideRoom(action.roomID, confirmSentMessage);
     case actions.REJECT_SENT_MESSAGE: {
-      console.log(`Message rejected: ${action.description}`, action.message);
-      return state;
+      return insideRoom(action.roomID, rejectSentMessage);
     }
     case actions.JOIN_ROOM:
       return state;

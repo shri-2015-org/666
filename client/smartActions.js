@@ -34,16 +34,22 @@ export const leaveRoom = roomID => (dispatch, getState) => {
   // TODO handle replies?
 };
 
+let _totalSent = 0;
+function newPendingID() {
+  return _totalSent++;
+}
+
 export const sendMessage = partialMessage => dispatch => {
+  const pendingID = `pending-message:${newPendingID()}`;
   const message = {
     ...partialMessage,
     time: Date.now(),
   };
-  dispatch(actions.sentMessage(message));
+  dispatch(actions.sentMessage(pendingID, message));
   transport.message(message)
     .catch(description =>
-      dispatch(actions.rejectSentMessage(message, description)))
+      dispatch(actions.rejectSentMessage(pendingID, description)))
     .then(data =>
-      dispatch(actions.confirmSentMessage(data)));
+      dispatch(actions.confirmSentMessage(pendingID, data)));
 };
 
