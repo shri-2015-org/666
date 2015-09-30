@@ -3,14 +3,7 @@ import http from 'http';
 import socketIO from 'socket.io';
 
 import _ from 'lodash';
-import { delayAll } from './actions.delay';
-import * as pureActions from './actions.mock';
-
-const delay = Number(process.env.SERVER_DELAY);
-const delayModifier = isNaN(delay) ? x => x : delayAll(delay);
-const failureModifier = x => x;
-console.log(pureActions);
-const actions = _.compose(delayModifier, failureModifier)(pureActions);
+import actions from './actions.wrapper';
 
 const socketServer = new http.Server();
 const io = socketIO(socketServer);

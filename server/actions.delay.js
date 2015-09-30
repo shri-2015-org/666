@@ -1,11 +1,9 @@
 /* eslint no-console: 0 */
-import * as pureActions from './actions.mock';
-
 export const delayWithFunction = delayFunction => actions =>
   Object.keys(actions).reduce((result, fxName) => {
     const delay = delayFunction(fxName);
     if (delay) {
-      console.log(`Action ${fxName} has delay ${delay} ms.`);
+      console.log(`Action '${fxName}' has delay ${delay} ms.`);
       return {
         ...result,
         [fxName]: data => new Promise((resolve, reject) =>
@@ -13,6 +11,10 @@ export const delayWithFunction = delayFunction => actions =>
             actions[fxName](data).then(resolve, reject), delay)),
       };
     }
+    return {
+      ...result,
+      [fxName]: actions[fxName],
+    };
   }, {});
 
 export const delayWithMap = delayMap =>
