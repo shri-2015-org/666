@@ -70,23 +70,29 @@ export function joinRoom(roomID) {
   return new Promise( (resolve, reject) => {
     socket.once(`server-response:joinRoom@${exchangeID}`, res => {
       assert(res instanceof Object);
-      assert(res.data instanceof Object);
-      assert(res.data.identity instanceof Object);
-      assert(typeof res.data.identity.userID === 'string');
-      assert(typeof res.data.identity.avatar === 'string');
-      assert(typeof res.data.identity.nick === 'string');
-      assert(typeof res.data.identity.secret === 'string');
-      assert(res.data.room instanceof Object);
-      assert(typeof res.data.room.roomID === 'string');
-      assert(typeof res.data.room.name === 'string');
-      assert(res.data.room.users instanceof Array);
-      res.data.room.users.forEach(user => {
-        assert(typeof user.roomID === 'string');
-        assert(typeof user.userID === 'string');
-        assert(typeof user.avatar === 'string');
-        assert(typeof user.nick === 'string');
-      });
-      return resolve(res.data);
+      if (res.status === 'OK') {
+        assert(res.data instanceof Object);
+        assert(res.data.identity instanceof Object);
+        assert(typeof res.data.identity.userID === 'string');
+        assert(typeof res.data.identity.avatar === 'string');
+        assert(typeof res.data.identity.nick === 'string');
+        assert(typeof res.data.identity.secret === 'string');
+        assert(res.data.room instanceof Object);
+        assert(typeof res.data.room.roomID === 'string');
+        assert(typeof res.data.room.name === 'string');
+        assert(res.data.room.users instanceof Array);
+        res.data.room.users.forEach(user => {
+          assert(typeof user.roomID === 'string');
+          assert(typeof user.userID === 'string');
+          assert(typeof user.avatar === 'string');
+          assert(typeof user.nick === 'string');
+        });
+        return resolve(res.data);
+      } else {
+        assert(res.status === 'ERROR');
+        assert(typeof res.description === 'string');
+        return reject(res.description);
+      }
     });
     setTimeout(() => reject('joinRoom timeout'), EXCHANGE_TIMEOUT);
   });
@@ -106,8 +112,13 @@ export function leaveRoom({roomID, userID, secret}) {
   return new Promise( (resolve, reject) => {
     socket.once(`server-response:joinRoom@${exchangeID}`, res => {
       assert(res instanceof Object);
-      assert(res.status === 'OK');
-      return resolve();
+      if (res.status === 'OK') {
+        return resolve();
+      } else {
+        assert(res.status === 'ERROR');
+        assert(typeof res.description === 'string');
+        return reject(res.description);
+      }
     });
     setTimeout(() => reject('leaveRoom timeout'), EXCHANGE_TIMEOUT);
   });
@@ -129,14 +140,19 @@ export function message({roomID, userID, secret, text, time}) {
   return new Promise( (resolve, reject) => {
     socket.once(`server-response:message@${exchangeID}`, res => {
       assert(res instanceof Object);
-      assert(res.status === 'OK');
-      assert(res.data instanceof Object);
-      assert(typeof res.data.roomID === 'string');
-      assert(typeof res.data.userID === 'string');
-      assert(typeof res.data.messageID === 'string');
-      assert(typeof res.data.text === 'string');
-      assert(typeof res.data.time === 'number');
-      return resolve(res.data);
+      if (res.status === 'OK') {
+        assert(res.data instanceof Object);
+        assert(typeof res.data.roomID === 'string');
+        assert(typeof res.data.userID === 'string');
+        assert(typeof res.data.messageID === 'string');
+        assert(typeof res.data.text === 'string');
+        assert(typeof res.data.time === 'number');
+        return resolve(res.data);
+      } else {
+        assert(res.status === 'ERROR');
+        assert(typeof res.description === 'string');
+        return reject(res.description);
+      }
     });
     setTimeout(() => reject('message timeout'), EXCHANGE_TIMEOUT);
   });
