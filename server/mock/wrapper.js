@@ -1,7 +1,7 @@
 import _ from 'lodash';
-import * as pureActions from './actions.mock';
-import { delayWithFunction, delayAll } from './actions.delay';
-import { failureWithFunction, failureAll } from './actions.failure';
+import * as pureActions from './actions';
+import { delayWithFunction, delayAll } from './delay';
+import { failureWithFunction, failureAll } from './failure';
 
 // DELAY
 

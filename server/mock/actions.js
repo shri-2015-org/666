@@ -1,7 +1,7 @@
 import uuid from 'uuid';
-import User from '../common/User';
-import Message from '../common/Message';
-import * as userGenerator from './userGenerator';
+import User from '../../common/User';
+import Message from '../../common/Message';
+import * as userGenerator from '../userGenerator';
 
 /*
   rooms: HashMap('roomID', {

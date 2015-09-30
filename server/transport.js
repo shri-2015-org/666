@@ -3,7 +3,7 @@ import http from 'http';
 import socketIO from 'socket.io';
 
 import _ from 'lodash';
-import actions from './actions.wrapper';
+import actions from './mock/wrapper';
 
 const socketServer = new http.Server();
 const io = socketIO(socketServer);
