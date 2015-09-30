@@ -26,6 +26,7 @@ export const leaveRoom = roomID => (dispatch, getState) => {
   const room = state.joinedRooms[roomID]
   if (!room) {
     console.log("Cannot leave room ${roomID}: we are not in it!?");
+    return;
   }
   const { secret, userID } = room;
   dispatch(actions.leaveRoom(roomID));
