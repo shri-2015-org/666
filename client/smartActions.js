@@ -10,12 +10,12 @@ export const switchToRoom = roomID => (dispatch, getState) => {
   if (needToJoin) {
     dispatch(actions.joinRoom(roomID));
     transport.joinRoom(roomID)
+      .catch(description =>
+        dispatch(actions.rejectJoinRoom(description)))
       .then(data => {
         dispatch(actions.confirmJoinRoom(data));
         dispatch(actions.switchToJoinedRoom(roomID));
-      })
-      .catch(description =>
-        dispatch(actions.rejectJoinRoom(description)));
+      });
   } else {
     dispatch(actions.switchToJoinedRoom(roomID));
   }
@@ -41,9 +41,9 @@ export const sendMessage = partialMessage => dispatch => {
   };
   dispatch(actions.sentMessage(message));
   transport.message(message)
-    .then(data =>
-      dispatch(actions.confirmSentMessage(data)))
     .catch(description =>
-      dispatch(actions.rejectSentMessage(message, description)));
+      dispatch(actions.rejectSentMessage(message, description)))
+    .then(data =>
+      dispatch(actions.confirmSentMessage(data)));
 };
 
