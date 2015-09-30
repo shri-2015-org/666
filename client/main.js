@@ -4,15 +4,18 @@ import React from 'react';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider, connect } from 'react-redux';
 import loggerMiddleware from 'redux-logger';
+import thunkMiddleware from 'redux-thunk';
 
 import all from './reducers';
 import App from './components/App/App.js';
 import { updateTopRooms, newMessage, joinUser, leaveUser } from 'actions';
 import * as transport from './transport.js';
 
-const createStorePlus = NODE_ENV === 'production' ?
-                        applyMiddleware()(createStore) :
-                        applyMiddleware(loggerMiddleware)(createStore);
+const applyMiddlewares = NODE_ENV === 'production' ?
+                         applyMiddleware(thunkMiddleware) :
+                         applyMiddleware(thunkMiddleware, loggerMiddleware);
+
+const createStorePlus = applyMiddlewares(createStore);
 
 const store = createStorePlus(all);
 const rootElement = document.getElementById('content');
