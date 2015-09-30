@@ -120,10 +120,11 @@ export function confirmSentMessage(pendingID, {roomID, messageID}) {
   };
 }
 
-export function rejectSentMessage(pendingID, description) {
+export function rejectSentMessage(pendingID, roomID, description) {
   return {
     type: REJECT_SENT_MESSAGE,
     pendingID,
+    roomID,
     description,
   };
 }

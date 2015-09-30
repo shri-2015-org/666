@@ -10,12 +10,13 @@ export const switchToRoom = roomID => (dispatch, getState) => {
   if (needToJoin) {
     dispatch(actions.joinRoom(roomID));
     transport.joinRoom(roomID)
-      .catch(description =>
-        dispatch(actions.rejectJoinRoom(description)))
       .then(data => {
         dispatch(actions.confirmJoinRoom(data));
         dispatch(actions.switchToJoinedRoom(roomID));
-      });
+      }, description =>
+        dispatch(actions.rejectJoinRoom(description))
+      );
+
   } else {
     dispatch(actions.switchToJoinedRoom(roomID));
   }
@@ -41,15 +42,17 @@ function newPendingID() {
 
 export const sendMessage = partialMessage => dispatch => {
   const pendingID = `pending-message:${newPendingID()}`;
+  const { roomID } = partialMessage;
   const message = {
     ...partialMessage,
     time: Date.now(),
   };
   dispatch(actions.sentMessage(pendingID, message));
   transport.message(message)
-    .catch(description =>
-      dispatch(actions.rejectSentMessage(pendingID, description)))
     .then(data =>
-      dispatch(actions.confirmSentMessage(pendingID, data)));
+      dispatch(actions.confirmSentMessage(pendingID, data))
+        , description =>
+      dispatch(actions.rejectSentMessage(pendingID, roomID, description))
+    );
 };
 
