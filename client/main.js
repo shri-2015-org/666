@@ -22,7 +22,7 @@ const rootElement = document.getElementById('content');
 
 const app = (
   <Provider store={store}>
-    {() => <App addMessage={text => store.dispatch(addMessagePending(text))} />}
+    {() => <App />}
   </Provider>
 );
 
