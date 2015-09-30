@@ -48,13 +48,10 @@ export function joinRoom({roomID}) {
   const room = rooms[joinedRoom];
 
   // room mutation
-  room.roomUsers = {
-    ...room.roomUsers,
-    [user]: {
-      secret: uuid.v4(),
-      nick: userGenerator.generateName(),
-      avatar: userGenerator.generateAvatar(user),
-    },
+  room.roomUsers[user] = {
+    secret: uuid.v4(),
+    nick: userGenerator.generateName(),
+    avatar: userGenerator.generateAvatar(user),
   };
 
   // return API structure
