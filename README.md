@@ -68,7 +68,7 @@ npm run prod
 
 Поддержка клиентом | Поддержка сервером
 --- | ---
-:no_entry_sign: | :no_entry_sign:  
+:white_check_mark: | :white_check_mark: :exclamation: (mock)
 
 ## `roomcast`
 Сообщения, приходящие от сервера всем в комнате. Имена socket.io событий нужно начинать с `roomcast:`
@@ -91,7 +91,7 @@ npm run prod
 
 Поддержка клиентом | Поддержка сервером
 --- | ---
-:no_entry_sign: | :no_entry_sign:  
+:white_check_mark: | :white_check_mark: :exclamation: (mock)
 
 #### `joinUser`
 Зашел новый пользователь.
@@ -108,7 +108,7 @@ npm run prod
 
 Поддержка клиентом | Поддержка сервером
 --- | ---
-:no_entry_sign: | :no_entry_sign:  
+:white_check_mark: | :white_check_mark: :exclamation: (mock)
 
 #### `leaveUser`
 Пользователь нас покинул.
@@ -123,7 +123,7 @@ npm run prod
 
 Поддержка клиентом | Поддержка сервером
 --- | ---
-:no_entry_sign: | :no_entry_sign:  
+:white_check_mark: | :white_check_mark: :exclamation: (mock)
 
 ## `exchange`
 
@@ -181,7 +181,7 @@ npm run prod
 
 Поддержка клиентом | Поддержка сервером
 --- | ---
-:no_entry_sign: | :no_entry_sign:  
+:white_check_mark: | :white_check_mark: :exclamation: (mock)
 
 
 #### `leaveRoom`
@@ -216,7 +216,7 @@ npm run prod
 
 Поддержка клиентом | Поддержка сервером
 --- | ---
-:no_entry_sign: | :no_entry_sign:  
+:white_check_mark: | :white_check_mark: :exclamation: (mock)
 
 
 #### `message`
@@ -260,4 +260,4 @@ npm run prod
 
 Поддержка клиентом | Поддержка сервером
 --- | ---
-:no_entry_sign: | :no_entry_sign:  
+:white_check_mark: | :white_check_mark: :exclamation: (mock)
