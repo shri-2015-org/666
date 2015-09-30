@@ -1,13 +1,24 @@
 import * as actions from './actions';
 import * as transport from './transport';
 
-export const joinRoom = roomID => dispatch => {
-  dispatch(actions.joinRoom(roomID));
-  transport.joinRoom(roomID)
-    .then(data =>
-      dispatch(actions.confirmJoinRoom(data)))
-    .catch(description =>
-      dispatch(actions.rejectJoinRoom(description)));
+export const switchToRoom = roomID => (dispatch, getState) => {
+  const state = getState();
+  const { currentRoomID } = state.ui;
+  if (currentRoomID === roomID) return; // do nothing!
+  const needToJoin = state.joinedRooms[roomID] === undefined;
+
+  if (needToJoin) {
+    dispatch(actions.joinRoom(roomID));
+    transport.joinRoom(roomID)
+      .then(data => {
+        dispatch(actions.confirmJoinRoom(data));
+        dispatch(actions.switchToJoinedRoom(roomID));
+      })
+      .catch(description =>
+        dispatch(actions.rejectJoinRoom(description)));
+  } else {
+    dispatch(actions.switchToJoinedRoom(roomID));
+  }
 };
 
 export const sendMessage = partialMessage => dispatch => {

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import React, { Component, PropTypes } from 'react';
-import {joinRoom} from '../../smartActions';
+import { switchToRoom } from '../../smartActions';
 import './Navigation.scss';
 import _ from 'lodash';
 
@@ -29,9 +29,12 @@ class Navigation extends Component {
         <div className="navigation-group">
           <h4 className="navigation-group-label"> Joined </h4>
           <ul className="navigation-group-list">
-            {_.map(joinedRooms, (room, roomID) =>
+            {_.map(joinedRooms, {room, roomID} =>
               <li className={roomID === currentRoomID ? 'is-active' : ''}>
-                <a href={`#!/room/#${roomID}`}>{`#${room.roomName}`}</a>
+                <a
+                  onClick={e => onClick(e, () => dispatch(switchToRoom(roomID)))}
+                  href={`#!/room/#${roomID}`}>{`#${room.roomName}`}
+                </a>
                 <button className="reset-input">x</button>
               </li>
             )}
@@ -40,12 +43,12 @@ class Navigation extends Component {
         <div className="navigation-group">
           <h4 className="navigation-group-label"> Top Channels </h4>
           <ul className="navigation-group-list">
-            {_.map(topRooms, room =>
+            {_.map(topRooms, {name, roomID} =>
               <li>
                 <a
-                  onClick={e => onClick(e, () => dispatch(joinRoom(room.roomID)))}
-                  href={`#!/room/#${room.roomID}`}>
-                    {`#${room.name}`}
+                  onClick={e => onClick(e, () => dispatch(switchToRoom(roomID)))}
+                  href={`#!/room/#${roomID}`}>
+                    {`#${name}`}
                 </a>
                 <span className="badge">{room.users}</span>
               </li>

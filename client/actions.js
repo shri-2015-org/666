@@ -9,6 +9,14 @@ export const REJECT_JOIN_ROOM = 'REJECT_JOIN_ROOM';
 export const SENT_MESSAGE = 'SENT_MESSAGE';
 export const CONFIRM_SENT_MESSAGE = 'CONFIRM_SENT_MESSAGE';
 export const REJECT_SENT_MESSAGE = 'REJECT_SENT_MESSAGE';
+export const SWITCH_TO_JOINED_ROOM = 'SWITCH_TO_JOINED_ROOM';
+
+export function switchToJoinedRoom(roomID) {
+  return {
+    type: SWITCH_TO_JOINED_ROOM,
+    roomID,
+  };
+}
 
 export function joinRoom(roomID) {
   return {

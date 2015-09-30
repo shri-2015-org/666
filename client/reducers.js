@@ -174,10 +174,10 @@ function ui(state = initialUi, action) {
         navigationCollapsed: !state.navigationCollapsed,
       };
     }
-    case actions.CONFIRM_JOIN_ROOM: {
+    case actions.SWITCH_TO_JOINED_ROOM: {
       return {
         ...state,
-        currentRoomID: action.room.roomID,
+        currentRoomID: action.roomID,
       };
     }
     default: return state;
