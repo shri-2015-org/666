@@ -3,7 +3,7 @@ import http from 'http';
 import socketIO from 'socket.io';
 
 import _ from 'lodash';
-import * as pureActions from './actions.mock';
+import * as actions from './actions.delay';
 
 const socketServer = new http.Server();
 const io = socketIO(socketServer);
@@ -14,23 +14,6 @@ const handleError = (socket, responseEvent) => (err) => {
     description: err,
   });
 };
-
-const delay = Number(process.env.SERVER_DELAY);
-const actions = isNaN(delay) ? pureActions : Object.keys(pureActions)
-  .reduce((result, fxName) => {
-    console.log(`Function actions.${fxName} has delay ${delay} ms.`);
-    return {
-      ...result,
-      [fxName]: function(data) {
-        return new Promise((resolve, reject) => {
-          setTimeout(() => pureActions[fxName](data)
-            .then(resolve)
-            .catch(reject),
-          delay);
-        });
-      },
-    };
-  }, {});
 
 const updateTop = () => {
   actions.getTop()
