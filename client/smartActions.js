@@ -1,7 +1,7 @@
 import * as actions from './actions';
 import * as transport from './transport';
 
-export const joinRoom = (dispatch, roomID) => {
+export const joinRoom = roomID => dispatch => {
   dispatch(actions.joinRoom(roomID));
   transport.joinRoom(roomID)
     .then(data =>
@@ -10,7 +10,7 @@ export const joinRoom = (dispatch, roomID) => {
       dispatch(actions.rejectJoinRoom(description)));
 };
 
-export const sendMessage = (dispatch, partialMessage) => {
+export const sendMessage = partialMessage => dispatch => {
   const message = {
     ...partialMessage,
     time: Date.now(),

@@ -43,7 +43,7 @@ class Navigation extends Component {
             {_.map(topRooms, room =>
               <li>
                 <a
-                  onClick={e => onClick(e, () => joinRoom(dispatch, room.roomID))}
+                  onClick={e => onClick(e, () => dispatch(joinRoom(room.roomID)))}
                   href={`#!/room/#${room.roomID}`}>
                     {`#${room.name}`}
                 </a>

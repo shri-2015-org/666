@@ -23,13 +23,13 @@ class Room extends Component {
         avatar,
       };
     });
-    const onSend = text => sendMessage(dispatch, {
+    const onSend = text => dispatch(sendMessage({
       roomID,
       userID,
       secret,
       text,
       // no time here!
-    });
+    }));
 
     return (
       <div className="room">
