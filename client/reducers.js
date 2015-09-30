@@ -16,44 +16,44 @@ function topRooms(state = null, action) {
   }
 }
 
-function joinUser(state, action) {
+function joinUser(room, action) {
   const {userID} = action;
   return {
-    ...state,
+    ...room,
     roomUsers: {
-      ...state.roomUsers,
+      ...room.roomUsers,
       [userID]: action.user,
     },
   };
 }
 
-function leaveUser(state, action) {
+function leaveUser(room, action) {
   const {userID} = action;
-  const users = state.roomUsers;
+  const users = room.roomUsers;
   const newUsers = Object.assign({}, users);
   delete newUsers[userID];
   return {
-    ...state,
+    ...room,
     roomUsers: newUsers,
   };
 }
 
-function newMessage(state, action) {
+function newMessage(room, action) {
   const { message } = action;
   const { messageID } = message;
-  if (state.roomMessages[messageID]) {
+  if (room.roomMessages[messageID]) {
     // TODO: handle existing message.
-    return state;
+    return room;
   }
   return {
-    ...state,
+    ...room,
     // TODO: insert at correct time, not last in list.
     orderedMessages: [
-      ...state.orderedMessages,
+      ...room.orderedMessages,
       messageID,
     ],
     roomMessages: {
-      ...state.roomMessages,
+      ...room.roomMessages,
       [messageID]: message,
     },
   };
@@ -64,9 +64,9 @@ function sentMessage(state, action) {
   return state;
 }
 
-function confirmSentMessage(state, action) {
+function confirmSentMessage(room, action) {
   // TODO: change the status of unconfirmed message
-  return state;
+  return room;
 }
 
 /*
