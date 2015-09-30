@@ -86,9 +86,9 @@ export function joinRoom(roomID) {
         assert(typeof user.avatar === 'string');
         assert(typeof user.nick === 'string');
       });
-      resolve(res.data);
+      return resolve(res.data);
     });
-    setTimeout(() => { reject('joinRoom timeout'); }, EXCHANGE_TIMEOUT);
+    setTimeout(() => reject('joinRoom timeout'), EXCHANGE_TIMEOUT);
   });
 }
 
@@ -107,9 +107,9 @@ export function leaveRoom({roomID, userID, secret}) {
     socket.once(`server-response:joinRoom@${exchangeID}`, res => {
       assert(res instanceof Object);
       assert(res.status === 'OK');
-      resolve();
+      return resolve();
     });
-    setTimeout(() => { reject('leaveRoom timeout'); }, EXCHANGE_TIMEOUT);
+    setTimeout(() => reject('leaveRoom timeout'), EXCHANGE_TIMEOUT);
   });
 }
 
@@ -136,9 +136,9 @@ export function message({roomID, userID, secret, text, time}) {
       assert(typeof res.data.messageID === 'string');
       assert(typeof res.data.text === 'string');
       assert(typeof res.data.time === 'number');
-      resolve(res.data);
+      return resolve(res.data);
     });
-    setTimeout(() => { reject('message timeout'); }, EXCHANGE_TIMEOUT);
+    setTimeout(() => reject('message timeout'), EXCHANGE_TIMEOUT);
   });
 }
 

@@ -11,6 +11,7 @@ function onClick(e, handler) {
 
 class Navigation extends Component {
   render() {
+
     const { dispatch, collapsed, currentRoomID,
             joinedRooms, topRooms } = this.props;
     return (
@@ -30,7 +31,7 @@ class Navigation extends Component {
           <ul className="navigation-group-list">
             {_.map(joinedRooms, (room, roomID) =>
               <li className={roomID === currentRoomID ? 'is-active' : ''}>
-                <a href={`#!/room/#${roomID}`}>{`#${roomID}`}</a>
+                <a href={`#!/room/#${roomID}`}>{`#${room.roomName}`}</a>
                 <button className="reset-input">x</button>
               </li>
             )}
@@ -44,9 +45,9 @@ class Navigation extends Component {
                 <a
                   onClick={e => onClick(e, () => joinRoom(dispatch, room.roomID))}
                   href={`#!/room/#${room.roomID}`}>
-                    {`#${room.roomID}`}
+                    {`#${room.name}`}
                 </a>
-                <span className="badge">9000+</span>
+                <span className="badge">{room.users}</span>
               </li>
             )}
           </ul>

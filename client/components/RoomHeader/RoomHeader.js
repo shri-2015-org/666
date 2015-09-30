@@ -5,7 +5,7 @@ import './RoomHeader.scss';
 
 class RoomHeader extends Component {
   render() {
-    const { dispatch, navigationCollapsed, currentRoomID, nick, avatar } = this.props;
+    const { dispatch, navigationCollapsed, currentRoomID, roomName, nick, avatar } = this.props;
 
     return (
       <header className="room-header">
@@ -21,7 +21,7 @@ class RoomHeader extends Component {
           <li className="room-header-bar-item">
             <h3 className="room-name">
               <a href="{`#!/room/#${currentRoomID}`}">
-                {`#${currentRoomID}`}
+                {`#${roomName}`}
               </a>
             </h3>
           </li>
@@ -49,11 +49,13 @@ class RoomHeader extends Component {
 export default connect(state => {
   const { navigationCollapsed, currentRoomID } = state.ui;
   const room = state.joinedRooms[currentRoomID];
+  const roomName = room.roomName
   const nick = room.roomUsers[room.userID].nick;
   const avatar = room.roomUsers[room.userID].avatar;
   return {
     navigationCollapsed,
     currentRoomID,
+    roomName,
     nick,
     avatar,
   };

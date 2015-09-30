@@ -3,8 +3,9 @@ import './Message.scss';
 
 export default class Message extends Component {
   render() {
-    const {time, nick, avatar, text } = this.props;
-    const humanTime = (new Date(time)).toTimeString();
+    const {time, nick, avatar, text } = this.props.message;
+    const date = new Date(time);
+    const humanTime = `${date.getHours()}:${date.getMinutes()}`;
     return (
       <li className="message">
         <div className="message-meta">

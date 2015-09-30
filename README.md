@@ -16,6 +16,10 @@ Run dev server:
 ```
 npm run dev
 ```
+Allow socket debug
+```
+localStorage.debug = 'socket.io-parser decoded*'
+```
 
 ### Prod
 Run prod server:

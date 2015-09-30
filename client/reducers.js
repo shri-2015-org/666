@@ -110,7 +110,7 @@ function joinedRooms(state = {}, action) {
     case actions.SENT_MESSAGE:
       return insideRoom(action.roomID, sentMessage);
     case actions.CONFIRM_SENT_MESSAGE:
-      return insideRoom(action.data.roomID, confirmSentMessage);
+      return insideRoom(action.roomID, confirmSentMessage);
     case actions.REJECT_SENT_MESSAGE: {
       console.log(`Message rejected: ${action.description}`, action.message);
       return state;

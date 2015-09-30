@@ -12,19 +12,20 @@ class Room extends Component {
     const { dispatch } = this.props;
     const { roomID, secret, orderedMessages,
             roomMessages, roomUsers } = this.props.room;
-    const myUserID = this.props.room.userID;
+    const userID = this.props.room.userID;
     const messages = orderedMessages.map(messageID => {
-      const { text, time, userID } = roomMessages[messageID];
+      const { text, time, userID: key } = roomMessages[messageID];
+      const { nick, avatar } = roomUsers[key];
       return {
         text,
         time,
-        nick: roomUsers[userID],
-        avatar: roomUsers[userID],
+        nick,
+        avatar,
       };
     });
     const onSend = text => sendMessage(dispatch, {
       roomID,
-      myUserID,
+      userID,
       secret,
       text,
       // no time here!

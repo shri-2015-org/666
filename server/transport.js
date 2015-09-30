@@ -81,7 +81,7 @@ function onConnection(socket) {
           status: 'OK',
           data: res,
         });
-        io.to(channel).emit('roomcast:joinUser', res);
+        io.to(channel).emit('roomcast:message', res);
       })
       .catch(handleError(socket, responseEvent));
   });
