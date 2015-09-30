@@ -16,6 +16,10 @@ Run dev server:
 ```
 npm run dev
 ```
+Set delay for server replies:
+```
+SERVER_DELAY=2000 npm run dev
+```
 Allow socket debug
 ```
 localStorage.debug = 'socket.io-parser decoded*'
