@@ -76,7 +76,6 @@ function onConnection(socket) {
         const { roomID } = res;
         const channel = `room:${roomID}`;
 
-        socket.join(channel);
         socket.emit(responseEvent, {
           status: 'OK',
           data: res,
