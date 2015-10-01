@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import React, { Component, PropTypes } from 'react';
 import { switchToRoom, leaveRoom } from '../../smartActions';
+import { searchInputChange } from '../../actions';
 import './Navigation.scss';
 import _ from 'lodash';
 
@@ -21,6 +22,7 @@ class Navigation extends Component {
       }>
         <div className="navigation-group">
           <input
+            onChange={e => dispatch(searchInputChange(e.target.value))}
             value={searchText}
             type="text"
             className="input--underline"
@@ -92,7 +94,7 @@ export default connect(state => {
     rating: 4,
     name: 'industrial dogecoin mining operation',
   }];
-  const searchText = 'xxx'
+  const searchText = state.ui.searchInputText;
   return {
     collapsed,
     currentRoomID,

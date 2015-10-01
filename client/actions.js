@@ -11,6 +11,14 @@ export const CONFIRM_SENT_MESSAGE = 'CONFIRM_SENT_MESSAGE';
 export const REJECT_SENT_MESSAGE = 'REJECT_SENT_MESSAGE';
 export const SWITCH_TO_JOINED_ROOM = 'SWITCH_TO_JOINED_ROOM';
 export const LEAVE_ROOM = 'LEAVE_ROOM';
+export const SEARCH_INPUT_CHANGE = 'SEARCH_INPUT_CHANGE';
+
+export function searchInputChange(text) {
+  return {
+    type: SEARCH_INPUT_CHANGE,
+    text,
+  };
+}
 
 export function leaveRoom(roomID) {
   return {

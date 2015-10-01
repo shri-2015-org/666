@@ -234,16 +234,24 @@ function joinedRooms(state = {}, action) {
 const initialUi = {
   navigationCollapsed: false,
   currentRoomID: null,
+  searchInputText: '',
 };
 
 /*
    ui: {
      navigationCollapsed: boolean,
      currentRoomID: string || null,
+     searchInputText: string,
    }
 */
 function ui(state = initialUi, action) {
   switch (action.type) {
+    case actions.SEARCH_INPUT_CHANGE: {
+      return {
+        ...state,
+        searchInputText: action.text,
+      };
+    }
     case actions.TOGGLE_NAVIGATION: {
       return {
         ...state,
