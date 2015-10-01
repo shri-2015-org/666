@@ -33,10 +33,27 @@ textarea {
   background-color: color(blue);
   color: white;
   border-radius: $radius;
-  padding: .75rem 1rem .9rem;
+  padding: .75rem 1.25rem .9rem;
+  transition: all .2s;
+
+  &:hover {
+    background-color: color(blue, light);
+  }
 
   &:disabled {
     background-color: color(grey);
+    cursor: not-allowed;
+  }
+
+  &--outline {
+    background-color: transparent;
+    border: 1px solid;
+    color: inherit;
+
+    &:hover {
+      background-color: color(blue);
+      color: white;
+    }
   }
 }
 
