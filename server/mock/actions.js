@@ -159,7 +159,8 @@ export function getTop() {
 export function searchRoomID({partialRoomID}) {
   const roomIDs = Object.keys(rooms);
 
-  return _(roomIDs)
+  return Promise.resolve(
+    _(roomIDs)
     .filter(roomID => _.startsWith(roomID, partialRoomID))
     .sort()
     .take(5)
@@ -169,7 +170,8 @@ export function searchRoomID({partialRoomID}) {
         roomID,
         name: room.roomName,
         rating: room.rating,
-        users: room.roomUsers.length,
+        users: Object.keys(room.roomUsers).length,
       };
-    });
+    })
+  );
 }

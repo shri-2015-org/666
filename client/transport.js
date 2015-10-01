@@ -158,3 +158,35 @@ export function message({roomID, userID, secret, text, time}) {
   });
 }
 
+export function searchRoomID(partialRoomID) {
+  const exchangeID = getExchangeID();
+  socket.emit('client-request:searchRoomID', {
+    exchangeID,
+    data: {
+      partialRoomID,
+    },
+  });
+
+  return new Promise( (resolve, reject) => {
+    socket.once(`server-response:searchRoomID@${exchangeID}`, res => {
+      assert(res instanceof Object);
+      if (res.status === 'OK') {
+        assert(res.data instanceof Array);
+        res.data.forEach(room => {
+          assert(room instanceof Object);
+          assert(typeof room.roomID === 'string');
+          assert(typeof room.name   === 'string');
+          assert(typeof room.users  === 'number');
+          assert(typeof room.rating === 'number');
+        });
+        return resolve(res.data);
+      } else {
+        assert(res.status === 'ERROR');
+        assert(typeof res.description === 'string');
+        return reject(res.description);
+      }
+    });
+    setTimeout(() => reject('searchRoomID timeout'), EXCHANGE_TIMEOUT);
+  });
+}
+

@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import React, { Component, PropTypes } from 'react';
-import { switchToRoom, leaveRoom } from '../../smartActions';
-import { searchInputChange } from '../../actions';
+import { switchToRoom, leaveRoom,searchInputChange } from '../../smartActions';
 import './Navigation.scss';
 import _ from 'lodash';
 
@@ -88,12 +87,7 @@ export default connect(state => {
   const collapsed = state.ui.navigationCollapsed;
   const { currentRoomID } = state.ui;
   const { topRooms, joinedRooms } = state;
-  const searchResults = [{
-    roomID: 'doge',
-    users: 7,
-    rating: 4,
-    name: 'industrial dogecoin mining operation',
-  }];
+  const searchResults = state.ui.searchResults;
   const searchText = state.ui.searchInputText;
   return {
     collapsed,

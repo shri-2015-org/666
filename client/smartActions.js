@@ -1,6 +1,16 @@
 import * as actions from './actions';
 import * as transport from './transport';
 
+export const searchInputChange = partialRoomID => dispatch => {
+  dispatch(actions.searchInputChange(partialRoomID));
+  transport.searchRoomID(partialRoomID)
+    .then(data =>
+      dispatch(actions.searchResultsArrived(data))
+    , description =>
+      dispatch(actions.searchResultsFailed(description))
+    );
+};
+
 export const switchToRoom = roomID => (dispatch, getState) => {
   const state = getState();
   const { currentRoomID } = state.ui;
