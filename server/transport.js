@@ -86,6 +86,19 @@ function onConnection(socket) {
       .catch(handleError(socket, responseEvent));
   });
 
+  socket.on('client-request:searchRoomID', ({ exchangeID, data }) => {
+    const responseEvent = `server-response:searchRoomID@${exchangeID}`;
+    // TODO request validation here
+    actions.searchRoomID(data)
+      .then((res) => {
+        socket.emit(responseEvent, {
+          status: 'OK',
+          data: res,
+        });
+      })
+      .catch(handleError(socket, responseEvent));
+  });
+
   updateTop();
 }
 

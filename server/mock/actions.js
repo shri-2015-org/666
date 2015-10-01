@@ -2,6 +2,7 @@ import uuid from 'uuid';
 import User from '../../common/User';
 import Message from '../../common/Message';
 import * as userGenerator from '../userGenerator';
+import _ from 'lodash';
 
 /*
   rooms: HashMap('roomID', {
@@ -155,3 +156,20 @@ export function getTop() {
   });
 }
 
+export function searchRoomID({partialRoomID}) {
+  const roomIDs = Object.keys(rooms);
+
+  return _(roomIDs)
+    .filter(roomID => _.startsWith(roomID, partialRoomID))
+    .sort()
+    .take(5)
+    .map(roomID => {
+      const room = rooms[roomID];
+      return {
+        roomID,
+        name: room.roomName,
+        rating: room.rating,
+        users: room.roomUsers.length,
+      };
+    });
+}
