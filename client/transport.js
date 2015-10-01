@@ -110,7 +110,7 @@ export function leaveRoom({roomID, userID, secret}) {
   });
 
   return new Promise( (resolve, reject) => {
-    socket.once(`server-response:joinRoom@${exchangeID}`, res => {
+    socket.once(`server-response:leaveRoom@${exchangeID}`, res => {
       assert(res instanceof Object);
       if (res.status === 'OK') {
         return resolve();
