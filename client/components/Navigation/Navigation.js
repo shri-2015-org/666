@@ -39,8 +39,8 @@ class Navigation extends Component {
                   <li key={index}>
                     <a
                       onClick={e => onClick(e, () => dispatch(switchToRoom(roomID)))}
-                      href={`#!/room/#${roomID}`}>
-                        {`#${roomID}`}
+                      title={name}
+                      href={`#!/room/#${roomID}`}>{`#${roomID}`}
                     </a>
                     <span className="badge">{users}</span>
                   </li>
@@ -50,13 +50,14 @@ class Navigation extends Component {
           }
           <h4 className="navigation-group-label"> Joined </h4>
           <ul className="navigation-group-list">
-            {_.map(joinedRooms, ({roomName}, roomID) =>
+            {_.map(joinedRooms, ({roomName: name}, roomID) =>
                 <li 
                   key={roomID}
                   className={roomID === currentRoomID ? 'is-active' : ''}>
                 <a
                   onClick={e => onClick(e, () => dispatch(switchToRoom(roomID)))}
-                  href={`#!/room/#${roomID}`}>{`#${roomName}`}
+                  title={name}
+                  href={`#!/room/#${roomID}`}>{`#${roomID}`}
                 </a>
                 <button
                   className="reset-input"
@@ -74,8 +75,8 @@ class Navigation extends Component {
               <li key={index}>
                 <a
                   onClick={e => onClick(e, () => dispatch(switchToRoom(roomID)))}
-                  href={`#!/room/#${roomID}`}>
-                    {`#${name}`}
+                  title={name}
+                  href={`#!/room/#${roomID}`}>{`#${roomID}`}
                 </a>
                 <span className="badge">{users}</span>
               </li>
