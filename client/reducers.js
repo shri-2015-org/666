@@ -260,7 +260,7 @@ function ui(state = initialUi, action) {
         searchResults: null,
       };
     }
-    case actions.SEARCH_RESULTS_ARRIVED: {
+    case actions.SEARCH_RESULTS_UPDATE: {
       return {
         ...state,
         searchResults: action.results,

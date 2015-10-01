@@ -3,13 +3,17 @@ import * as transport from './transport';
 
 export const searchInputChange = partialRoomID => dispatch => {
   dispatch(actions.searchInputChange(partialRoomID));
-  transport.searchRoomID(partialRoomID)
-    .then(data =>
-      dispatch(actions.searchResultsArrived(data))
-    , description =>
-      dispatch(actions.searchResultsFailed(description))
-    );
-};
+  if (partialRoomID.length > 0) {
+    transport.searchRoomID(partialRoomID)
+      .then(data =>
+        dispatch(actions.searchResultsUpdate(data))
+      , description =>
+        dispatch(actions.searchResultsFailed(description))
+      );
+  } else {
+    dispatch(actions.searchResultsUpdate(null));
+  }
+}
 
 export const switchToRoom = roomID => (dispatch, getState) => {
   const state = getState();

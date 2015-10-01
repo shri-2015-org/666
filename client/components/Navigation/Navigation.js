@@ -31,19 +31,23 @@ class Navigation extends Component {
           <h4 className="navigation-group-label"> Create Room </h4>
           {`#${searchText}`}
           <br /><br />
-          <h4 className="navigation-group-label"> Search Results </h4>
-          <ul className="navigation-group-list">
-            {_.map(searchResults, ({roomID, name, rating, users}, index) =>
-              <li key={index}>
-                <a
-                  onClick={e => onClick(e, () => dispatch(switchToRoom(roomID)))}
-                  href={`#!/room/#${roomID}`}>
-                    {`#${roomID}`}
-                </a>
-                <span className="badge">{users}</span>
-              </li>
-            )}
-          </ul>
+          {searchResults === null ? '' :
+            <div>
+              <h4 className="navigation-group-label"> Search Results </h4>
+              <ul className="navigation-group-list">
+                {_.map(searchResults, ({roomID, name, rating, users}, index) =>
+                  <li key={index}>
+                    <a
+                      onClick={e => onClick(e, () => dispatch(switchToRoom(roomID)))}
+                      href={`#!/room/#${roomID}`}>
+                        {`#${roomID}`}
+                    </a>
+                    <span className="badge">{users}</span>
+                  </li>
+                )}
+              </ul>
+            </div>
+          }
           <h4 className="navigation-group-label"> Joined </h4>
           <ul className="navigation-group-list">
             {_.map(joinedRooms, ({roomName}, roomID) =>
