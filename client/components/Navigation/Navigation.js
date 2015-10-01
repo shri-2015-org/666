@@ -11,7 +11,7 @@ function onClick(e, handler) {
 
 class Navigation extends Component {
   render() {
-    const { dispatch, collapsed, currentRoomID,
+    const { dispatch, collapsed, currentRoomID, shouldShowCreation,
             joinedRooms, topRooms, searchResults, searchText } = this.props;
     return (
       <nav className={
@@ -28,9 +28,13 @@ class Navigation extends Component {
             placeholder="# Find / Create new" />
         </div>
         <div className="navigation-group">
-          <h4 className="navigation-group-label"> Create Room </h4>
-          {`#${searchText}`}
-          <br /><br />
+          {!shouldShowCreation ? '' :
+            <div>
+              <h4 className="navigation-group-label"> Create Room </h4>
+              {`#${searchText}`}
+              <br /><br />
+            </div>
+          }
           {searchResults === null ? '' :
             <div>
               <h4 className="navigation-group-label"> Search Results </h4>
@@ -94,6 +98,16 @@ export default connect(state => {
   const { topRooms, joinedRooms } = state;
   const searchResults = state.ui.searchResults;
   const searchText = state.ui.searchInputText;
+  const shouldShowCreation =
+    searchText.length > 0 &&
+    searchResults &&
+    !(
+      searchResults[0] &&
+      searchText === searchResults[0].roomID
+    );
+
+
+
   return {
     collapsed,
     currentRoomID,
@@ -101,6 +115,7 @@ export default connect(state => {
     joinedRooms,
     searchResults,
     searchText,
+    shouldShowCreation,
   };
 })(Navigation);
 
