@@ -163,7 +163,7 @@ npm run prod
 
 Поддержка клиентом | Поддержка сервером
 --- | ---
-:no_entry_sign: | :no_entry_sign:
+:white_check_mark: | :white_check_mark: :exclamation: (mock)
 
 #### `joinRoom`
 * Я хотел бы присоединиться к комнате roomID / к случайной комнате (null).
@@ -329,4 +329,4 @@ npm run prod
 
 Поддержка клиентом | Поддержка сервером
 --- | ---
-:no_entry_sign: | :no_entry_sign:
+:white_check_mark: | :white_check_mark: :exclamation: (mock)

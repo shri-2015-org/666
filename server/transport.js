@@ -86,6 +86,33 @@ function onConnection(socket) {
       .catch(handleError(socket, responseEvent));
   });
 
+  socket.on('client-request:searchRoomID', ({ exchangeID, data }) => {
+    const responseEvent = `server-response:searchRoomID@${exchangeID}`;
+    // TODO request validation here
+    actions.searchRoomID(data)
+      .then((res) => {
+        socket.emit(responseEvent, {
+          status: 'OK',
+          data: res,
+        });
+      })
+      .catch(handleError(socket, responseEvent));
+  });
+
+  // TODO этот блок и предыдущий отличаются незначительно, помимо названия события.
+  // Это относится и к другим блокам. Явно просится роефактор.
+  socket.on('client-request:createRoom', ({ exchangeID, data }) => {
+    const responseEvent = `server-response:createRoom@${exchangeID}`;
+    // TODO request validation here
+    actions.createRoom(data)
+      .then(() => {
+        socket.emit(responseEvent, {
+          status: 'OK',
+        });
+      })
+      .catch(handleError(socket, responseEvent));
+  });
+
   updateTop();
 }
 

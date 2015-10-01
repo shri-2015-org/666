@@ -2,6 +2,7 @@ import uuid from 'uuid';
 import User from '../../common/User';
 import Message from '../../common/Message';
 import * as userGenerator from '../userGenerator';
+import _ from 'lodash';
 
 /*
   rooms: HashMap('roomID', {
@@ -21,20 +22,49 @@ import * as userGenerator from '../userGenerator';
   })
 */
 // mock start data
+const fakeUsers = {
+  '8cc4dc0b-8263-49d7-90dd-15551913462d': {
+    secret: '48cdbbb9-5e8a-403f-9104-e5ed66019a41',
+    nick: 'Anonym',
+    avatar: 'media/plane.svg',
+  },
+};
+
 const rooms = {
-  '1289f58a-418d-4b6d-88e9-071418aa62e3': {
-    roomName: 'Main room',
-    roomUsers: {
-      '8cc4dc0b-8263-49d7-90dd-15551913462d': {
-        secret: '48cdbbb9-5e8a-403f-9104-e5ed66019a41',
-        nick: 'Anonym',
-        avatar: 'media/plane.svg',
-      },
-    },
+  'lobby': {
+    roomName: 'The place where the universe begins.',
+    roomUsers: [], // fakeUsers,
     roomMessages: [],
     rating: 0,
   },
+  'doctor': {
+    roomName: 'Medical topics.',
+    roomUsers: [],
+    roomMessages: [],
+    rating: 5,
+  },
+  'doge': {
+    roomName: 'Industrial dogecoin mining operations.',
+    roomUsers: [],
+    roomMessages: [],
+    rating: 1,
+  },
 };
+
+export function createRoom({roomID}) {
+  if (rooms.hasOwnProperty(roomID)) {
+    return Promise.reject('Room exists.');
+  }
+
+  rooms[roomID] = {
+    roomName: 'This is a brand new room.',
+    roomUsers: [],
+    roomMessages: [],
+    rating: 0,
+  };
+
+  return Promise.resolve();
+}
 
 export function joinRoom({roomID}) {
   if (roomID && !rooms.hasOwnProperty(roomID)) {
@@ -155,3 +185,22 @@ export function getTop() {
   });
 }
 
+export function searchRoomID({partialRoomID}) {
+  const roomIDs = Object.keys(rooms);
+
+  return Promise.resolve(
+    _(roomIDs)
+    .filter(roomID => _.startsWith(roomID, partialRoomID))
+    .sort()
+    .take(5)
+    .map(roomID => {
+      const room = rooms[roomID];
+      return {
+        roomID,
+        name: room.roomName,
+        rating: room.rating,
+        users: Object.keys(room.roomUsers).length,
+      };
+    })
+  );
+}

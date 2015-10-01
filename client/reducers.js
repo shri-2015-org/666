@@ -234,16 +234,49 @@ function joinedRooms(state = {}, action) {
 const initialUi = {
   navigationCollapsed: false,
   currentRoomID: null,
+  searchInputText: '',
+  searchResults: null,
 };
 
 /*
    ui: {
      navigationCollapsed: boolean,
      currentRoomID: string || null,
+     searchInputText: string,
+     searchResults: null || [{
+       roomID: string,
+       name: string,
+       users: number,
+       rating: number,
+     }],
    }
 */
 function ui(state = initialUi, action) {
   switch (action.type) {
+    case actions.CREATE_ROOM_FAILED: {
+      // TODO handle it here.
+      console.log('CREATE_ROOM_FAILED', action.description);
+      return state;
+    }
+    case actions.SEARCH_RESULTS_FAILED: {
+      // TODO indicate the failure to the user?
+      return {
+        ...state,
+        searchResults: null,
+      };
+    }
+    case actions.SEARCH_RESULTS_UPDATE: {
+      return {
+        ...state,
+        searchResults: action.results,
+      };
+    }
+    case actions.SEARCH_INPUT_CHANGE: {
+      return {
+        ...state,
+        searchInputText: action.text,
+      };
+    }
     case actions.TOGGLE_NAVIGATION: {
       return {
         ...state,
