@@ -12,7 +12,7 @@ function onClick(e, handler) {
 class Navigation extends Component {
   render() {
     const { dispatch, collapsed, currentRoomID,
-            joinedRooms, topRooms } = this.props;
+            joinedRooms, topRooms, searchResults } = this.props;
     return (
       <nav className={
         collapsed ?
@@ -26,6 +26,20 @@ class Navigation extends Component {
             placeholder="# Find / Create new" />
         </div>
         <div className="navigation-group">
+          <h4 className="navigation-group-label"> Create Room </h4>
+          <h4 className="navigation-group-label"> Search Results </h4>
+          <ul className="navigation-group-list">
+            {_.map(searchResults, ({roomID, name, rating, users}, index) =>
+              <li key={index}>
+                <a
+                  onClick={e => onClick(e, () => dispatch(switchToRoom(roomID)))}
+                  href={`#!/room/#${roomID}`}>
+                    {`#${roomID}`}
+                </a>
+                <span className="badge">{users}</span>
+              </li>
+            )}
+          </ul>
           <h4 className="navigation-group-label"> Joined </h4>
           <ul className="navigation-group-list">
             {_.map(joinedRooms, ({roomName}, roomID) =>
@@ -69,11 +83,18 @@ export default connect(state => {
   const collapsed = state.ui.navigationCollapsed;
   const { currentRoomID } = state.ui;
   const { topRooms, joinedRooms } = state;
+  const searchResults = [{
+    roomID: 'doge',
+    users: 7,
+    rating: 4,
+    name: 'industrial dogecoin mining operation',
+  }];
   return {
     collapsed,
     currentRoomID,
     topRooms,
     joinedRooms,
+    searchResults,
   };
 })(Navigation);
 
