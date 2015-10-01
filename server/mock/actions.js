@@ -22,18 +22,32 @@ import _ from 'lodash';
   })
 */
 // mock start data
+const fakeUsers = {
+  '8cc4dc0b-8263-49d7-90dd-15551913462d': {
+    secret: '48cdbbb9-5e8a-403f-9104-e5ed66019a41',
+    nick: 'Anonym',
+    avatar: 'media/plane.svg',
+  },
+};
+
 const rooms = {
-  '1289f58a-418d-4b6d-88e9-071418aa62e3': {
-    roomName: 'Main room',
-    roomUsers: {
-      '8cc4dc0b-8263-49d7-90dd-15551913462d': {
-        secret: '48cdbbb9-5e8a-403f-9104-e5ed66019a41',
-        nick: 'Anonym',
-        avatar: 'media/plane.svg',
-      },
-    },
+  'lobby': {
+    roomName: 'The place where the universe begins.',
+    roomUsers: [], // fakeUsers,
     roomMessages: [],
     rating: 0,
+  },
+  'doctor': {
+    roomName: 'Medical topics.',
+    roomUsers: [],
+    roomMessages: [],
+    rating: 5,
+  },
+  'doge': {
+    roomName: 'Industrial dogecoin mining operations.',
+    roomUsers: [],
+    roomMessages: [],
+    rating: 1,
   },
 };
 
