@@ -133,6 +133,38 @@ npm run prod
 
 Пример: `client-request:joinRoom` и `server-response:joinRoom@17`
 
+#### `createRoom`
+* Я хотел бы создать комнату roomID.
+* Да, пожалуйста / Нет, такая уже есть.
+
+Данные запроса:
+```
+{
+	exchangeID: string,
+	data: {
+		roomID: string,
+	},
+}
+```
+ 
+Данные ответа: 
+```
+{
+	status: 'OK',
+}
+
+/* или */
+
+{
+	status: 'ERROR',
+	description: string,
+}
+```
+
+Поддержка клиентом | Поддержка сервером
+--- | ---
+:no_entry_sign: | :no_entry_sign:
+
 #### `joinRoom`
 * Я хотел бы присоединиться к комнате roomID / к случайной комнате (null).
 * Да, пожалуйста. Вас там будут знать как userID.
@@ -182,7 +214,6 @@ npm run prod
 Поддержка клиентом | Поддержка сервером
 --- | ---
 :white_check_mark: | :white_check_mark: :exclamation: (mock)
-
 
 #### `leaveRoom`
 * Я хотел бы отсоединиться от комнаты roomID.
