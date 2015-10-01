@@ -12,7 +12,7 @@ function onClick(e, handler) {
 class Navigation extends Component {
   render() {
     const { dispatch, collapsed, currentRoomID,
-            joinedRooms, topRooms, searchResults } = this.props;
+            joinedRooms, topRooms, searchResults, searchText } = this.props;
     return (
       <nav className={
         collapsed ?
@@ -21,12 +21,15 @@ class Navigation extends Component {
       }>
         <div className="navigation-group">
           <input
+            value={searchText}
             type="text"
             className="input--underline"
             placeholder="# Find / Create new" />
         </div>
         <div className="navigation-group">
           <h4 className="navigation-group-label"> Create Room </h4>
+          {`#${searchText}`}
+          <br /><br />
           <h4 className="navigation-group-label"> Search Results </h4>
           <ul className="navigation-group-list">
             {_.map(searchResults, ({roomID, name, rating, users}, index) =>
@@ -89,12 +92,14 @@ export default connect(state => {
     rating: 4,
     name: 'industrial dogecoin mining operation',
   }];
+  const searchText = 'xxx'
   return {
     collapsed,
     currentRoomID,
     topRooms,
     joinedRooms,
     searchResults,
+    searchText,
   };
 })(Navigation);
 
