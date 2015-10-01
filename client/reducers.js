@@ -253,6 +253,11 @@ const initialUi = {
 */
 function ui(state = initialUi, action) {
   switch (action.type) {
+    case actions.CREATE_ROOM_FAILED: {
+      // TODO handle it here.
+      console.log('CREATE_ROOM_FAILED', action.description);
+      return state;
+    }
     case actions.SEARCH_RESULTS_FAILED: {
       // TODO indicate the failure to the user?
       return {

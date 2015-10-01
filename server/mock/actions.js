@@ -51,6 +51,21 @@ const rooms = {
   },
 };
 
+export function createRoom({roomID}) {
+  if (rooms.hasOwnProperty(roomID)) {
+    return Promise.reject('Room exists.');
+  }
+
+  rooms[roomID] = {
+    roomName: 'This is a brand new room.',
+    roomUsers: [],
+    roomMessages: [],
+    rating: 0,
+  };
+
+  return Promise.resolve();
+}
+
 export function joinRoom({roomID}) {
   if (roomID && !rooms.hasOwnProperty(roomID)) {
     return Promise.reject('No room is found');

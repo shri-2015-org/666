@@ -1,6 +1,17 @@
 import * as actions from './actions';
 import * as transport from './transport';
 
+export const createRoom = roomID => dispatch => {
+  // TODO check validity of roomID
+  transport.createRoom(roomID)
+    .then(() => {
+      dispatch(actions.searchResultsUpdate(null));
+      dispatch(switchToRoom(roomID));
+    }, description =>
+      dispatch(actions.createRoomFailed(description))
+    );
+};
+
 export const searchInputChange = partialRoomID => dispatch => {
   dispatch(actions.searchInputChange(partialRoomID));
   if (partialRoomID.length > 0) {

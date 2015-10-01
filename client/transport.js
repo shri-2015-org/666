@@ -190,3 +190,28 @@ export function searchRoomID(partialRoomID) {
   });
 }
 
+// TODO много повторяющегося кода в каждом из обработчиков; можно вынести его.
+export function createRoom(roomID) {
+  const exchangeID = getExchangeID();
+  socket.emit('client-request:createRoom', {
+    exchangeID,
+    data: {
+      roomID,
+    },
+  });
+
+  return new Promise( (resolve, reject) => {
+    socket.once(`server-response:createRoom@${exchangeID}`, res => {
+      assert(res instanceof Object);
+      if (res.status === 'OK') {
+        return resolve();
+      } else {
+        assert(res.status === 'ERROR');
+        assert(typeof res.description === 'string');
+        return reject(res.description);
+      }
+    });
+    setTimeout(() => reject('createRoom timeout'), EXCHANGE_TIMEOUT);
+  });
+}
+

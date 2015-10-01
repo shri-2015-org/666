@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import React, { Component, PropTypes } from 'react';
-import { switchToRoom, leaveRoom,searchInputChange } from '../../smartActions';
+import { switchToRoom, leaveRoom,
+         createRoom, searchInputChange } from '../../smartActions';
 import './Navigation.scss';
 import _ from 'lodash';
 
@@ -31,7 +32,10 @@ class Navigation extends Component {
           {!shouldShowCreation ? '' :
             <div>
               <h4 className="navigation-group-label"> Create Room </h4>
-              {`#${searchText}`}
+              <a
+                onClick={e => onClick(e, () => dispatch(createRoom(searchText)))}>
+                  {`#${searchText}`}
+              </a>
               <br /><br />
             </div>
           }

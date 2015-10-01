@@ -14,11 +14,19 @@ export const LEAVE_ROOM = 'LEAVE_ROOM';
 export const SEARCH_INPUT_CHANGE = 'SEARCH_INPUT_CHANGE';
 export const SEARCH_RESULTS_UPDATE = 'SEARCH_RESULTS_UPDATE';
 export const SEARCH_RESULTS_FAILED = 'SEARCH_RESULTS_FAILED';
+export const CREATE_ROOM_FAILED = 'CREATE_ROOM_FAILED';
 
 export function searchResultsUpdate(results) {
   return {
     type: SEARCH_RESULTS_UPDATE,
     results,
+  };
+}
+
+export function createRoomFailed(description) {
+  return {
+    type: CREATE_ROOM_FAILED,
+    description,
   };
 }
 
