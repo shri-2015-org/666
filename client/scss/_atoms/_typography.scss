@@ -1,13 +1,48 @@
 html {
-  font: normal $font-size "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  font: normal #{$font-size}/1.4 "Open Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 }
 
 a {
   color: inherit;
 }
 
+h1, .h1 {
+  font-size: 3.715rem; // 52px
+  line-height: 1.36em;
+}
+
+h2, .h2 {
+  font-size: 1.85rem; // 26px
+  line-height: 1.25em;
+  font-weight: normal;
+  margin-bottom: 1rem;
+}
+
+h3, .h3 {
+  font-size: 1.55rem;  // 22px
+}
+
+h4, .h4 {
+  font-size: 1rem; // 14px
+}
+
+p + p {
+  margin-top: .5em;
+}
+
+// Helpers:
+
+.article + .article {
+  margin-top: 2em;
+}
+
 .badge {
   border-radius: 99px;
   background: color(blue);
-  padding: 2px 6px;
+  padding: .15em .5em;
+  line-height: 1;
+}
+
+.faded {
+  color: color(grey);
 }
