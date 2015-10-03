@@ -1,4 +1,4 @@
-import { assert, should, expect } from 'chai';
+import { assert } from 'chai';
 
 import utils from './testUtils';
 import mongoose from 'mongoose';

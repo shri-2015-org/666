@@ -52,7 +52,6 @@
   },
   "author": "anonym club star team",
   "pre-commit": [
-    "lint",
-    "test"
+    "lint"
   ]
 }
