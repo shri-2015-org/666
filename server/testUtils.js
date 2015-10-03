@@ -2,7 +2,7 @@
 * Modified from https://github.com/elliotf/mocha-mongoose
 */
 
-import config from '../config';
+import config from './config';
 import mongoose from 'mongoose';
 
 // ensure the NODE_ENV is set to 'test'

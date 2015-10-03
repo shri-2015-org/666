@@ -1,7 +1,6 @@
 import { assert } from 'chai';
 
-import utils from './testUtils';
-import mongoose from 'mongoose';
+import utils from '../testUtils';
 
 import * as User from './User';
 
@@ -14,7 +13,8 @@ describe('User: model', () => {
         avatar: 'avatar',
         nick: 'nick',
       };
-      User.model.create(userData, (err, createdUser) => {
+      const user = new User.model(userData);
+      user.save( (err, createdUser) => {
         assert.equal(err, null);
         assert.equal(createdUser.roomID, 'roomID');
         assert.equal(createdUser.userID, 'userID');
@@ -25,7 +25,8 @@ describe('User: model', () => {
     });
     it('should throw Error', done => {
       const userData = {};
-      User.model.create(userData, (err, createdUser) => {
+      const user = new User.model(userData);
+      user.save( (err, createdUser) => {
         assert.equal(err.name, 'ValidationError');
         done();
       });

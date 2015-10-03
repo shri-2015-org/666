@@ -4,7 +4,7 @@ import * as Message from './Message';
 
 const schema = new mongoose.Schema({
   roomID: { type: String, required: true },
-  name: { type: String, required: true },
+  name: { type: String },
   rating: { type: Number, default: 0},
   users: [User.schema],
   messages: [Message.schema],

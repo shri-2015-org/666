@@ -1,7 +1,6 @@
 import { assert } from 'chai';
 
-import utils from './testUtils';
-import mongoose from 'mongoose';
+import utils from '../testUtils';
 
 import * as Room from './Room';
 import * as User from './User';
@@ -15,7 +14,8 @@ describe('Room: model', () => {
         name: 'name',
         rating: 0,
       };
-      Room.model.create(roomData, (err, createdRoom) => {
+      const room = new Room.model(roomData);
+      room.save( (err, createdRoom) => {
         assert.equal(err, null);
         assert.equal(createdRoom.roomID, 'roomID');
         assert.equal(createdRoom.name, 'name');
@@ -25,7 +25,8 @@ describe('Room: model', () => {
     });
     it('should throw Error', done => {
       const roomData = {};
-      Room.model.create(roomData, (err, createdRoom) => {
+      const room = new Room.model(roomData);
+      room.save( (err, createdRoom) => {
         assert.equal(err.name, 'ValidationError');
         done();
       });

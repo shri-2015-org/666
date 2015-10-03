@@ -1,7 +1,6 @@
 import { assert } from 'chai';
 
-import utils from './testUtils';
-import mongoose from 'mongoose';
+import utils from '../testUtils';
 
 import * as Message from './Message';
 
@@ -15,7 +14,8 @@ describe('Message: model', () => {
         text: 'text',
         time: 0,
       };
-      Message.model.create(messageData, (err, createdMessage) => {
+      const message = new Message.model(messageData);
+      message.save( (err, createdMessage) => {
         assert.equal(err, null);
         assert.equal(createdMessage.roomID, 'roomID');
         assert.equal(createdMessage.userID, 'userID');
@@ -27,8 +27,8 @@ describe('Message: model', () => {
       });
     });
     it('should throw Error', done => {
-      const messageData = {};
-      Message.model.create(messageData, (err, createdMessage) => {
+      const message = new Message.model({});
+      message.save( (err, createdMessage) => {
         assert.equal(err.name, 'ValidationError');
         done();
       });
