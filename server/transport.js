@@ -2,7 +2,6 @@
 import http from 'http';
 import socketIO from 'socket.io';
 
-import _ from 'lodash';
 import actions from './mock/wrapper';
 
 const socketServer = new http.Server();

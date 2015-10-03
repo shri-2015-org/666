@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import Room from '../Room';
 import Navigation from '../Navigation';
 import Welcome from '../Welcome';

@@ -1,7 +1,6 @@
 /* eslint no-console: 0 */
 import dataServer from './transport.js';
 import express from 'express';
-import http from 'http';
 
 // --- DATA SERVER
 
