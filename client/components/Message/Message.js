@@ -6,7 +6,8 @@ export default class Message extends Component {
     const { time, nick, avatar, text, status } = this.props.message;
     const date = new Date(time);
     const humanTime = `${date.getHours()}:${date.getMinutes()}`;
-    let style = undefined;
+
+    let style;
     if (status === 'sent') style = {opacity: 1};
     if (status === 'rejected') style = {opacity: 0.5};
 
