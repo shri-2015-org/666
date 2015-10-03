@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import './Welcome.scss';
+import './index.scss';
 
 export default class extends Component {
   render() {

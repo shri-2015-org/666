@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import React, { Component, PropTypes } from 'react';
 import { messagesT } from '../../propTypes';
-import RoomHeader from '../RoomHeader/RoomHeader';
-import MessageList from '../MessageList/MessageList';
-import RoomInput from '../RoomInput/RoomInput';
-import './Room.scss';
+import RoomHeader from '../RoomHeader';
+import MessageList from '../MessageList';
+import RoomInput from '../RoomInput';
+import './index.scss';
 import { sendMessage } from '../../smartActions';
 
 class Room extends Component {

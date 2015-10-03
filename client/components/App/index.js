@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import React, { Component, PropTypes } from 'react';
-import Room from '../Room/Room.js';
-import Navigation from '../Navigation/Navigation';
-import Welcome from '../Welcome/Welcome';
-import './App.scss';
+import Room from '../Room';
+import Navigation from '../Navigation';
+import Welcome from '../Welcome';
+import './index.scss';
 
 class App extends Component {
   render() {
