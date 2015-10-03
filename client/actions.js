@@ -143,11 +143,12 @@ export function sentMessage(pendingID, {roomID, text, time}) {
   };
 }
 
-export function confirmSentMessage(pendingID, {roomID, messageID}) {
+export function confirmSentMessage(pendingID, {roomID, messageID, text}) {
   return {
     type: CONFIRM_SENT_MESSAGE,
     pendingID,
     roomID,
+    text,
     messageID,
   };
 }
