@@ -7,13 +7,6 @@ import actions from './mock/wrapper';
 const socketServer = new http.Server();
 const io = socketIO(socketServer);
 
-const handleError = (socket, responseEvent) => (err) => {
-  socket.emit(responseEvent, {
-    status: 'ERROR',
-    description: err,
-  });
-};
-
 const updateTop = () => {
   actions.getTop()
     .then((res) => {
@@ -21,94 +14,90 @@ const updateTop = () => {
     });
 };
 
+function check(socket, name, handler) {
+  let responseEvent = `server-response:${name}@error`;
+  socket.on(`client-request:${name}`, request => {
+    return new Promise((resolve, reject) => {
+      if (typeof request !== 'object') return reject('request is not object');
+
+      const {exchangeID, data} = request;
+      if (typeof exchangeID !== 'string') return reject('exchange is not string');
+
+      responseEvent = `server-response:${name}@${exchangeID}`;
+      if (typeof data !== 'object') return reject('data is not object');
+
+      return actions[name](data)
+        .then(resolve)
+        .catch(reject);
+    })
+    .then((res) => {
+      handler(responseEvent, res);
+    })
+    .catch((err) => {
+      socket.emit(responseEvent, {
+        status: 'ERROR',
+        description: err,
+      });
+    });
+  });
+}
+
 function onConnection(socket) {
-  socket.on('client-request:joinRoom', ({ exchangeID, data }) => {
-    const responseEvent = `server-response:joinRoom@${exchangeID}`;
-    // TODO request validation here
-    actions.joinRoom(data)
-      .then((res) => {
-        const { roomID } = res.room;
-        const { userID, nick, avatar } = res.identity;
-        const channel = `room:${roomID}`;
+  check(socket, 'joinRoom', (responseEvent, res) => {
+    const { roomID } = res.room;
+    const { userID, nick, avatar } = res.identity;
+    const channel = `room:${roomID}`;
 
-        socket.join(channel);
-        socket.emit(responseEvent, {
-          status: 'OK',
-          data: res,
-        });
-        io.to(channel).emit('roomcast:joinUser', {
-          roomID,
-          userID,
-          nick,
-          avatar,
-        });
-        updateTop();
-      })
-      .catch(handleError(socket, responseEvent));
+    socket.join(channel);
+    socket.emit(responseEvent, {
+      status: 'OK',
+      data: res,
+    });
+    io.to(channel).emit('roomcast:joinUser', {
+      roomID,
+      userID,
+      nick,
+      avatar,
+    });
+    updateTop();
   });
 
-  socket.on('client-request:leaveRoom', ({ exchangeID, data }) => {
-    const responseEvent = `server-response:leaveRoom@${exchangeID}`;
-    // TODO request validation here
-    actions.leaveRoom(data)
-      .then(({roomID, userID}) => {
-        const channel = `room:${roomID}`;
+  check(socket, 'leaveRoom', (responseEvent, {roomID, userID}) => {
+    const channel = `room:${roomID}`;
 
-        socket.leave(channel);
-        socket.emit(responseEvent, {
-          status: 'OK',
-        });
-        io.to(channel).emit('roomcast:leaveUser', {
-          roomID,
-          userID,
-        });
-        updateTop();
-      })
-      .catch(handleError(socket, responseEvent));
+    socket.leave(channel);
+    socket.emit(responseEvent, {
+      status: 'OK',
+    });
+    io.to(channel).emit('roomcast:leaveUser', {
+      roomID,
+      userID,
+    });
+    updateTop();
   });
 
-  socket.on('client-request:message', ({ exchangeID, data }) => {
-    const responseEvent = `server-response:message@${exchangeID}`;
-    // TODO request validation here
-    actions.message(data)
-      .then((res) => {
-        const { roomID } = res;
-        const channel = `room:${roomID}`;
+  check(socket, 'message', (responseEvent, res) => {
+    const {roomID} = res;
+    const channel = `room:${roomID}`;
 
-        socket.emit(responseEvent, {
-          status: 'OK',
-          data: res,
-        });
-        io.to(channel).emit('roomcast:message', res);
-      })
-      .catch(handleError(socket, responseEvent));
+    socket.emit(responseEvent, {
+      status: 'OK',
+      data: res,
+    });
+    io.to(channel).emit('roomcast:message', res);
   });
 
-  socket.on('client-request:searchRoomID', ({ exchangeID, data }) => {
-    const responseEvent = `server-response:searchRoomID@${exchangeID}`;
-    // TODO request validation here
-    actions.searchRoomID(data)
-      .then((res) => {
-        socket.emit(responseEvent, {
-          status: 'OK',
-          data: res,
-        });
-      })
-      .catch(handleError(socket, responseEvent));
+  check(socket, 'searchRoomID', (responseEvent, res) => {
+    socket.emit(responseEvent, {
+      status: 'OK',
+      data: res,
+    });
   });
 
-  // TODO этот блок и предыдущий отличаются незначительно, помимо названия события.
-  // Это относится и к другим блокам. Явно просится роефактор.
-  socket.on('client-request:createRoom', ({ exchangeID, data }) => {
-    const responseEvent = `server-response:createRoom@${exchangeID}`;
-    // TODO request validation here
-    actions.createRoom(data)
-      .then(() => {
-        socket.emit(responseEvent, {
-          status: 'OK',
-        });
-      })
-      .catch(handleError(socket, responseEvent));
+  check(socket, 'createRoom', (responseEvent) => {
+    socket.emit(responseEvent, {
+      status: 'OK',
+    });
   });
 
   updateTop();
