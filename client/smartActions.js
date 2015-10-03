@@ -26,6 +26,16 @@ export const searchInputChange = partialRoomID => dispatch => {
   }
 }
 
+export const joinRandomRoom = () => dispatch => {
+  transport.joinRoom(null)
+    .then(data => {
+      dispatch(actions.confirmJoinRoom(data));
+      dispatch(actions.switchToJoinedRoom(data.room.roomID));
+    }, description =>
+      dispatch(actions.rejectJoinRoom(description))
+    );
+};
+
 export const switchToRoom = roomID => (dispatch, getState) => {
   const state = getState();
   const { currentRoomID } = state.ui;
