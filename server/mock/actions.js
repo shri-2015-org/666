@@ -34,19 +34,19 @@ const fakeUsers = {
 const rooms = {
   'lobby': {
     roomName: 'The place where the universe begins.',
-    roomUsers: [], // fakeUsers,
+    roomUsers: {}, // fakeUsers,
     roomMessages: [],
     rating: 0,
   },
   'doctor': {
     roomName: 'Medical topics.',
-    roomUsers: [],
+    roomUsers: {},
     roomMessages: [],
     rating: 5,
   },
   'doge': {
     roomName: 'Industrial dogecoin mining operations.',
-    roomUsers: [],
+    roomUsers: {},
     roomMessages: [],
     rating: 1,
   },
