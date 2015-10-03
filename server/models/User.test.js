@@ -10,6 +10,7 @@ describe('User: model', () => {
       const userData = {
         roomID: 'roomID',
         userID: 'userID',
+        secret: 'secret',
         avatar: 'avatar',
         nick: 'nick',
       };
@@ -18,6 +19,7 @@ describe('User: model', () => {
         assert.equal(err, null);
         assert.equal(createdUser.roomID, 'roomID');
         assert.equal(createdUser.userID, 'userID');
+        assert.equal(createdUser.secret, 'secret');
         assert.equal(createdUser.avatar, 'avatar');
         assert.equal(createdUser.nick, 'nick');
         done();

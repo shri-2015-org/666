@@ -30,7 +30,7 @@ describe('actions', () => {
         .then(user => {
           assert.equal(user.roomID, 'roomID');
           done();
-        })
+        });
     });
   });
 });

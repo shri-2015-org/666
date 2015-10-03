@@ -72,7 +72,6 @@ export function createRoom({roomID}) {
 function _getRoom({roomID}) {
   return new Promise((resolve, reject) => {
     Room.model.findOne({roomID}, (err, room) => {
-      console.log(room);
       if (err) {
         return reject(err);
       }
@@ -90,6 +89,7 @@ function _createUser(room) {
     const user = new User.model({
       roomID: room.roomID,
       userID: userID,
+      secret: uuid.v4(),
       avatar: userGenerator.generateAvatar(userID),
       nick: userGenerator.generateName(),
     });
@@ -105,7 +105,7 @@ function _createUser(room) {
 function _addUser({user, room}) {
   return new Promise((resolve, reject) => {
     room.users.push(user);
-    room.save((err, room) => {
+    room.save((err) => {
       if (err) {
         return reject(err);
       }
