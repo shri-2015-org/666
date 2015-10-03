@@ -1,76 +1,11 @@
 import http from 'http';
 import socketIO from 'socket.io';
 
-import pureActions from './mock/wrapper';
+import actions from './mock/wrapper';
+import * as handlers from './api.handlers';
 
 const socketServer = new http.Server();
-const globalIO = socketIO(socketServer);
-
-function createRoom(resEvents, res, socket) {
-  socket.emit(resEvents.exchange, {
-    status: 'OK',
-  });
-}
-
-function joinRoom(resEvents, res, socket, io) {
-  const { roomID } = res.room;
-  const { userID, nick, avatar } = res.identity;
-  const channel = `room:${roomID}`;
-
-  socket.join(channel);
-  socket.emit(resEvents.exchange, {
-    status: 'OK',
-    data: res,
-  });
-  io.to(channel).emit(resEvents.roomcast, {
-    roomID,
-    userID,
-    nick,
-    avatar,
-  });
-  return {needTop: true};
-}
-
-function leaveRoom(resEvents, res, socket, io) {
-  const {roomID, userID} = res;
-  const channel = `room:${roomID}`;
-
-  socket.leave(channel);
-  socket.emit(resEvents.exchange, {
-    status: 'OK',
-  });
-  io.to(channel).emit(resEvents.roomcast, {
-    roomID,
-    userID,
-  });
-  return {needTop: true};
-}
-
-function message(resEvents, res, socket, io) {
-  const {roomID} = res;
-  const channel = `room:${roomID}`;
-
-  socket.emit(resEvents.exchange, {
-    status: 'OK',
-    data: res,
-  });
-  io.to(channel).emit(resEvents.roomcast, res);
-}
-
-function searchRoomID(resEvents, res, socket) {
-  socket.emit(resEvents.exchange, {
-    status: 'OK',
-    data: res,
-  });
-}
-
-const handlers = {
-  createRoom,
-  joinRoom,
-  message,
-  leaveRoom,
-  searchRoomID,
-};
+const io = socketIO(socketServer);
 
 const checkError = (event, request) => () => {
   let err = false;
@@ -81,7 +16,7 @@ const checkError = (event, request) => () => {
   return Promise.resolve();
 };
 
-const updateTop = (actions, io) => (data) => {
+const updateTop = (data) => {
   if (!data || !data.needTop) return;
   actions.getTop()
     .then((res) => {
@@ -98,7 +33,7 @@ const errorHandler = (event, request, socket) => (err) => {
   });
 };
 
-const wrapper = (actions, socket, io) => (event) => {
+const wrapper = (socket) => (event) => {
   socket.on(`client-request:${event}`, (req) => {
     Promise.resolve()
       .then(checkError(event, req))
@@ -110,7 +45,7 @@ const wrapper = (actions, socket, io) => (event) => {
         };
         return handlers[event](resEvents, res, socket, io);
       })
-      .then(updateTop(io))
+      .then(updateTop)
       .catch(errorHandler(event, req, socket));
   });
 };
@@ -119,10 +54,10 @@ export default function(port) {
   socketServer.listen(port, () => {
     console.log('Socket data listening on *:' + port);
   });
-  globalIO.on('connection', (socket) => {
+  io.on('connection', (socket) => {
     Object.keys(handlers)
-      .map(wrapper(pureActions, socket, globalIO));
-    updateTop(pureActions, globalIO)({needTop: true});
+      .map(wrapper(socket));
+    updateTop({needTop: true});
   });
 }
 
