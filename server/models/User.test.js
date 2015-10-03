@@ -9,15 +9,17 @@ describe('User: model', () => {
   describe('#create()', () => {
     it('should create a new User', done => {
       const userData = {
-        name: 'name',
+        roomID: 'roomID',
+        userID: 'userID',
         avatar: 'avatar',
-        uid: 'uid',
+        nick: 'nick',
       };
       User.model.create(userData, (err, createdUser) => {
         assert.equal(err, null);
-        assert.equal(createdUser.name, 'name');
+        assert.equal(createdUser.roomID, 'roomID');
+        assert.equal(createdUser.userID, 'userID');
         assert.equal(createdUser.avatar, 'avatar');
-        assert.equal(createdUser.uid, 'uid');
+        assert.equal(createdUser.nick, 'nick');
         done();
       });
     });

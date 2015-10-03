@@ -9,21 +9,20 @@ describe('Message: model', () => {
   describe('#create()', () => {
     it('should create a new Message', done => {
       const messageData = {
-        uid: 'uid',
-        mid: 'mid',
+        roomID: 'roomID',
+        userID: 'userID',
+        messageID: 'messageID',
         text: 'text',
-        time: Date.now(),
-        read: 'read',
-        status: 'status',
+        time: 0,
       };
       Message.model.create(messageData, (err, createdMessage) => {
         assert.equal(err, null);
-        assert.equal(createdMessage.uid, 'uid');
-        assert.equal(createdMessage.mid, 'mid');
+        assert.equal(createdMessage.roomID, 'roomID');
+        assert.equal(createdMessage.userID, 'userID');
+        assert.equal(createdMessage.messageID, 'messageID');
         assert.equal(createdMessage.text, 'text');
-        assert.equal(createdMessage.time, messageData.time);
-        assert.equal(createdMessage.read, 'read');
-        assert.equal(createdMessage.status, 'status');
+        assert.equal(createdMessage.time, 0);
+
         done();
       });
     });
