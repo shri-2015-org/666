@@ -1,15 +1,19 @@
 import * as actions from './actions';
 import * as transport from './transport';
+import validRoomID from '../common/RoomID';
 
 export const createRoom = roomID => dispatch => {
-  // TODO check validity of roomID
-  transport.createRoom(roomID)
-    .then(() => {
-      dispatch(actions.searchResultsUpdate(null));
-      dispatch(switchToRoom(roomID));
-    }, description =>
-      dispatch(actions.createRoomFailed(description))
-    );
+  if (validRoomID(roomID)) {
+    transport.createRoom(roomID)
+      .then(() => {
+        dispatch(actions.searchResultsUpdate(null));
+        dispatch(switchToRoom(roomID));
+      }, description =>
+        dispatch(actions.createRoomFailed(description))
+      );
+  } else {
+    // TODO показать пользователю, что такой создать нельзя
+  }
 };
 
 export const searchInputChange = partialRoomID => dispatch => {
