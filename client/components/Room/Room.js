@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
-import React, { Component, PropTypes } from 'react';
-import { messagesT } from '../../propTypes';
+import React, { Component } from 'react';
 import RoomHeader from '../RoomHeader/RoomHeader';
 import MessageList from '../MessageList/MessageList';
 import RoomInput from '../RoomInput/RoomInput';

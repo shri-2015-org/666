@@ -48,7 +48,7 @@ export function leaveRoom(roomID) {
   return {
     type: LEAVE_ROOM,
     roomID,
-  }
+  };
 }
 
 export function switchToJoinedRoom(roomID) {

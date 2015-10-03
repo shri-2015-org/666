@@ -292,8 +292,8 @@ function ui(state = initialUi, action) {
     case actions.LEAVE_ROOM: {
       if (state.currentRoomID !== action.roomID) return state;
       return {
-          ...state,
-          currentRoomID: null,
+        ...state,
+        currentRoomID: null,
       };
     }
     default: return state;

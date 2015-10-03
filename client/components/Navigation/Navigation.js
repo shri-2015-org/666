@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { switchToRoom, leaveRoom,
          createRoom, searchInputChange } from '../../smartActions';
 import './Navigation.scss';
@@ -59,7 +59,7 @@ class Navigation extends Component {
           <h4 className="navigation-group-label"> Joined </h4>
           <ul className="navigation-group-list">
             {_.map(joinedRooms, ({roomName: name}, roomID) =>
-                <li 
+                <li
                   key={roomID}
                   className={roomID === currentRoomID ? 'is-active' : ''}>
                 <a
@@ -109,8 +109,6 @@ export default connect(state => {
       searchResults[0] &&
       searchText === searchResults[0].roomID
     );
-
-
 
   return {
     collapsed,

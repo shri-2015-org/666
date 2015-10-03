@@ -88,11 +88,10 @@ export function joinRoom(roomID) {
           assert(typeof user.nick === 'string');
         });
         return resolve(res.data);
-      } else {
-        assert(res.status === 'ERROR');
-        assert(typeof res.description === 'string');
-        return reject(res.description);
       }
+      assert(res.status === 'ERROR');
+      assert(typeof res.description === 'string');
+      return reject(res.description);
     });
     setTimeout(() => reject('joinRoom timeout'), EXCHANGE_TIMEOUT);
   });
@@ -114,11 +113,10 @@ export function leaveRoom({roomID, userID, secret}) {
       assert(res instanceof Object);
       if (res.status === 'OK') {
         return resolve();
-      } else {
-        assert(res.status === 'ERROR');
-        assert(typeof res.description === 'string');
-        return reject(res.description);
       }
+      assert(res.status === 'ERROR');
+      assert(typeof res.description === 'string');
+      return reject(res.description);
     });
     setTimeout(() => reject('leaveRoom timeout'), EXCHANGE_TIMEOUT);
   });
@@ -148,11 +146,10 @@ export function message({roomID, userID, secret, text, time}) {
         assert(typeof res.data.text === 'string');
         assert(typeof res.data.time === 'number');
         return resolve(res.data);
-      } else {
-        assert(res.status === 'ERROR');
-        assert(typeof res.description === 'string');
-        return reject(res.description);
       }
+      assert(res.status === 'ERROR');
+      assert(typeof res.description === 'string');
+      return reject(res.description);
     });
     setTimeout(() => reject('message timeout'), EXCHANGE_TIMEOUT);
   });
@@ -180,11 +177,10 @@ export function searchRoomID(partialRoomID) {
           assert(typeof room.rating === 'number');
         });
         return resolve(res.data);
-      } else {
-        assert(res.status === 'ERROR');
-        assert(typeof res.description === 'string');
-        return reject(res.description);
       }
+      assert(res.status === 'ERROR');
+      assert(typeof res.description === 'string');
+      return reject(res.description);
     });
     setTimeout(() => reject('searchRoomID timeout'), EXCHANGE_TIMEOUT);
   });
@@ -205,11 +201,10 @@ export function createRoom(roomID) {
       assert(res instanceof Object);
       if (res.status === 'OK') {
         return resolve();
-      } else {
-        assert(res.status === 'ERROR');
-        assert(typeof res.description === 'string');
-        return reject(res.description);
       }
+      assert(res.status === 'ERROR');
+      assert(typeof res.description === 'string');
+      return reject(res.description);
     });
     setTimeout(() => reject('createRoom timeout'), EXCHANGE_TIMEOUT);
   });

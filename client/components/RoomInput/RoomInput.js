@@ -1,4 +1,4 @@
-import React, { findDOMNode, Component, PropTypes } from 'react';
+import React, { findDOMNode, Component } from 'react';
 
 export default class RoomInput extends Component {
 
@@ -25,7 +25,7 @@ export default class RoomInput extends Component {
     }
   }
 
-  keyUp(e) {
+  keyUp() {
     const $input = findDOMNode(this.refs.input);
     const $submitBtn = findDOMNode(this.refs.submitBtn);
 
@@ -58,6 +58,3 @@ export default class RoomInput extends Component {
   }
 }
 
-RoomInput.propTypes = {
-  onSend: PropTypes.func.isRequired,
-};
