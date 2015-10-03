@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import { switchToRoom, leaveRoom,
          createRoom, searchInputChange } from '../../smartActions';
-import './Navigation.scss';
+import './index.scss';
 import _ from 'lodash';
 
 function onClick(e, handler) {

@@ -7,9 +7,9 @@ import createLogger from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 
 import all from './reducers';
-import App from './components/App/App.js';
+import App from './components/App';
 import { updateTopRooms, newMessage, joinUser, leaveUser } from 'actions';
-import * as transport from './transport.js';
+import * as transport from './transport';
 
 const loggerMiddleware = createLogger({
   level: 'info',

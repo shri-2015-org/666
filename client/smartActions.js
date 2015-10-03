@@ -1,5 +1,6 @@
 import * as actions from './actions';
 import * as transport from './transport';
+import validRoomID from '../common/RoomID';
 
 export const searchInputChange = partialRoomID => dispatch => {
   dispatch(actions.searchInputChange(partialRoomID));
@@ -13,6 +14,16 @@ export const searchInputChange = partialRoomID => dispatch => {
   } else {
     dispatch(actions.searchResultsUpdate(null));
   }
+};
+
+export const joinRandomRoom = () => dispatch => {
+  transport.joinRoom(null)
+    .then(data => {
+      dispatch(actions.confirmJoinRoom(data));
+      dispatch(actions.switchToJoinedRoom(data.room.roomID));
+    }, description =>
+      dispatch(actions.rejectJoinRoom(description))
+    );
 };
 
 export const switchToRoom = roomID => (dispatch, getState) => {
@@ -36,14 +47,17 @@ export const switchToRoom = roomID => (dispatch, getState) => {
 };
 
 export const createRoom = roomID => dispatch => {
-  // TODO check validity of roomID
-  transport.createRoom(roomID)
-    .then(() => {
-      dispatch(actions.searchResultsUpdate(null));
-      dispatch(switchToRoom(roomID));
-    }, description =>
-      dispatch(actions.createRoomFailed(description))
-    );
+  if (validRoomID(roomID)) {
+    transport.createRoom(roomID)
+      .then(() => {
+        dispatch(actions.searchResultsUpdate(null));
+        dispatch(switchToRoom(roomID));
+      }, description =>
+        dispatch(actions.createRoomFailed(description))
+      );
+  } else {
+    // TODO показать пользователю, что такой создать нельзя
+  }
 };
 
 export const leaveRoom = roomID => (dispatch, getState) => {

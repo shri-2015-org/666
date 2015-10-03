@@ -3,6 +3,7 @@ import User from '../../common/User';
 import Message from '../../common/Message';
 import * as userGenerator from '../userGenerator';
 import _ from 'lodash';
+import validRoomID from '../../common/RoomID';
 
 /*
   rooms: HashMap('roomID', {
@@ -52,6 +53,10 @@ const rooms = {
 };
 
 export function createRoom({roomID}) {
+  if (!validRoomID(roomID)) {
+    return Promise.reject('Room ID is not valid.');
+  }
+
   if (rooms.hasOwnProperty(roomID)) {
     return Promise.reject('Room exists.');
   }

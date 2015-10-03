@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { toggleNavigation } from '../../actions';
 import React, { Component } from 'react';
-import './RoomHeader.scss';
+import './index.scss';
 
 class RoomHeader extends Component {
   render() {
