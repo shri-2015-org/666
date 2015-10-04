@@ -31,10 +31,17 @@ export const joinRoom = roomID => (dispatch, getState) => {
   transport.joinRoom(partial)
     .then(data => {
       dispatch(actions.confirmJoinRoom(data));
+      // TODO think about split switch fron join
       dispatch(actions.switchToJoinedRoom(data.room.roomID));
     }, description =>
       dispatch(actions.rejectJoinRoom(description))
     );
+};
+
+export const reJoinRooms = rooms => dispatch => {
+  if (!rooms) return; // void
+  const roomKeys = Object.keys(rooms);
+  roomKeys.map(roomID => { dispatch(joinRoom(roomID)); });
 };
 
 export const switchToRoom = roomID => (dispatch, getState) => {

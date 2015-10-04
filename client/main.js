@@ -9,7 +9,8 @@ import thunkMiddleware from 'redux-thunk';
 import { writeState, readState } from './storage';
 import all from './reducers';
 import App from './components/App';
-import { updateTopRooms, newMessage, joinUser, leaveUser } from 'actions';
+import { updateTopRooms, newMessage, joinUser, leaveUser } from './actions';
+import { reJoinRooms } from './smartActions';
 import * as transport from './transport';
 
 const loggerMiddleware = createLogger({
@@ -23,7 +24,8 @@ const applyMiddlewares = NODE_ENV === 'production' ?
 
 const createStorePlus = applyMiddlewares(createStore);
 
-const store = createStorePlus(all, readState());
+const state = readState();
+const store = createStorePlus(all, state);
 const rootElement = document.getElementById('content');
 
 const app = (
@@ -31,6 +33,8 @@ const app = (
     {() => <App />}
   </Provider>
 );
+
+store.dispatch(reJoinRooms(state.joinedRooms));
 
 transport.onTopRooms(data =>
     store.dispatch(updateTopRooms(data.rooms)));

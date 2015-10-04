@@ -199,6 +199,8 @@ function joinedRooms(state = {}, action) {
       const { roomID } = room;
       const { userID, secret } = identity;
       const roomName = room.name;
+      const roomMessages = state[roomID] ? state[roomID].roomMessages : {};
+      const orderedMessages = state[roomID] ? state[roomID].orderedMessages : [];
       const roomUsers = room.users
         .reduce( (result, {userID: key, avatar, nick} ) => {
           return {
@@ -217,8 +219,8 @@ function joinedRooms(state = {}, action) {
           secret,
           roomName,
           roomUsers,
-          roomMessages: {},
-          orderedMessages: [],
+          roomMessages,
+          orderedMessages,
         },
       };
     }
