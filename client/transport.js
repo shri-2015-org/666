@@ -58,7 +58,7 @@ function getExchangeID() {
   return exchangeCount++;
 }
 
-export function joinRoom(roomID) {
+export function joinRoom({roomID}) {
   const exchangeID = getExchangeID();
   socket.emit('client-request:joinRoom', {
     exchangeID,
