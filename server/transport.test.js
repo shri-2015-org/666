@@ -13,9 +13,10 @@ describe('Socket server test on port' + port, () => {
     dataServer(port);
   });
 
-  const mockRoomID = '1289f58a-418d-4b6d-88e9-071418aa62e3';
+  const mockRoomID = 'lobby';
   let identity1;
   let identity2;
+  let randomRoomID;
 
   // --- topRooms
 
@@ -30,7 +31,7 @@ describe('Socket server test on port' + port, () => {
 
   // --- joinRoom
 
-  it('join random room', (done) => {
+  it('join existed room', (done) => {
     socket.once('server-response:joinRoom@0', (res) => {
       res.should.have.property('status');
       assert.equal(res.status, 'OK');
@@ -44,12 +45,12 @@ describe('Socket server test on port' + port, () => {
     socket.emit('client-request:joinRoom', {
       exchangeID: '0',
       data: {
-        roomID: null,
+        roomID: mockRoomID,
       },
     });
   });
 
-  it('join existed room', (done) => {
+  it('join random room', (done) => {
     socket.once('server-response:joinRoom@1', (res) => {
       res.should.have.property('status');
       assert.equal(res.status, 'OK');
@@ -58,12 +59,13 @@ describe('Socket server test on port' + port, () => {
       res.data.should.have.property('room');
       // ...
       identity2 = res.data.identity;
+      randomRoomID = res.data.room.roomID;
       done();
     });
     socket.emit('client-request:joinRoom', {
       exchangeID: '1',
       data: {
-        roomID: mockRoomID,
+        roomID: null,
       },
     });
   });
@@ -193,7 +195,7 @@ describe('Socket server test on port' + port, () => {
     socket.emit('client-request:message', {
       exchangeID: '8',
       data: {
-        roomID: mockRoomID,
+        roomID: randomRoomID,
         userID: 'unknown-user-id',
         secret: 'unknown-secret',
         text: messageText,
@@ -213,7 +215,7 @@ describe('Socket server test on port' + port, () => {
     socket.emit('client-request:message', {
       exchangeID: '9',
       data: {
-        roomID: mockRoomID,
+        roomID: randomRoomID,
         userID: identity2.userID,
         secret: 'unknown-secret',
         text: messageText,
@@ -237,7 +239,7 @@ describe('Socket server test on port' + port, () => {
     socket.emit('client-request:message', {
       exchangeID: '10',
       data: {
-        roomID: mockRoomID,
+        roomID: randomRoomID,
         userID: identity2.userID,
         secret: identity2.secret,
         text: messageText,
