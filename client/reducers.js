@@ -91,7 +91,7 @@ function sentMessage(room, action) {
 }
 
 function confirmSentMessage(room, action) {
-  const { pendingID, messageID } = action;
+  const { pendingID, messageID, text } = action;
   const { roomMessages, orderedMessages } = room;
   const { index } = roomMessages[pendingID];
 
@@ -102,6 +102,7 @@ function confirmSentMessage(room, action) {
     tmp[messageID] = {
       ...tmp[pendingID],
       status: 'confirmed',
+      text,
       messageID,
     };
     delete tmp[pendingID];

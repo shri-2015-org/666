@@ -18,6 +18,7 @@
     "debug": "2.2.0",
     "express": "4.13.3",
     "lodash": "3.10.1",
+    "marked": "^0.3.5",
     "react": "0.13.3",
     "redux-thunk": "^1.0.0",
     "socket.io": "1.3.6",
@@ -50,7 +51,6 @@
   },
   "author": "anonym club star team",
   "pre-commit": [
-    "lint",
-    "test"
+    "lint"
   ]
 }

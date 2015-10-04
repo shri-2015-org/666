@@ -9,6 +9,9 @@
   background-color: color(grey, light);
   padding: .75em 1em .9em;
 
+  overflow-y: auto;
+  max-height: 50vh;
+
   &--underline {
     @extend %reset-input;
 

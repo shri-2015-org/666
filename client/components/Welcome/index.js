@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import './index.scss';
 import { joinRandomRoom } from '../../smartActions';
 import { connect } from 'react-redux';
@@ -9,7 +9,7 @@ class Welcome extends Component {
     return (
       <div className="welcome">
         <article className="article">
-          <h1>Welcome</h1>
+          <h1 className="giga">Welcome</h1>
           <h2>Make yourself at home</h2>
           <p>Join a room and find your new identity.</p>
         </article>
