@@ -16,9 +16,19 @@ export const searchInputChange = partialRoomID => dispatch => {
   }
 };
 
-export const joinRoom = roomID => dispatch => {
+export const joinRoom = roomID => (dispatch, getState) => {
+  let partial = {roomID};
+  if (roomID) {
+    const state = getState();
+    const room = state.joinedRooms[roomID];
+    partial = !room ? partial : {
+      ...partial,
+      userID: room.userID,
+      secret: room.secret,
+    };
+  }
   dispatch(actions.joinRoom(roomID));
-  transport.joinRoom({roomID})
+  transport.joinRoom(partial)
     .then(data => {
       dispatch(actions.confirmJoinRoom(data));
       dispatch(actions.switchToJoinedRoom(data.room.roomID));
