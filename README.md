@@ -11,6 +11,12 @@ npm cache clean
 npm install
 ```
 
+Install MongoDB with [Homebrew](http://brew.sh/) or use this [link](http://docs.mongodb.org/manual/installation/)
+```
+brew update
+brew install mongodb
+```
+
 ### Dev
 Run dev server:
 ```
@@ -40,7 +46,7 @@ npm run prod
 
 # API :smirk_cat:
  Описание взаимодействия клиентов и сервера.
- 
+
 Обозначения:
 * :white_check_mark: -- Поддержка есть
 * :no_entry_sign: -- Поддержки нет
@@ -52,7 +58,7 @@ npm run prod
 Пример: `broadcast:topRooms`.
 
 #### `topRooms`
-Обновление топа. 
+Обновление топа.
 
 Данные:
 ```
@@ -64,7 +70,7 @@ npm run prod
 		rating: number,
 	}],
 }
-```  
+```
 
 Поддержка клиентом | Поддержка сервером
 --- | ---
@@ -76,7 +82,7 @@ npm run prod
 Пример: `roomcast:message`.
 
 #### `message`
-Пришло новое сообщение. 
+Пришло новое сообщение.
 
 Данные:
 ```
@@ -87,7 +93,7 @@ npm run prod
 	text: string,
 	time: number,
 }
-```  
+```
 
 Поддержка клиентом | Поддержка сервером
 --- | ---
@@ -104,7 +110,7 @@ npm run prod
 	avatar: string,
 	nick: string,
 }
-```  
+```
 
 Поддержка клиентом | Поддержка сервером
 --- | ---
@@ -119,7 +125,7 @@ npm run prod
 	roomID: string,
 	userID: string,
 }
-```  
+```
 
 Поддержка клиентом | Поддержка сервером
 --- | ---
@@ -146,8 +152,8 @@ npm run prod
 	},
 }
 ```
- 
-Данные ответа: 
+
+Данные ответа:
 ```
 {
 	status: 'OK',
@@ -176,19 +182,19 @@ npm run prod
 	data: {
 		roomID: string || null,
 	},
-}  
+}
 ```
- 
-Данные ответа: 
+
+Данные ответа:
 ```
 {
 	status: 'OK',
 	data: {
 		identity: {
-			userID: string,	 
-			avatar: string,  
-			nick: string, 
-			secret: string,  
+			userID: string,
+			avatar: string,
+			nick: string,
+			secret: string,
 		},
 		room: {
 			roomID: string,
@@ -228,10 +234,10 @@ npm run prod
 		userID: string,
 		secret: string,
 	},
-}  
+}
 ```
- 
-Данные ответа: 
+
+Данные ответа:
 ```
 {
 	status: 'OK',
@@ -265,10 +271,10 @@ npm run prod
 		text: string,
 		time: number,
 	}
-}  
+}
 ```
- 
-Данные ответа: 
+
+Данные ответа:
 ```
 {
 	status: 'OK',
@@ -304,10 +310,10 @@ npm run prod
 	data: {
 		partialRoomID: string,
 	}
-}  
+}
 ```
- 
-Данные ответа: 
+
+Данные ответа:
 ```
 {
 	status: 'OK',
