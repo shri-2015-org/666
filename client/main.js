@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import createLogger from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 
+import { writeState, readState } from './storage';
 import all from './reducers';
 import App from './components/App';
 import { updateTopRooms, newMessage, joinUser, leaveUser } from 'actions';
@@ -17,12 +18,12 @@ const loggerMiddleware = createLogger({
 });
 
 const applyMiddlewares = NODE_ENV === 'production' ?
-                         applyMiddleware(thunkMiddleware) :
-                         applyMiddleware(thunkMiddleware, loggerMiddleware);
+                         applyMiddleware(thunkMiddleware, writeState) :
+                         applyMiddleware(thunkMiddleware, writeState, loggerMiddleware);
 
 const createStorePlus = applyMiddlewares(createStore);
 
-const store = createStorePlus(all);
+const store = createStorePlus(all, readState());
 const rootElement = document.getElementById('content');
 
 const app = (
