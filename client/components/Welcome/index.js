@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './index.scss';
-import { joinRoom } from '../../smartActions';
+import { switchToRoom } from '../../smartActions';
 import { connect } from 'react-redux';
 
 class Welcome extends Component {
@@ -17,7 +17,7 @@ class Welcome extends Component {
           <p><i className="iconShuffle"></i></p>
           <p>
             <button
-              onClick={() => dispatch(joinRoom(null))}
+              onClick={() => dispatch(switchToRoom(null))}
               className="btn btn--outline">
                 Join random room
             </button>
