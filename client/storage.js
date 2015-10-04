@@ -1,9 +1,10 @@
 const key = 'all-state';
 
 export const writeState = ({getState}) => (next) => (action) => {
+  const result = next(action);
   const state = JSON.stringify(getState());
   window.localStorage.setItem(key, state);
-  return next(action);
+  return result;
 };
 
 export const readState = () => {
