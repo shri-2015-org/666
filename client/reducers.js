@@ -40,9 +40,9 @@ function leaveUser(room, action) {
 
 function newMessage(room, action) {
   const { message } = action;
+  const userID = action.message.userID;
   const { messageID } = message;
-  if (room.roomMessages[messageID]) {
-    // TODO: handle existing message.
+  if (room.userID === userID) { // ignore our message
     return room;
   }
   return {
