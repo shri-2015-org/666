@@ -33,4 +33,28 @@ describe('actions', () => {
         });
     });
   });
+  describe('#leaveRoom({roomID, userID, secret})', () => {
+    it('should reject if roomID === undefined', done => {
+      const data = {
+        roomID: 'roomID',
+        userID: 'userID',
+        secret: 'secret',
+      };
+      actions.leaveRoom(data)
+        .catch(error => {
+          assert.equal(error, 'Error: Can not create user in unexisted room');
+          done();
+        });
+    });
+    it('should resolve with {roomID, userID}', done => {
+      const data = {roomID: 'roomID'};
+      actions.createRoom(data)
+        .then(actions.joinRoom)
+        .then(actions.leaveRoom)
+        .then(leaveData => {
+          assert.equal(leaveData.roomID, 'roomID');
+          done();
+        });
+    });
+  });
 });

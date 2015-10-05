@@ -69,22 +69,23 @@ export function createRoom({roomID}) {
   });
 }
 
-function _getRoom({roomID}) {
+function _getRoom({roomID, userID, secret}) {
   return new Promise((resolve, reject) => {
     Room.model.findOne({roomID}, (err, room) => {
+      // console.log('err, room', err, room);
       if (err) {
         return reject(err);
       }
-      resolve(room);
+      if (!room) {
+        return reject(new Error('Can not create user in unexisted room'));
+      }
+      resolve({room, userID, secret});
     });
   });
 }
 
-function _createUser(room) {
+function _createUser({room}) {
   return new Promise((resolve, reject) => {
-    if (!room) {
-      return reject(new Error('Can not create user in unexisted room'));
-    }
     const userID = uuid.v4();
     const user = new User.model({
       roomID: room.roomID,
@@ -105,7 +106,7 @@ function _createUser(room) {
 function _addUser({user, room}) {
   return new Promise((resolve, reject) => {
     room.users.push(user);
-    room.save((err) => {
+    room.save(err => {
       if (err) {
         return reject(err);
       }
@@ -120,28 +121,25 @@ export function joinRoom({roomID}) {
     .then(_addUser);
 }
 
-export function leaveRoom({roomID, userID, secret}) {
-  if (!roomID || !rooms.hasOwnProperty(roomID)) {
-    return Promise.reject('No room is found');
-  }
 
-  const users = rooms[roomID].roomUsers;
-
-  if (!users.hasOwnProperty(userID)) {
-    return Promise.reject('Your userID is wrong');
-  }
-  if (users[userID].secret !== secret) {
-    return Promise.reject('Your secret is wrong');
-  }
-
-  // room mutation
-  delete users[userID];
-
-  // return API structure
-  return Promise.resolve({
-    roomID,
-    userID,
+function _deleteUser({room, userID, secret}) {
+  return new Promise((resolve, reject) => {
+    const user = room.users.filter(userEl => {
+      return userEl.userID === userID && userEl.secret === secret;
+    })[0];
+    room.users.remove(user);
+    room.save(err => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(user);
+    });
   });
+}
+
+export function leaveRoom({roomID, userID, secret}) {
+  return _getRoom({roomID, userID, secret})
+    .then(_deleteUser);
 }
 
 export function message({roomID, userID, secret, text, time}) {
