@@ -4,58 +4,9 @@ import _ from 'lodash';
 
 import * as Room from './models/Room';
 import * as User from './models/User';
+import * as Message from './models/Message';
 
-import config from './config';
 import * as userGenerator from './userGenerator';
-
-// const db = mongoose.createConnection(config.development);
-
-/*
-  rooms: HashMap('roomID', {
-    roomName: string,
-    roomUsers: HashMap('userID', {
-      avatar: string,
-      nick: string,
-      secret: string,
-    }),
-    roomMessages: [{
-      userID: string,
-      messageID: string,
-      text: string,
-      time: number,
-    }],
-    rating: number,
-  })
-*/
-// mock start data
-const fakeUsers = {
-  '8cc4dc0b-8263-49d7-90dd-15551913462d': {
-    secret: '48cdbbb9-5e8a-403f-9104-e5ed66019a41',
-    nick: 'Anonym',
-    avatar: 'media/plane.svg',
-  },
-};
-
-const rooms = {
-  'lobby': {
-    roomName: 'The place where the universe begins.',
-    roomUsers: [], // fakeUsers,
-    roomMessages: [],
-    rating: 0,
-  },
-  'doctor': {
-    roomName: 'Medical topics.',
-    roomUsers: [],
-    roomMessages: [],
-    rating: 5,
-  },
-  'doge': {
-    roomName: 'Industrial dogecoin mining operations.',
-    roomUsers: [],
-    roomMessages: [],
-    rating: 1,
-  },
-};
 
 export function createRoom({roomID}) {
   return new Promise((resolve, reject) => {
@@ -69,17 +20,16 @@ export function createRoom({roomID}) {
   });
 }
 
-function _getRoom({roomID, userID, secret}) {
+function _getRoom({roomID, userID, secret, text, time}) {
   return new Promise((resolve, reject) => {
     Room.model.findOne({roomID}, (err, room) => {
-      // console.log('err, room', err, room);
       if (err) {
         return reject(err);
       }
       if (!room) {
-        return reject(new Error('Can not create user in unexisted room'));
+        return reject(new Error('Can not find user in unexisted room'));
       }
-      resolve({room, userID, secret});
+      resolve({room, userID, secret, text, time});
     });
   });
 }
@@ -103,7 +53,7 @@ function _createUser({room}) {
   });
 }
 
-function _addUser({user, room}) {
+function _saveUser({user, room}) {
   return new Promise((resolve, reject) => {
     room.users.push(user);
     room.save(err => {
@@ -118,9 +68,20 @@ function _addUser({user, room}) {
 export function joinRoom({roomID}) {
   return _getRoom({roomID})
     .then(_createUser)
-    .then(_addUser);
+    .then(_saveUser);
 }
 
+function _getUser({room, userID, secret, text, time}) {
+  return new Promise((resolve, reject) => {
+    const user = room.users.filter(userEl => {
+      return userEl.userID === userID;
+    })[0];
+    if (!user) {
+      return reject(new Error('Can not find user'));
+    }
+    resolve({room, user, secret, text, time});
+  });
+}
 
 function _deleteUser({room, userID, secret}) {
   return new Promise((resolve, reject) => {
@@ -142,75 +103,69 @@ export function leaveRoom({roomID, userID, secret}) {
     .then(_deleteUser);
 }
 
-export function message({roomID, userID, secret, text, time}) {
-  if (roomID && !rooms.hasOwnProperty(roomID)) {
-    return Promise.reject('No room is found');
-  }
-
-  const room = rooms[roomID];
-  const users = room.roomUsers;
-
-  if (!users.hasOwnProperty(userID)) {
-    return Promise.reject('Your userID is wrong');
-  }
-  if (users[userID].secret !== secret) {
-    return Promise.reject('Your secret is wrong');
-  }
-
-  const messageID = uuid.v4();
-
-  // room mutation
-  room.roomMessages.push({
-    userID,
-    messageID,
-    text,
-    time,
-  });
-
-  // return API structure
-  return Promise.resolve({
-    roomID,
-    userID,
-    messageID,
-    text,
-    time,
+function _createMessage({room, user, secret, text, time}) {
+  return new Promise((resolve, reject) => {
+    if (user.secret !== secret) {
+      return reject(new Error('Wrong secret'));
+    }
+    const msg = new Message.model({
+      roomID: room.roomID,
+      userID: user.userID,
+      messageID: uuid.v4(),
+      text: text,
+      time: time,
+    });
+    msg.save( (err, savedMessage) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve({ room, user, savedMessage });
+    });
   });
 }
 
-export function getTop() {
-  const topRooms = Object.keys(rooms)
-    .map((key) => {
-      const room = rooms[key];
-      return {
-        roomID: key,
-        name: room.roomName,
-        users: Object.keys(room.roomUsers).length,
-        rating: room.rating,
-      };
+function _saveMessage({room, user, savedMessage}) {
+  return new Promise((resolve, reject) => {
+    room.messages.push(savedMessage);
+    room.save(err => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(savedMessage);
     });
+  });
+}
 
-  // return all rooms
-  return Promise.resolve({
-    rooms: topRooms,
+export function message({roomID, userID, secret, text, time}) {
+  return _getRoom({roomID, userID, secret, text, time})
+    .then(_getUser)
+    .then(_createMessage)
+    .then(_saveMessage);
+}
+
+export function getTop() {
+  return new Promise((resolve, reject) => {
+    Room.model
+      .find({rating: 0})
+      .sort({rating: -1})
+      .exec( (err, rooms) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve({rooms});
+      });
   });
 }
 
 export function searchRoomID({partialRoomID}) {
-  const roomIDs = Object.keys(rooms);
-
-  return Promise.resolve(
-    _(roomIDs)
-    .filter(roomID => _.startsWith(roomID, partialRoomID))
-    .sort()
-    .take(5)
-    .map(roomID => {
-      const room = rooms[roomID];
-      return {
-        roomID,
-        name: room.roomName,
-        rating: room.rating,
-        users: Object.keys(room.roomUsers).length,
-      };
-    })
-  );
+  return new Promise((resolve, reject) => {
+    Room.model
+      .find({roomID: new RegExp(partialRoomID, 'i')})
+      .exec( (err, rooms) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve({rooms});
+      });
+  });
 }
