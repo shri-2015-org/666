@@ -28,30 +28,27 @@ export const joinRoom = roomID => (dispatch, getState) => {
     };
   }
   dispatch(actions.joinRoom(roomID));
-  transport.joinRoom(partial)
-    .then(data => {
-      dispatch(actions.confirmJoinRoom(data));
-      // TODO think about split switch fron join
-      dispatch(actions.switchToJoinedRoom(data.room.roomID));
-    }, description =>
-      dispatch(actions.rejectJoinRoom(description))
-    );
+  const result = transport.joinRoom(partial)
+    .then(data => actions.confirmJoinRoom(data),
+          description => actions.rejectJoinRoom(description));
+  return dispatch(result);
 };
 
 export const reJoinRooms = rooms => dispatch => {
   if (!rooms) return; // void
   const roomKeys = Object.keys(rooms);
-  roomKeys.map(roomID => { dispatch(joinRoom(roomID)); });
+  roomKeys.map(roomID => dispatch(joinRoom(roomID)));
 };
 
 export const switchToRoom = roomID => (dispatch, getState) => {
   const state = getState();
   const { currentRoomID } = state.ui;
-  if (currentRoomID === roomID) return; // do nothing!
+  if (roomID && currentRoomID === roomID) return; // do nothing!
   const needToJoin = state.joinedRooms[roomID] === undefined;
 
   if (needToJoin) {
-    dispatch(joinRoom(roomID));
+    dispatch(joinRoom(roomID))
+      .then(({room}) => dispatch(actions.switchToJoinedRoom(room.roomID)));
   } else {
     dispatch(actions.switchToJoinedRoom(roomID));
   }
