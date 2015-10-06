@@ -93,6 +93,23 @@ npm run prod
 --- | ---
 :white_check_mark: | :white_check_mark: :exclamation: (mock)
 
+#### `attachment`
+Сервер добавил метаданные к сообщению.
+
+Данные:
+```
+{
+	roomID: string,
+	messageID: string,
+    url: string,
+	meta: any, // TODO уточнить
+}
+```
+
+Поддержка клиентом | Поддержка сервером
+--- | ---
+:no_entry_sign: | :no_entry_sign:
+
 #### `joinUser`
 Зашел новый пользователь.
 
