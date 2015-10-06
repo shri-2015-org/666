@@ -14,6 +14,9 @@ import * as transport from './transport';
 const loggerMiddleware = createLogger({
   level: 'info',
   collapsed: true,
+  predicate: (_, action) =>
+    action.type !== 'ROOM_INPUT_CHANGE' &&
+    action.type !== 'SEARCH_INPUT_CHANGE',
 });
 
 const applyMiddlewares = NODE_ENV === 'production' ?
