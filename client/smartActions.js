@@ -78,13 +78,24 @@ function newPendingID() {
   return _totalSent++;
 }
 
-export const sendMessage = partialMessage => dispatch => {
-  const pendingID = `pending-message:${newPendingID()}`;
-  const { roomID } = partialMessage;
+export const sendMessage = () => (dispatch, getState) => {
+  const state = getState();
+  if (state.ui.roomInputText === '') return; // don't send
+  const roomID = state.ui.currentRoomID;
+  const room = state.joinedRooms[roomID];
+  if (!room) {
+    throw new Error('Terminal failure: sent a message without being in a room.');
+  }
+  const { userID, secret } = room;
   const message = {
-    ...partialMessage,
+    roomID,
+    userID,
+    secret,
+    text: state.ui.roomInputText,
     time: Date.now(),
   };
+  dispatch(actions.roomInputChange(''));
+  const pendingID = `pending-message:${newPendingID()}`;
   dispatch(actions.sentMessage(pendingID, message));
   transport.message(message)
     .then(data =>

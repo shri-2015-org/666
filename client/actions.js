@@ -12,6 +12,7 @@ export const REJECT_SENT_MESSAGE = 'REJECT_SENT_MESSAGE';
 export const SWITCH_TO_JOINED_ROOM = 'SWITCH_TO_JOINED_ROOM';
 export const LEAVE_ROOM = 'LEAVE_ROOM';
 export const SEARCH_INPUT_CHANGE = 'SEARCH_INPUT_CHANGE';
+export const ROOM_INPUT_CHANGE = 'ROOM_INPUT_CHANGE';
 export const SEARCH_RESULTS_UPDATE = 'SEARCH_RESULTS_UPDATE';
 export const SEARCH_RESULTS_FAILED = 'SEARCH_RESULTS_FAILED';
 export const CREATE_ROOM_FAILED = 'CREATE_ROOM_FAILED';
@@ -40,6 +41,13 @@ export function searchResultsFailed(description) {
 export function searchInputChange(text) {
   return {
     type: SEARCH_INPUT_CHANGE,
+    text,
+  };
+}
+
+export function roomInputChange(text) {
+  return {
+    type: ROOM_INPUT_CHANGE,
     text,
   };
 }

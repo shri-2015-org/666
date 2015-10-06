@@ -236,6 +236,7 @@ const initialUi = {
   navigationCollapsed: false,
   currentRoomID: null,
   searchInputText: '',
+  roomInputText: '',
   searchResults: null,
 };
 
@@ -244,6 +245,7 @@ const initialUi = {
      navigationCollapsed: boolean,
      currentRoomID: string || null,
      searchInputText: string,
+     roomInputText: string,
      searchResults: null || [{
        roomID: string,
        name: string,
@@ -276,6 +278,12 @@ function ui(state = initialUi, action) {
       return {
         ...state,
         searchInputText: action.text,
+      };
+    }
+    case actions.ROOM_INPUT_CHANGE: {
+      return {
+        ...state,
+        roomInputText: action.text,
       };
     }
     case actions.TOGGLE_NAVIGATION: {

@@ -5,16 +5,15 @@ import MessageList from '../MessageList';
 import RoomInput from '../RoomInput';
 import './index.scss';
 import { sendMessage } from '../../smartActions';
+import { roomInputChange } from '../../actions';
 
 class Room extends Component {
   render() {
-    const { dispatch, room } = this.props;
-    const { roomID, secret, orderedMessages,
-            roomMessages, roomUsers } = room;
-    const userID = this.props.room.userID;
+    const { dispatch, room, inputText, buttonEnabled } = this.props;
+    const { orderedMessages, roomMessages, roomUsers } = room;
     const messages = orderedMessages.map(messageID => {
-      const { text, time, userID: key, status } = roomMessages[messageID];
-      const { nick, avatar } = roomUsers[key];
+      const { text, time, userID, status } = roomMessages[messageID];
+      const { nick, avatar } = roomUsers[userID];
       return {
         text,
         time,
@@ -23,13 +22,8 @@ class Room extends Component {
         status,
       };
     });
-    const onSend = text => dispatch(sendMessage({
-      roomID,
-      userID,
-      secret,
-      text,
-      // no time here!
-    }));
+    const onChange = text => dispatch(roomInputChange(text));
+    const onSend = () => dispatch(sendMessage());
 
     return (
       <div className="room">
@@ -41,11 +35,20 @@ class Room extends Component {
         </div>
         <RoomInput
           onSend={onSend}
+          onChange={onChange}
+          buttonEnabled={buttonEnabled}
+          text={inputText}
         />
       </div>
     );
   }
 }
 
-export default connect()(Room);
+export default connect(state => {
+  const inputText = state.ui.roomInputText;
+  return {
+    buttonEnabled: !!inputText,
+    inputText,
+  };
+})(Room);
 

@@ -1,57 +1,43 @@
 import React, { findDOMNode, Component } from 'react';
 
-export default class RoomInput extends Component {
-
-  sendMessage() {
-    const $input = findDOMNode(this.refs.input);
-    const $submitBtn = findDOMNode(this.refs.submitBtn);
-    const text = $input.value;
-    if (text !== '') {
-      this.props.onSend(text);
-      $input.value = '';
-      $submitBtn.disabled = true;
-    }
-  }
-
-  submitMessage(e) {
-    this.sendMessage();
+function onKeyPress(e, handler) {
+  if (e.which === 13 && !e.shiftKey) {
     e.preventDefault();
+    handler();
   }
+}
 
-  keyPress(e) {
-    if (e.which === 13 && !e.shiftKey) {
-      this.sendMessage();
-      e.preventDefault();
-    }
-  }
+function onSubmit(e, handler) {
+  e.preventDefault();
+  handler();
+}
 
-  keyUp() {
-    const $input = findDOMNode(this.refs.input);
-    const $submitBtn = findDOMNode(this.refs.submitBtn);
-
-    $submitBtn.disabled = ($input.value === '');
-
-    $input.style.height = '';
-    $input.style.height = `${ $input.scrollHeight }px`;
+export default class extends Component {
+  componentDidUpdate() {
+    const textarea = findDOMNode(this.refs.textarea);
+    textarea.style.height = '';
+    textarea.style.height = `${textarea.scrollHeight}px`;
   }
 
   render() {
+    const { onSend, onChange, text, buttonEnabled } = this.props;
     return (
-      <form className="room-actions" onSubmit={e => this.submitMessage(e)}>
+      <form className="room-actions" onSubmit={e => onSubmit(e, onSend)}>
         <textarea
           type="text"
-          ref="input"
+          ref="textarea"
           placeholder="Message..."
           className="room-actions-input input"
-          onKeyUp={e => this.keyUp(e)}
-          onKeyPress={e => this.keyPress(e)}
+          onChange={e => onChange(e.target.value)}
+          onKeyPress={e => onKeyPress(e, onSend)}
           rows="1"
+          value={text}
         ></textarea>
         <button
           className="room-actions-send btn"
           type="submit"
           ref="submitBtn"
-          disabled
+          disabled={!buttonEnabled}
         > Send </button>
       </form>
     );
