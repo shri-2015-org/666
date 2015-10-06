@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
+import MessageBody from '../MessageBody';
 import './index.scss';
-import md from '../../../common/md';
-import emoji from '../../../common/emoji';
 
 export default class Message extends Component {
   render() {
     const { time, nick, avatar, text, status } = this.props.message;
     const date = new Date(time);
-    const htmlString = md(emoji(text));
     const humanTime = `${date.getHours()}:${date.getMinutes()}`;
 
     let style;
@@ -26,8 +24,7 @@ export default class Message extends Component {
             style={{'backgroundImage': `url(${avatar})`}}>
           </div>
           <div className="message-content-text bubble">
-            <article className="md"
-              dangerouslySetInnerHTML={{ __html: htmlString }} />
+            <MessageBody text={text} />
           </div>
         </div>
       </li>
