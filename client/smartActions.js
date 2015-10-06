@@ -16,28 +16,38 @@ export const searchInputChange = partialRoomID => dispatch => {
   }
 };
 
-export const joinRoom = roomID => (dispatch, getState) => {
-  let partial = {roomID};
-  if (roomID) {
-    const state = getState();
-    const room = state.joinedRooms[roomID];
-    partial = !room ? partial : {
-      ...partial,
-      userID: room.userID,
-      secret: room.secret,
-    };
-  }
+export const joinRoom = ({roomID, userID, secret}) => dispatch => {
   dispatch(actions.joinRoom(roomID));
-  const result = transport.joinRoom(partial)
+  const result = transport.joinRoom({roomID, userID, secret})
     .then(data => actions.confirmJoinRoom(data),
           description => actions.rejectJoinRoom(description));
   return dispatch(result);
 };
 
-export const reJoinRooms = rooms => dispatch => {
-  if (!rooms) return; // void
+export const restoreState = state => dispatch => {
+  if (!state || !state.joinedRooms) return Promise.resolve();
+
+  const { currentRoomID } = state.ui ? state.ui : {};
+  const rooms = state.joinedRooms;
   const roomKeys = Object.keys(rooms);
-  roomKeys.map(roomID => dispatch(joinRoom(roomID)));
+
+  return Promise
+    .all(roomKeys.map(roomID => {
+      const { userID, secret, roomMessages, orderedMessages } = rooms[roomID];
+      return dispatch(joinRoom({roomID, userID, secret}))
+        .then(({room}) => {
+          if (!room) return Promise.resolve();
+          dispatch(actions.restoreMessages(room.roomID, {
+            roomMessages,
+            orderedMessages,
+          }));
+          return room.roomID;
+        });
+    }))
+    .then(joinedRooms => {
+      if (!~joinedRooms.indexOf(currentRoomID)) return; // void
+      dispatch(actions.switchToJoinedRoom(currentRoomID));
+    });
 };
 
 export const switchToRoom = roomID => (dispatch, getState) => {
@@ -47,7 +57,7 @@ export const switchToRoom = roomID => (dispatch, getState) => {
   const needToJoin = state.joinedRooms[roomID] === undefined;
 
   if (needToJoin) {
-    dispatch(joinRoom(roomID))
+    dispatch(joinRoom({roomID}))
       .then(({room}) => dispatch(actions.switchToJoinedRoom(room.roomID)));
   } else {
     dispatch(actions.switchToJoinedRoom(roomID));

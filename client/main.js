@@ -8,11 +8,10 @@ import createStorePlus from './middleware';
 import all from './reducers';
 import App from './components/App';
 import { updateTopRooms, newMessage, joinUser, leaveUser } from './actions';
-import { reJoinRooms } from './smartActions';
+import { restoreState } from './smartActions';
 import * as transport from './transport';
 
-const state = readState();
-const store = createStorePlus(all, state);
+const store = createStorePlus(all);
 const rootElement = document.getElementById('content');
 
 const app = (
@@ -21,19 +20,18 @@ const app = (
   </Provider>
 );
 
-store.dispatch(reJoinRooms(state.joinedRooms));
+store.dispatch(restoreState(readState()))
+  .then(() => {
+    transport.onMessage(data =>
+        store.dispatch(newMessage(data)));
+    transport.onJoinUser(data =>
+        store.dispatch(joinUser(data)));
+    transport.onLeaveUser(data =>
+        store.dispatch(leaveUser(data)));
+  });
 
 transport.onTopRooms(data =>
     store.dispatch(updateTopRooms(data.rooms)));
-
-transport.onMessage(data =>
-    store.dispatch(newMessage(data)));
-
-transport.onJoinUser(data =>
-    store.dispatch(joinUser(data)));
-
-transport.onLeaveUser(data =>
-    store.dispatch(leaveUser(data)));
 
 React.render(app, rootElement);
 
