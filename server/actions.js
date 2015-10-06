@@ -42,7 +42,7 @@ function _createUser(room) {
       avatar: userGenerator.generateAvatar(userID),
       nick: userGenerator.generateName(),
     });
-    room.update({$push: {users: user}}, err => {
+    room.update({$push: {users: user}, $inc: {rating: 1}}, err => {
       if (err) {
         return reject(err);
       }
@@ -78,7 +78,7 @@ function _getUser({room, userID}) {
  */
 function _deleteUser({room, userID, secret}) {
   return new Promise((resolve, reject) => {
-    room.update({$pull: {users: {userID, secret} }}, (err) => {
+    room.update({$pull: {users: {userID, secret}, $inc: {rating: -1} }}, (err) => {
       if (err) {
         return reject(err);
       }
@@ -154,6 +154,7 @@ export function joinRoom({roomID}) {
 export function leaveRoom({roomID, userID, secret}) {
   return _getRoom(roomID)
     .then((room) => {
+      console.log(room);
       return _deleteUser({room, userID, secret});
     });
 }
