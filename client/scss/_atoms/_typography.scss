@@ -6,8 +6,12 @@ a {
   color: inherit;
 }
 
-h1, .h1 {
+.giga {
   font-size: 3.715rem; // 52px
+}
+
+h1, .h1 {
+  font-size: 2.5rem; // 52px
   line-height: 1.36em;
 }
 
@@ -31,6 +35,95 @@ p + p {
 }
 
 // Helpers:
+
+.article, .md {
+  $borders: 1px solid color(grey, light);
+  line-height: 1.5;
+  margin: 1em 0;
+
+  a {
+    text-decoration: underline;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  ul,
+  ol,
+  blockquote,
+  table,
+  pre {
+    margin: 1rem 0;
+  }
+
+  ul li {
+    list-style: square inside;
+  }
+
+  ol li {
+    list-style: decimal inside;
+  }
+
+  ul li ul li {
+    padding-left: 1em;
+    list-style: disc inside;
+  }
+
+  li {
+    margin: .5em 0;
+  }
+
+  blockquote {
+    border-left: 4px solid color(grey, light);
+    padding-left: 1em;
+    margin-left: 1em;
+  }
+
+  pre {
+    background: color(grey, light);
+    padding: .5em;
+    padding-left: 1em;
+    border-radius: $radius;
+  }
+
+  code {
+    background: color(grey, light);
+    padding: .1em .5em .2em;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border: $borders;
+    border-radius: 7px;
+  }
+
+  table th {
+    border-bottom: $borders;
+  }
+
+  table td, table th {
+    padding: .4em .8em;
+  }
+
+  table tr:nth-of-type(even) {
+    background: #eee;
+  }
+
+  img {
+   max-width: 300px;
+  }
+
+  hr {
+    border: none;
+    border-bottom: $borders;
+    margin: .5em 0;
+  }
+}
 
 .article + .article {
   margin-top: 2em;
