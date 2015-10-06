@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   db: {
     production: 'mongodb://localhost/anonymClub-prod',
     development: 'mongodb://localhost/anonymClub-dev',
