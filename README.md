@@ -108,7 +108,7 @@ npm run prod
 
 Поддержка клиентом | Поддержка сервером
 --- | ---
-:no_entry_sign: | :no_entry_sign:
+:white_check_mark: | :white_check_mark: :exclamation: (mock)
 
 #### `joinUser`
 Зашел новый пользователь.
