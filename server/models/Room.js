@@ -3,7 +3,7 @@ import * as User from './User';
 import * as Message from './Message';
 
 const schema = new mongoose.Schema({
-  roomID: { type: String, required: true },
+  roomID: { type: String, required: true, index: true },
   name: { type: String },
   rating: { type: Number, default: 0},
   users: [User.schema],
