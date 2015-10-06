@@ -2,6 +2,7 @@ export const NEW_MESSAGE = 'NEW_MESSAGE';
 export const JOIN_USER = 'JOIN_USER';
 export const LEAVE_USER = 'LEAVE_USER';
 export const TOGGLE_NAVIGATION = 'TOGGLE_NAVIGATION';
+export const TOGGLE_PREVIEW = 'TOGGLE_PREVIEW';
 export const UPDATE_TOP_ROOMS = 'UPDATE_TOP_ROOMS';
 export const JOIN_ROOM = 'JOIN_ROOM';
 export const CONFIRM_JOIN_ROOM = 'CONFIRM_JOIN_ROOM';
@@ -138,6 +139,12 @@ export function addUser(user) {
 export function toggleNavigation() {
   return {
     type: TOGGLE_NAVIGATION,
+  };
+}
+
+export function togglePreview() {
+  return {
+    type: TOGGLE_PREVIEW,
   };
 }
 

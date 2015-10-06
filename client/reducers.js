@@ -234,6 +234,7 @@ function joinedRooms(state = {}, action) {
 
 const initialUi = {
   navigationCollapsed: false,
+  previewCollapsed: true,
   currentRoomID: null,
   searchInputText: '',
   roomInputText: '',
@@ -243,6 +244,7 @@ const initialUi = {
 /*
    ui: {
      navigationCollapsed: boolean,
+     previewCollapsed: boolean,
      currentRoomID: string || null,
      searchInputText: string,
      roomInputText: string,
@@ -280,9 +282,17 @@ function ui(state = initialUi, action) {
         searchInputText: action.text,
       };
     }
-    case actions.ROOM_INPUT_CHANGE: {
+    case actions.TOGGLE_PREVIEW: {
       return {
         ...state,
+        previewCollapsed: !state.previewCollapsed,
+      };
+    }
+    case actions.ROOM_INPUT_CHANGE: {
+      const previewCollapsed = action.text !== '' ? state.previewCollapsed : true;
+      return {
+        ...state,
+        previewCollapsed,
         roomInputText: action.text,
       };
     }
