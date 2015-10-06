@@ -40,9 +40,9 @@ function leaveUser(room, action) {
 
 function newMessage(room, action) {
   const { message } = action;
+  const userID = action.message.userID;
   const { messageID } = message;
-  if (room.roomMessages[messageID]) {
-    // TODO: handle existing message.
+  if (room.userID === userID) { // ignore our message
     return room;
   }
   return {
@@ -91,7 +91,7 @@ function sentMessage(room, action) {
 }
 
 function confirmSentMessage(room, action) {
-  const { pendingID, messageID } = action;
+  const { pendingID, messageID, text } = action;
   const { roomMessages, orderedMessages } = room;
   const { index } = roomMessages[pendingID];
 
@@ -102,6 +102,7 @@ function confirmSentMessage(room, action) {
     tmp[messageID] = {
       ...tmp[pendingID],
       status: 'confirmed',
+      text,
       messageID,
     };
     delete tmp[pendingID];
@@ -184,6 +185,17 @@ function joinedRooms(state = {}, action) {
       return insideRoom(action.roomID, confirmSentMessage);
     case actions.REJECT_SENT_MESSAGE: {
       return insideRoom(action.roomID, rejectSentMessage);
+    }
+    case actions.RESTORE_MESSAGES: {
+      const { roomID, roomMessages, orderedMessages } = action;
+      return {
+        ...state,
+        [roomID]: {
+          ...state[roomID],
+          roomMessages,
+          orderedMessages,
+        },
+      };
     }
     case actions.JOIN_ROOM:
       return state;
