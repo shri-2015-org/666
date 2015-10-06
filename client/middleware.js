@@ -19,7 +19,6 @@ const vanillaPromise = store => next => action => {
     return next(action);
   }
 
-  console.log('vanilaPromise is work');
   return Promise.resolve(action).then(store.dispatch);
 };
 
