@@ -167,7 +167,7 @@ npm run prod
 
 #### `joinRoom`
 * Я хотел бы 
-  - присоединиться к комнате roomID (userID, secret - не заданы)
+  - присоединиться к комнате roomID (userID, secret - null)
   - присоединиться к случайной комнате (roomID - null)
   - восстановиться в комнате roomID как userID
 * Да, пожалуйста. Вас там будут знать / уже знают как userID.
@@ -178,8 +178,8 @@ npm run prod
 	exchangeID: string,
 	data: {
 		roomID: string || null,
-		[userID: string,]
-		[secretID: string,]
+		userID: string || null,
+		secretID: string || null,
 	},
 }  
 ```

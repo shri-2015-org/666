@@ -83,8 +83,14 @@ export function joinRoom({roomID, userID, secret}) {
   const roomUsers = room.roomUsers;
 
   let user;
-  if (userID && roomUsers.hasOwnProperty(userID) &&
-      roomUsers[userID].secret === secret) {
+  if (userID) {
+    if (!roomUsers.hasOwnProperty(userID)) {
+      return Promise.reject('Your user is not found in this room');
+    }
+    if (roomUsers[userID].secret !== secret) {
+      return Promise.reject('Your secret is wrong');
+    }
+
     user = userID;
   } else {
     user = uuid.v4();
