@@ -11,14 +11,12 @@ describe('Room: model', () => {
     it('should create a new Room', done => {
       const roomData = {
         roomID: 'roomID',
-        name: 'name',
         rating: 0,
       };
       const room = new Room.model(roomData);
       room.save( (err, createdRoom) => {
         assert.equal(err, null);
         assert.equal(createdRoom.roomID, 'roomID');
-        assert.equal(createdRoom.name, 'name');
         assert.equal(createdRoom.rating, 0);
         done();
       });

@@ -5,7 +5,7 @@ const schema = new mongoose.Schema({
   userID: { type: String, required: true },
   messageID: { type: String, required: true },
   text: { type: String, required: true },
-  time: Number,
+  time: { type: Number, required: true },
 });
 
 const model = mongoose.model('Message', schema);
