@@ -20,15 +20,14 @@ const app = (
   </Provider>
 );
 
-store.dispatch(restoreState(readState()))
-  .then(() => {
-    transport.onMessage(data =>
-        store.dispatch(newMessage(data)));
-    transport.onJoinUser(data =>
-        store.dispatch(joinUser(data)));
-    transport.onLeaveUser(data =>
-        store.dispatch(leaveUser(data)));
-  });
+store.dispatch(restoreState(readState()));
+
+transport.onMessage(data =>
+    store.dispatch(newMessage(data)));
+transport.onJoinUser(data =>
+    store.dispatch(joinUser(data)));
+transport.onLeaveUser(data =>
+    store.dispatch(leaveUser(data)));
 
 transport.onTopRooms(data =>
     store.dispatch(updateTopRooms(data.rooms)));

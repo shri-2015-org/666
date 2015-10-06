@@ -36,7 +36,7 @@ export const restoreState = state => dispatch => {
       const { userID, secret, roomMessages, orderedMessages } = rooms[roomID];
       return dispatch(joinRoom({roomID, userID, secret}))
         .then(({room}) => {
-          if (!room) return Promise.resolve();
+          if (!room) return null;
           dispatch(actions.restoreMessages(room.roomID, {
             roomMessages,
             orderedMessages,
