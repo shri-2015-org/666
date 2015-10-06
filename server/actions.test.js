@@ -4,10 +4,24 @@ import utils from './testUtils';
 
 import * as actions from './actions';
 
+let emptyData;
+let data;
+
+before( () => {
+  emptyData = {};
+  data = {
+    roomID: 'roomID',
+    userID: 'userID',
+    secret: 'secret',
+    text: 'text',
+    time: 0,
+  };
+});
+
 describe('actions', () => {
   describe('#createRoom({roomID})', () => {
     it('should reject if roomID === undefined', done => {
-      actions.createRoom({})
+      actions.createRoom(emptyData)
         .catch(error => {
           assert.equal(error.name, 'ValidationError');
           done();
@@ -15,8 +29,7 @@ describe('actions', () => {
     });
   });
   describe('#joinRoom({roomID})', () => {
-    it('should reject if roomID === undefined', done => {
-      const data = {roomID: 'roomID'};
+    it('should reject if there is no room with tnis roomID', done => {
       actions.joinRoom(data)
         .catch(error => {
           assert.equal(error, 'Error: Can not find user in unexisted room');
@@ -24,7 +37,6 @@ describe('actions', () => {
         });
     });
     it('should resolve with new User', done => {
-      const data = {roomID: 'roomID'};
       actions.createRoom(data)
         .then(actions.joinRoom)
         .then(user => {
@@ -35,11 +47,6 @@ describe('actions', () => {
   });
   describe('#leaveRoom({roomID, userID, secret})', () => {
     it('should reject if user not found in room', done => {
-      const data = {
-        roomID: 'roomID',
-        userID: 'userID',
-        secret: 'secret',
-      };
       actions.leaveRoom(data)
         .catch(error => {
           assert.equal(error, 'Error: Can not find user in unexisted room');
@@ -47,7 +54,6 @@ describe('actions', () => {
         });
     });
     it('should resolve with {roomID, userID}', done => {
-      const data = {roomID: 'roomID'};
       actions.createRoom(data)
         .then(actions.joinRoom)
         .then(actions.leaveRoom)
@@ -59,13 +65,6 @@ describe('actions', () => {
   });
   describe('#message({roomID, userID, secret, text, time})', () => {
     it('should reject if user not found in room', done => {
-      const data = {
-        roomID: 'roomID',
-        userID: 'userID',
-        secret: 'secret',
-        text: 'text',
-        time: 0,
-      };
       actions.message(data)
         .catch(error => {
           assert.equal(error, 'Error: Can not find user in unexisted room');
@@ -73,13 +72,6 @@ describe('actions', () => {
         });
     });
     it('should resolve with {roomID, userID, secret, text, time}', done => {
-      const data = {
-        roomID: 'roomID',
-        userID: 'userID',
-        secret: 'secret',
-        text: 'text',
-        time: 0,
-      };
       actions.createRoom(data)
         .then(actions.joinRoom)
         .then( (user) => {
@@ -103,13 +95,6 @@ describe('actions', () => {
   });
   describe('#getTop()', () => {
     it('should resolve with [rooms]', done => {
-      const data = {
-        roomID: 'roomID',
-        userID: 'userID',
-        secret: 'secret',
-        text: 'text',
-        time: 0,
-      };
       actions.createRoom(data)
         .then( () => {
           actions.getTop()
@@ -122,13 +107,6 @@ describe('actions', () => {
   });
   describe('#searchRoomID({partialRoomID})', () => {
     it('should resolve with [rooms]', done => {
-      const data = {
-        roomID: 'roomID',
-        userID: 'userID',
-        secret: 'secret',
-        text: 'text',
-        time: 0,
-      };
       actions.createRoom(data)
         .then( () => {
           actions.searchRoomID({partialRoomID: 'roo'})
