@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import './index.scss';
 import MessageParser from '../MessageParser';
+import OpenGraph from '../OpenGraph';
 
 export default class Message extends Component {
   render() {
-    const { time, nick, avatar, text, status } = this.props.message;
+    const { attachments, time, nick, avatar, text, status } = this.props.message;
     const date = new Date(time);
     const htmlText = MessageParser.process(text).emoji().md().result;
     const humanTime = `${date.getHours()}:${date.getMinutes()}`;
@@ -26,6 +27,8 @@ export default class Message extends Component {
           </div>
           <div className="message-content-text bubble">
             <article className="md" dangerouslySetInnerHTML={{ __html: htmlText }} />
+            { attachments.map((atta, index) =>
+              <OpenGraph key={index} meta={atta.meta.data} />) }
           </div>
         </div>
       </li>

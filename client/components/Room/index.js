@@ -13,7 +13,8 @@ class Room extends Component {
             roomMessages, roomUsers } = room;
     const userID = this.props.room.userID;
     const messages = orderedMessages.map(messageID => {
-      const { text, time, userID: key, status } = roomMessages[messageID];
+      const { text, time, userID: key,
+              status, attachments } = roomMessages[messageID];
       const { nick, avatar } = roomUsers[key] ? roomUsers[key] : {
         nick: 'Leaved user',
         avatar: '', // TODO link to our logo with anonym man
@@ -24,6 +25,7 @@ class Room extends Component {
         nick,
         avatar,
         status,
+        attachments,
       };
     });
     const onSend = text => dispatch(sendMessage({
