@@ -68,13 +68,17 @@ function onConnection(socket) {
   });
 
   socket.on('client-request:message', ({ exchangeID, data }) => {
-    const responseEvent = `server-response:message@${exchangeID}`;
-    // TODO request validation here
-    actions.message(data)
-      .then((res) => {
-        const { roomID } = res;
-        const channel = `room:${roomID}`;
+    const { roomID } = data;
+    const channel = `room:${roomID}`;
 
+    const responseEvent = `server-response:message@${exchangeID}`;
+    const emitAttachment = emitData => {
+      io.to(channel).emit('roomcast:attachment', emitData);
+    };
+
+    // TODO request validation here
+    actions.message(data, emitAttachment)
+      .then((res) => {
         socket.emit(responseEvent, {
           status: 'OK',
           data: res,

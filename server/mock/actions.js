@@ -4,6 +4,7 @@ import Message from '../../common/Message';
 import * as userGenerator from '../userGenerator';
 import _ from 'lodash';
 import validRoomID from '../../common/RoomID';
+import { fetchMetas } from '../open-graph';
 
 /*
   rooms: HashMap('roomID', {
@@ -18,6 +19,7 @@ import validRoomID from '../../common/RoomID';
       messageID: string,
       text: string,
       time: number,
+      attachments: HashMap('url', any),
     }],
     rating: number,
   })
@@ -151,7 +153,7 @@ export function leaveRoom({roomID, userID, secret}) {
   });
 }
 
-export function message({roomID, userID, secret, text, time}) {
+export function message({roomID, userID, secret, text, time}, metaCallback) {
   if (roomID && !rooms.hasOwnProperty(roomID)) {
     return Promise.reject('No room is found');
   }
@@ -168,12 +170,26 @@ export function message({roomID, userID, secret, text, time}) {
 
   const messageID = uuid.v4();
 
+  const attachments = {};
+
   // room mutation
   room.roomMessages.push({
     userID,
     messageID,
     text,
     time,
+    attachments,
+  });
+
+  fetchMetas(text, (url, index, meta) => {
+    attachments[url] = meta;
+    metaCallback({
+      roomID,
+      messageID,
+      url,
+      index,
+      meta,
+    });
   });
 
   // return API structure
