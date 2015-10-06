@@ -11,7 +11,7 @@
     "test-server": "mocha --compilers js:babel/register 'server/**/*.test.js'",
     "test-common": "mocha --compilers js:babel/register 'common/**/*.test.js'",
     "test-client": "mocha --compilers js:babel/register 'client/**/*.test.js'",
-    "autotest": "supervisor -q -n exit -x mocha -- -b  --compilers js:babel/register 'server/models/*.test.js'"
+    "test-server-actions": "supervisor -q -n exit -x mocha -- -b  --compilers js:babel/register 'server/actions.test.js'"
   },
   "dependencies": {
     "babel": "5.8.23",
