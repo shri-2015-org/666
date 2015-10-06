@@ -56,7 +56,9 @@ describe('actions', () => {
     it('should resolve with {roomID, userID}', done => {
       actions.createRoom(data)
         .then(actions.joinRoom)
-        .then(actions.leaveRoom)
+        .then(user => {
+          return actions.leaveRoom(user);
+        })
         .then(leaveData => {
           assert.equal(leaveData.roomID, 'roomID');
           done();
