@@ -186,6 +186,17 @@ function joinedRooms(state = {}, action) {
     case actions.REJECT_SENT_MESSAGE: {
       return insideRoom(action.roomID, rejectSentMessage);
     }
+    case actions.RESTORE_MESSAGES: {
+      const { roomID, roomMessages, orderedMessages } = action;
+      return {
+        ...state,
+        [roomID]: {
+          ...state[roomID],
+          roomMessages,
+          orderedMessages,
+        },
+      };
+    }
     case actions.JOIN_ROOM:
       return state;
     case actions.LEAVE_ROOM: {

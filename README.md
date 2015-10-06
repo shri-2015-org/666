@@ -166,8 +166,11 @@ npm run prod
 :white_check_mark: | :white_check_mark: :exclamation: (mock)
 
 #### `joinRoom`
-* Я хотел бы присоединиться к комнате roomID / к случайной комнате (null).
-* Да, пожалуйста. Вас там будут знать как userID.
+* Я хотел бы 
+  - присоединиться к комнате roomID (userID, secret - null)
+  - присоединиться к случайной комнате (roomID - null)
+  - восстановиться в комнате roomID как userID
+* Да, пожалуйста. Вас там будут знать / уже знают как userID.
 
 Данные запроса:
 ```
@@ -175,6 +178,8 @@ npm run prod
 	exchangeID: string,
 	data: {
 		roomID: string || null,
+		userID: string || null,
+		secretID: string || null,
 	},
 }  
 ```
