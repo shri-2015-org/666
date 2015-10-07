@@ -6,9 +6,13 @@ import * as actions from './actions';
 
 let emptyData;
 let data;
+let onlyRoomID;
 
 before( () => {
   emptyData = {};
+  onlyRoomID = {
+    roomID: 'roomID',
+  };
   data = {
     roomID: 'roomID',
     userID: 'userID',
@@ -39,8 +43,29 @@ describe('actions', () => {
     it('should resolve with new User', done => {
       actions.createRoom(data)
         .then(actions.joinRoom)
-        .then(user => {
-          assert.equal(user.roomID, 'roomID');
+        .then( ({identity}) => {
+          assert.equal(identity.roomID, 'roomID');
+          done();
+        });
+    });
+    it('should join to random room', done => {
+      actions.createRoom(data)
+        .then( () => {
+          return actions.joinRoom(emptyData);
+        })
+        .then( ({identity}) => {
+          assert.equal(identity.roomID, 'roomID');
+          done();
+        });
+    });
+    it('should restore user', done => {
+      actions.createRoom(data)
+        .then(actions.joinRoom)
+        .then( ({identity}) => {
+          return actions.joinRoom(identity);
+        })
+        .then( ({identity}) => {
+          assert.equal(identity.roomID, 'roomID');
           done();
         });
     });
@@ -56,8 +81,8 @@ describe('actions', () => {
     it('should resolve with {roomID, userID}', done => {
       actions.createRoom(data)
         .then(actions.joinRoom)
-        .then(user => {
-          return actions.leaveRoom(user);
+        .then( ({identity}) => {
+          return actions.leaveRoom(identity);
         })
         .then(leaveData => {
           assert.equal(leaveData.roomID, 'roomID');
@@ -76,11 +101,11 @@ describe('actions', () => {
     it('should resolve with {roomID, userID, secret, text, time}', done => {
       actions.createRoom(data)
         .then(actions.joinRoom)
-        .then( (user) => {
+        .then( ({identity}) => {
           const messageData = {
-            roomID: user.roomID,
-            userID: user.userID,
-            secret: user.secret,
+            roomID: identity.roomID,
+            userID: identity.userID,
+            secret: identity.secret,
             text: 'text',
             time: 0,
           };
@@ -112,8 +137,8 @@ describe('actions', () => {
       actions.createRoom(data)
         .then( () => {
           actions.searchRoomID({partialRoomID: 'roo'})
-            .then(searchData => {
-              assert.equal(searchData.rooms.length, 1);
+            .then(rooms => {
+              assert.equal(rooms.length, 1);
               done();
             });
         });

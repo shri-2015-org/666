@@ -2,7 +2,13 @@
 import http from 'http';
 import socketIO from 'socket.io';
 
-import actions from './mock/wrapper';
+// import actions from './mock/wrapper';
+import * as actions from './actions';
+
+actions.connectToDB(() => {
+  actions.createRoom({roomID: 'lobby'});
+  console.log('connect to db');
+});
 
 const socketServer = new http.Server();
 const io = socketIO(socketServer);

@@ -8,6 +8,20 @@ import * as Message from './models/Message';
 
 import * as userGenerator from './userGenerator';
 
+import config from './config';
+
+export function connectToDB(cb) {
+  const env = process.env.NODE_ENV || 'development';
+  mongoose.connect(config.db[env], () => {
+    for (const i in mongoose.connection.collections) {
+      if (mongoose.connection.collections.hasOwnProperty(i)) {
+        mongoose.connection.collections[i].remove(function() {});
+      }
+    }
+    cb();
+  });
+}
+
 /**
  * Retun promise that resolve with Room instance from db or reject with error
  * @param  {String} options.roomID - room identifier
@@ -32,21 +46,22 @@ function _getRoom(roomID) {
  * @param  {Room} options.room - Room instance
  * @return {Promise}
  */
-function _createUser(room) {
+function _createUser({room, userID}) {
   return new Promise((resolve, reject) => {
-    const userID = uuid.v4();
+    const id = uuid.v4();
     const user = new User.model({
       roomID: room.roomID,
-      userID: userID,
+      userID: id,
       secret: uuid.v4(),
-      avatar: userGenerator.generateAvatar(userID),
+      avatar: userGenerator.generateAvatar(id),
       nick: userGenerator.generateName(),
     });
-    room.update({$push: {users: user}, $inc: {rating: 1}}, err => {
+    room.users.push(user);
+    room.update({$push: {users: user}, $inc: {rating: 1}}, (err) => {
       if (err) {
         return reject(err);
       }
-      resolve(user);
+      resolve({user, room});
     });
   });
 }
@@ -65,7 +80,7 @@ function _getUser({room, userID}) {
     if (!user) {
       return reject(new Error('Can not find user'));
     }
-    resolve(user);
+    resolve({user, room});
   });
 }
 
@@ -124,7 +139,7 @@ function _createMessage({room, user, secret, text, time}) {
  */
 export function createRoom({roomID}) {
   return new Promise((resolve, reject) => {
-    const room = new Room.model({roomID});
+    const room = new Room.model({roomID, name: roomID});
     room.save( (err, createdRoom) => {
       if (err) {
         return reject(err);
@@ -134,14 +149,59 @@ export function createRoom({roomID}) {
   });
 }
 
+function _getRandomRoom() {
+  return new Promise((resolve, reject) => {
+    Room.model.count( (err, count) => {
+      if (err) {
+        return reject(err);
+      }
+      const rand = Math.floor(Math.random() * count);
+      Room.model
+        .findOne()
+        .skip(rand)
+        .exec( (error, room) => {
+          if (error) {
+            return reject(error);
+          }
+          if (!room) {
+            return reject(new Error('Can not find user in unexisted room'));
+          }
+          resolve(room);
+        });
+    });
+  });
+}
+
 /**
  * Retun promise that add user to a room and resolve with hash with user data
  * @param  {String} options.roomID - room identifier
  * @return {Promise}
  */
-export function joinRoom({roomID}) {
-  return _getRoom(roomID)
-    .then(_createUser);
+export function joinRoom({roomID, userID, secret}) {
+  let roomMethod;
+  if (!roomID) {
+    roomMethod = _getRandomRoom;
+  } else {
+    roomMethod = _getRoom;
+  }
+  return roomMethod(roomID)
+    .then(room => {
+      let userMethod;
+      if (userID && secret) {
+        userMethod = _getUser;
+      } else {
+        userMethod = _createUser;
+      }
+      return userMethod({room, userID});
+    })
+    .then( ({user, room}) => {
+      return new Promise((resolve, reject) => {
+        resolve({
+          identity: user,
+          room: room,
+        });
+      });
+    });
 }
 
 /**
@@ -154,7 +214,6 @@ export function joinRoom({roomID}) {
 export function leaveRoom({roomID, userID, secret}) {
   return _getRoom(roomID)
     .then((room) => {
-      console.log(room);
       return _deleteUser({room, userID, secret});
     });
 }
@@ -169,14 +228,12 @@ export function leaveRoom({roomID, userID, secret}) {
  * @return {Promise}
  */
 export function message({roomID, userID, secret, text, time}) {
-  let resolvedRoom;
   return _getRoom(roomID)
     .then((room) => {
-      resolvedRoom = room;
       return _getUser({room, userID});
     })
-    .then(user => {
-      return _createMessage({room: resolvedRoom, user, secret, text, time});
+    .then( ({user, room}) => {
+      return _createMessage({room, user, secret, text, time});
     });
 }
 
@@ -193,7 +250,10 @@ export function getTop() {
         if (err) {
           return reject(err);
         }
-        resolve({rooms});
+        resolve({rooms: rooms.map( ({roomID, name, rating, users}) => {
+          return {roomID, name, rating, users: users.length};
+        }),
+        });
       });
   });
 }
@@ -212,7 +272,11 @@ export function searchRoomID({partialRoomID}) {
         if (err) {
           return reject(err);
         }
-        resolve({rooms});
+        resolve(rooms
+          .map( ({roomID, name, rating, users}) => {
+            return {roomID, name, rating, users: users.length};
+          })
+        );
       });
   });
 }
