@@ -16,31 +16,49 @@ export const searchInputChange = partialRoomID => dispatch => {
   }
 };
 
-export const joinRandomRoom = () => dispatch => {
-  transport.joinRoom(null)
-    .then(data => {
-      dispatch(actions.confirmJoinRoom(data));
-      dispatch(actions.switchToJoinedRoom(data.room.roomID));
-    }, description =>
-      dispatch(actions.rejectJoinRoom(description))
-    );
+export const joinRoom = ({roomID, userID, secret}) => dispatch => {
+  dispatch(actions.joinRoom(roomID));
+  const result = transport.joinRoom({roomID, userID, secret})
+    .then(data => actions.confirmJoinRoom(data),
+          description => actions.rejectJoinRoom(description));
+  return dispatch(result);
+};
+
+export const restoreState = state => dispatch => {
+  if (!state || !state.joinedRooms) return Promise.resolve();
+
+  const { currentRoomID } = state.ui ? state.ui : {};
+  const rooms = state.joinedRooms;
+  const roomKeys = Object.keys(rooms);
+
+  return Promise
+    .all(roomKeys.map(roomID => {
+      const { userID, secret, roomMessages, orderedMessages } = rooms[roomID];
+      return dispatch(joinRoom({roomID, userID, secret}))
+        .then(({room}) => {
+          if (!room) return null;
+          dispatch(actions.restoreMessages(room.roomID, {
+            roomMessages,
+            orderedMessages,
+          }));
+          return room.roomID;
+        });
+    }))
+    .then(joinedRooms => {
+      if (!~joinedRooms.indexOf(currentRoomID)) return; // void
+      dispatch(actions.switchToJoinedRoom(currentRoomID));
+    });
 };
 
 export const switchToRoom = roomID => (dispatch, getState) => {
   const state = getState();
   const { currentRoomID } = state.ui;
-  if (currentRoomID === roomID) return; // do nothing!
+  if (roomID && currentRoomID === roomID) return; // do nothing!
   const needToJoin = state.joinedRooms[roomID] === undefined;
 
   if (needToJoin) {
-    dispatch(actions.joinRoom(roomID));
-    transport.joinRoom(roomID)
-      .then(data => {
-        dispatch(actions.confirmJoinRoom(data));
-        dispatch(actions.switchToJoinedRoom(roomID));
-      }, description =>
-        dispatch(actions.rejectJoinRoom(description))
-      );
+    dispatch(joinRoom({roomID}))
+      .then(({room}) => dispatch(actions.switchToJoinedRoom(room.roomID)));
   } else {
     dispatch(actions.switchToJoinedRoom(roomID));
   }

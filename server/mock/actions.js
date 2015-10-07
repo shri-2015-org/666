@@ -71,42 +71,56 @@ export function createRoom({roomID}) {
   return Promise.resolve();
 }
 
-export function joinRoom({roomID}) {
+export function joinRoom({roomID, userID, secret}) {
   if (roomID && !rooms.hasOwnProperty(roomID)) {
     return Promise.reject('No room is found');
   }
 
   const roomKeys = Object.keys(rooms);
-  const user = uuid.v4();
-  const joinedRoom = roomID ? roomID :
-    roomKeys[Math.floor(Math.random() * roomKeys.length)];
+  const randomRoom = roomKeys[Math.floor(Math.random() * roomKeys.length)];
+  const joinedRoom = roomID ? roomID : randomRoom;
   const room = rooms[joinedRoom];
+  const roomUsers = room.roomUsers;
 
-  // room mutation
-  room.roomUsers[user] = {
-    secret: uuid.v4(),
-    nick: userGenerator.generateName(),
-    avatar: userGenerator.generateAvatar(user),
-  };
+  let user;
+  if (userID) {
+    if (!roomUsers.hasOwnProperty(userID)) {
+      return Promise.reject('Your user is not found in this room');
+    }
+    if (roomUsers[userID].secret !== secret) {
+      return Promise.reject('Your secret is wrong');
+    }
+
+    user = userID;
+  } else {
+    user = uuid.v4();
+  
+    // room mutation
+    roomUsers[user] = {
+      secret: uuid.v4(),
+      nick: userGenerator.generateName(),
+      avatar: userGenerator.generateAvatar(user),
+    };
+  }
 
   // return API structure
   return Promise.resolve({
     identity: {
       userID: user,
-      secret: room.roomUsers[user].secret,
-      nick: room.roomUsers[user].nick,
-      avatar: room.roomUsers[user].avatar,
+      secret: roomUsers[user].secret,
+      nick: roomUsers[user].nick,
+      avatar: roomUsers[user].avatar,
     },
     room: {
       roomID: joinedRoom,
       name: room.roomName,
-      users: Object.keys(room.roomUsers)
+      users: Object.keys(roomUsers)
         .map( (key) => {
           return {
             roomID: joinedRoom,
             userID: key,
-            nick: room.roomUsers[key].nick,
-            avatar: room.roomUsers[key].avatar,
+            nick: roomUsers[key].nick,
+            avatar: roomUsers[key].avatar,
           };
         }),
     },

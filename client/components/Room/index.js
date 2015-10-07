@@ -12,7 +12,10 @@ class Room extends Component {
     const { orderedMessages, roomMessages, roomUsers } = room;
     const messages = orderedMessages.map(messageID => {
       const { text, time, userID, status } = roomMessages[messageID];
-      const { nick, avatar } = roomUsers[userID];
+      const { nick, avatar } = roomUsers[userID] ? roomUsers[userID] : {
+        nick: 'Leaved user',
+        avatar: '', // TODO link to our logo with anonym man
+      };
       return {
         text,
         time,
