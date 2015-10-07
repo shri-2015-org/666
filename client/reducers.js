@@ -63,6 +63,29 @@ function newMessage(room, action) {
   };
 }
 
+function newAttachment(room, action) {
+  const { messageID, meta, index, url } = action;
+  const message = room.roomMessages[messageID];
+  if (!message) {
+    // TODO handle situation;
+    console.log('newAttachment could not find the messageID: `${messageID}`');
+  }
+  const { attachments } = message;
+  return {
+    ...room,
+    roomMessages: {
+      ...room.roomMessages,
+      [messageID]: {
+        ...message,
+        attachments: [
+          ...attachments,
+          { meta, index, url },
+        ],
+      },
+    },
+  };
+}
+
 function sentMessage(room, action) {
   const { text, time, pendingID } = action;
   const { userID } = room;
@@ -72,6 +95,7 @@ function sentMessage(room, action) {
     messageID,
     text,
     time,
+    attachments: [],
   };
   return {
     ...room,
@@ -179,6 +203,8 @@ function joinedRooms(state = {}, action) {
       return insideRoom(action.roomID, leaveUser);
     case actions.NEW_MESSAGE:
       return insideRoom(action.roomID, newMessage);
+    case actions.NEW_ATTACHMENT:
+      return insideRoom(action.roomID, newAttachment);
     case actions.SENT_MESSAGE:
       return insideRoom(action.roomID, sentMessage);
     case actions.CONFIRM_SENT_MESSAGE:

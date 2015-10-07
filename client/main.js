@@ -7,7 +7,8 @@ import { readState } from './storage';
 import createStorePlus from './middleware';
 import all from './reducers';
 import App from './components/App';
-import { updateTopRooms, newMessage, joinUser, leaveUser } from './actions';
+import { updateTopRooms, newMessage, newAttachment,
+         joinUser, leaveUser } from 'actions';
 import { restoreState } from './smartActions';
 import * as transport from './transport';
 
@@ -24,6 +25,10 @@ store.dispatch(restoreState(readState()));
 
 transport.onMessage(data =>
     store.dispatch(newMessage(data)));
+
+transport.onAttachment(data =>
+    store.dispatch(newAttachment(data)));
+
 transport.onJoinUser(data =>
     store.dispatch(joinUser(data)));
 transport.onLeaveUser(data =>

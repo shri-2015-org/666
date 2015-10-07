@@ -11,7 +11,8 @@ class Room extends Component {
     const { room, showPreview, inputText } = this.props;
     const { orderedMessages, roomMessages, roomUsers } = room;
     const messages = orderedMessages.map(messageID => {
-      const { text, time, userID, status } = roomMessages[messageID];
+      const { text, time, userID,
+              status, attachments } = roomMessages[messageID];
       const { nick, avatar } = roomUsers[userID] ? roomUsers[userID] : {
         nick: 'Leaved user',
         avatar: '', // TODO link to our logo with anonym man
@@ -22,6 +23,7 @@ class Room extends Component {
         nick,
         avatar,
         status,
+        attachments,
       };
     });
 
@@ -34,6 +36,7 @@ class Room extends Component {
       nick: ourNick,
       avatar: ourAvatar,
       status: 'preview',
+      attachments: [],
     };
 
     return (

@@ -1,4 +1,5 @@
 export const NEW_MESSAGE = 'NEW_MESSAGE';
+export const NEW_ATTACHMENT = 'NEW_ATTACHMENT';
 export const JOIN_USER = 'JOIN_USER';
 export const LEAVE_USER = 'LEAVE_USER';
 export const TOGGLE_NAVIGATION = 'TOGGLE_NAVIGATION';
@@ -127,6 +128,17 @@ export function newMessage({roomID, userID, messageID, text, time}) {
       text,
       time,
     },
+  };
+}
+
+export function newAttachment({roomID, messageID, url, meta, index}) {
+  return {
+    type: NEW_ATTACHMENT,
+    roomID,
+    messageID,
+    url,
+    index,
+    meta,
   };
 }
 

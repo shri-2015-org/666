@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import MessageBody from '../MessageBody';
 import './index.scss';
+import OpenGraph from '../OpenGraph';
 
 export default class Message extends Component {
   render() {
-    const { time, nick, avatar, text, status } = this.props.message;
+    const { attachments, time, nick, avatar, text, status } = this.props.message;
     const date = new Date(time);
     const humanTime = `${date.getHours()}:${date.getMinutes()}`;
     const finalTime = status === 'preview' ? '(preview)' : humanTime;
@@ -29,6 +30,8 @@ export default class Message extends Component {
           </div>
           <div className="message-content-text bubble">
             <MessageBody text={text} />
+            { attachments.map((atta, index) =>
+              <OpenGraph key={index} meta={atta.meta.data} />) }
           </div>
         </div>
       </li>
