@@ -1,58 +1,98 @@
-export function createRoom(resEvents, res, socket) {
-  socket.emit(resEvents.exchange, {
-    status: 'OK',
-  });
-}
+import actions from './mock/wrapper';
 
-export function joinRoom(resEvents, res, socket, io) {
-  const { roomID } = res.room;
-  const { userID, nick, avatar } = res.identity;
-  const channel = `room:${roomID}`;
-
-  socket.join(channel);
-  socket.emit(resEvents.exchange, {
-    status: 'OK',
-    data: res,
+const createRoom = request => () => actions.createRoom(request)
+  .then(() => {
+    return [{
+      type: 'exchange',
+    }];
   });
-  io.to(channel).emit(resEvents.roomcast, {
-    roomID,
-    userID,
-    nick,
-    avatar,
-  });
-  return {needTop: true};
-}
 
-export function leaveRoom(resEvents, res, socket, io) {
-  const {roomID, userID} = res;
-  const channel = `room:${roomID}`;
+const joinRoom = request => () => actions.joinRoom(request)
+  .then(({room, identity}) => {
+    const { roomID } = room;
+    const { userID, nick, avatar } = identity;
+    const channel = `room:${room.roomID}`;
 
-  socket.leave(channel);
-  socket.emit(resEvents.exchange, {
-    status: 'OK',
+    return [{
+      type: 'exchange',
+      data: {
+        room,
+        identity,
+      },
+    }, {
+      type: 'join',
+      channel,
+    }, {
+      type: 'roomcast',
+      channel,
+      data: {
+        roomID,
+        userID,
+        nick,
+        avatar,
+      },
+    }, {
+      type: 'updateTop',
+    }];
   });
-  io.to(channel).emit(resEvents.roomcast, {
-    roomID,
-    userID,
-  });
-  return {needTop: true};
-}
 
-export function message(resEvents, res, socket, io) {
-  const {roomID} = res;
-  const channel = `room:${roomID}`;
+const leaveRoom = request => () => actions.leaveRoom(request)
+  .then(({roomID, userID}) => {
+    const channel = `room:${roomID}`;
 
-  socket.emit(resEvents.exchange, {
-    status: 'OK',
-    data: res,
+    return [{
+      type: 'exchange',
+    }, {
+      type: 'leave',
+      channel,
+    }, {
+      type: 'roomcast',
+      channel,
+      data: {
+        roomID,
+        userID,
+      },
+    }, {
+      type: 'updateTop',
+    }];
   });
-  io.to(channel).emit(resEvents.roomcast, res);
-}
 
-export function searchRoomID(resEvents, res, socket) {
-  socket.emit(resEvents.exchange, {
-    status: 'OK',
-    data: res,
+const message = request => () => actions.message(request)
+  .then(data => {
+    const {roomID} = data;
+    const channel = `room:${roomID}`;
+
+    return [{
+      type: 'exchange',
+      data,
+    }, {
+      type: 'roomcast',
+      channel,
+      data,
+    }];
   });
-}
+
+const searchRoomID = request => () => actions.searchRoomID(request)
+  .then(data => {
+    return [{
+      type: 'exchange',
+      data,
+    }];
+  });
+
+export const handlers = {
+  createRoom,
+  joinRoom,
+  leaveRoom,
+  message,
+  searchRoomID,
+};
+
+export const topRooms = () => actions.getTop()
+  .then(data => {
+    return [{
+      type: 'broadcast',
+      data,
+    }];
+  });
 
