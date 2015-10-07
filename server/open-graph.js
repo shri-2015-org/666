@@ -1,7 +1,7 @@
 import getUrls from 'get-urls';
 import ogs from 'open-graph-scraper';
 
-export const fetchMetas = (text, callback) => {
+export const fetchMetas = (text, handler) => {
   const urls = getUrls(text);
   urls.forEach((url, index) => {
     ogs({url, timeout: 2000}, (error, meta) => {
@@ -11,7 +11,7 @@ export const fetchMetas = (text, callback) => {
         return;
       }
       // console.log(meta);
-      callback(url, index, meta);
+      handler(url, index, meta);
     });
   });
 };
