@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import generic from './Generic';
+import './index.scss';
 
 const plugins = [
   generic,
