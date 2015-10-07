@@ -1,5 +1,13 @@
 import actions from './mock/wrapper';
 
+export const topRooms = () => actions.getTop()
+  .then(data => {
+    return {
+      type: 'broadcast',
+      data,
+    };
+  });
+
 const createRoom = request => () => actions.createRoom(request)
   .then(() => {
     return [{
@@ -31,9 +39,9 @@ const joinRoom = request => () => actions.joinRoom(request)
         nick,
         avatar,
       },
-    }, {
-      type: 'updateTop',
-    }];
+    },
+    topRooms(),
+    ];
   });
 
 const leaveRoom = request => () => actions.leaveRoom(request)
@@ -52,9 +60,9 @@ const leaveRoom = request => () => actions.leaveRoom(request)
         roomID,
         userID,
       },
-    }, {
-      type: 'updateTop',
-    }];
+    },
+    topRooms(),
+    ];
   });
 
 const message = request => () => actions.message(request)
@@ -87,12 +95,4 @@ export const handlers = {
   message,
   searchRoomID,
 };
-
-export const topRooms = () => actions.getTop()
-  .then(data => {
-    return [{
-      type: 'broadcast',
-      data,
-    }];
-  });
 

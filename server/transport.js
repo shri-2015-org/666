@@ -25,8 +25,8 @@ const errorHandler = (event, socket, request) => err => {
   });
 };
 
-const inner = (event, socket, request) => responses => {
-  responses.map(({type, channel, data}) => {
+const responser = (event, socket, request) => responses => {
+  function switcher({type, channel, data}) {
     switch (type) {
       case 'exchange':
         return socket.emit(`server-response:${event}@${request.exchangeID}`, {
@@ -41,12 +41,16 @@ const inner = (event, socket, request) => responses => {
         return io.to(channel).emit(`roomcast:${event}`, data);
       case 'broadcast':
         return io.emit(`broadcast:${event}`, data);
-      // TODO think about remove two next
-      case 'updateTop':
-        return topRooms().then(inner('topRooms'));
       default:
         return null;
     }
+  }
+
+  return responses.map(response => {
+    if (typeof response.then !== 'function') {
+      return switcher(response);
+    }
+    return Promise.resolve(response).then(switcher);
   });
 };
 
@@ -55,7 +59,7 @@ const wrapper = socket => event => {
     Promise.resolve()
       .then(validate(event, request))
       .then(handlers[event](request.data)) // it will be actions in future
-      .then(inner(event, socket, request))
+      .then(responser(event, socket, request))
       .catch(errorHandler(event, socket, request));
   });
 };
@@ -67,7 +71,9 @@ export default function(port) {
   io.on('connection', (socket) => {
     Object.keys(handlers)
       .map(wrapper(socket));
-    inner()([{type: 'updateTop'}]);
+    topRooms().then(response => {
+      responser('topRooms')([response]);
+    });
   });
 }
 
