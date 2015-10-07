@@ -18,6 +18,10 @@ brew install mongodb
 ```
 
 ### Dev
+Run MongoDB before run server:
+```
+mongod
+```
 Run dev server:
 ```
 npm run dev
@@ -172,7 +176,7 @@ npm run prod
 :white_check_mark: | :white_check_mark: :exclamation: (mock)
 
 #### `joinRoom`
-* Я хотел бы 
+* Я хотел бы
   - присоединиться к комнате roomID (userID, secret - null)
   - присоединиться к случайной комнате (roomID - null)
   - восстановиться в комнате roomID как userID
