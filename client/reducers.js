@@ -40,9 +40,9 @@ function leaveUser(room, action) {
 
 function newMessage(room, action) {
   const { message } = action;
+  const userID = action.message.userID;
   const { messageID } = message;
-  if (room.roomMessages[messageID]) {
-    // TODO: handle existing message.
+  if (room.userID === userID) { // ignore our message
     return room;
   }
   return {
@@ -185,6 +185,17 @@ function joinedRooms(state = {}, action) {
       return insideRoom(action.roomID, confirmSentMessage);
     case actions.REJECT_SENT_MESSAGE: {
       return insideRoom(action.roomID, rejectSentMessage);
+    }
+    case actions.RESTORE_MESSAGES: {
+      const { roomID, roomMessages, orderedMessages } = action;
+      return {
+        ...state,
+        [roomID]: {
+          ...state[roomID],
+          roomMessages,
+          orderedMessages,
+        },
+      };
     }
     case actions.JOIN_ROOM:
       return state;

@@ -15,6 +15,7 @@ export const SEARCH_INPUT_CHANGE = 'SEARCH_INPUT_CHANGE';
 export const SEARCH_RESULTS_UPDATE = 'SEARCH_RESULTS_UPDATE';
 export const SEARCH_RESULTS_FAILED = 'SEARCH_RESULTS_FAILED';
 export const CREATE_ROOM_FAILED = 'CREATE_ROOM_FAILED';
+export const RESTORE_MESSAGES = 'RESTORE_MESSAGES';
 
 export function searchResultsUpdate(results) {
   return {
@@ -159,6 +160,15 @@ export function rejectSentMessage(pendingID, roomID, description) {
     pendingID,
     roomID,
     description,
+  };
+}
+
+export function restoreMessages(roomID, {roomMessages, orderedMessages}) {
+  return {
+    type: RESTORE_MESSAGES,
+    roomID,
+    roomMessages,
+    orderedMessages,
   };
 }
 
