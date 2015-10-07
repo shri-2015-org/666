@@ -889,3 +889,10 @@ export const EMOJI_IMAGES = {
   'zero': 'https://assets-cdn.github.com/images/icons/emoji/unicode/0030-20e3.png?v5',
   'zzz': 'https://assets-cdn.github.com/images/icons/emoji/unicode/1f4a4.png?v5',
 };
+
+export default function emoji(text) {
+  return text.replace(EMOJI_REGEX, match => {
+    const emojiImageUrl = EMOJI_IMAGES[match.replace(/\:?/g, '')];
+    return emojiImageUrl ? `![]( ${ emojiImageUrl })` : match;
+  });
+}

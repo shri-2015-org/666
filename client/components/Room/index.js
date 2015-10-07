@@ -2,20 +2,18 @@ import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import RoomHeader from '../RoomHeader';
 import MessageList from '../MessageList';
+import Message from '../Message';
 import RoomInput from '../RoomInput';
 import './index.scss';
-import { sendMessage } from '../../smartActions';
 
 class Room extends Component {
   render() {
-    const { dispatch, room } = this.props;
-    const { roomID, secret, orderedMessages,
-            roomMessages, roomUsers } = room;
-    const userID = this.props.room.userID;
+    const { room, showPreview, inputText } = this.props;
+    const { orderedMessages, roomMessages, roomUsers } = room;
     const messages = orderedMessages.map(messageID => {
-      const { text, time, userID: key,
+      const { text, time, userID,
               status, attachments } = roomMessages[messageID];
-      const { nick, avatar } = roomUsers[key] ? roomUsers[key] : {
+      const { nick, avatar } = roomUsers[userID] ? roomUsers[userID] : {
         nick: 'Leaved user',
         avatar: '', // TODO link to our logo with anonym man
       };
@@ -28,29 +26,43 @@ class Room extends Component {
         attachments,
       };
     });
-    const onSend = text => dispatch(sendMessage({
-      roomID,
-      userID,
-      secret,
-      text,
-      // no time here!
-    }));
+
+    const ourUserID = room.userID;
+    const {nick: ourNick, avatar: ourAvatar} = room.roomUsers[ourUserID];
+
+    const previewMessage = {
+      text: inputText,
+      time: null,
+      nick: ourNick,
+      avatar: ourAvatar,
+      status: 'preview',
+      attachments: [],
+    };
 
     return (
       <div className="room">
         <RoomHeader room={room} />
         <div className="room-messages">
-          <MessageList
-            messages={messages}
-          />
+          {!showPreview ? '' :
+            <div>
+              <hr/>
+              <Message message={previewMessage} />
+            </div>
+          }
+          <MessageList messages={messages} />
         </div>
-        <RoomInput
-          onSend={onSend}
-        />
+        <RoomInput />
       </div>
     );
   }
 }
 
-export default connect()(Room);
+export default connect(state => {
+  const inputText = state.ui.roomInputText;
+  const { previewCollapsed } = state.ui;
+  return {
+    showPreview: !!inputText && !previewCollapsed,
+    inputText,
+  };
+})(Room);
 
