@@ -2,22 +2,33 @@ import React, { Component } from 'react';
 
 class Generic extends Component {
   render() {
-    const { imageUrl, title } = this.props;
+    const { imageUrl, title, link } = this.props;
     return (
-    <div>
-      <span>{ title }</span>
-      <img height={200} src={imageUrl} />
-    </div>);
+    <figure className="attachment">
+      <figcaption className="attachment-caption article">
+        <a href={link} target="_blank">
+          <h4 className="attachment-caption-title">{ title }</h4>
+        </a>
+      </figcaption>
+      {(() => {
+        if (!!imageUrl) {
+          return (
+            <a href={link} target="_blank">
+              <img src={imageUrl} className="attachment-image" />
+            </a>
+          ); }
+      })()}
+    </figure>);
   }
 }
 
 export default meta => {
   const image = meta.ogImage;
   const title = meta.ogTitle;
-  if (image) {
-    return (
-      <Generic imageUrl={image.url} title={title} />
-    );
-  }
+  const link = meta.ogUrl;
+
+  return (image) ?
+    (<Generic imageUrl={image.url} title={title} link={link} />) :
+    false;
 };
 
