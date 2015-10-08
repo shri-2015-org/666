@@ -36,7 +36,7 @@ p + p {
 
 // Helpers:
 
-.article, .md {
+.md {
   $borders: 1px solid color(grey, light);
   line-height: 1.5;
   margin: 1em 0;
@@ -122,6 +122,11 @@ p + p {
     border: none;
     border-bottom: $borders;
     margin: .5em 0;
+  }
+
+  &-emoji {
+    width: 1em;
+    min-width: 24px;
   }
 }
 

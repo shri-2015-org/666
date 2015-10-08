@@ -44,8 +44,7 @@ class Room extends Component {
         <RoomHeader room={room} />
         <div className="room-messages">
           {!showPreview ? '' :
-            <div>
-              <hr/>
+            <div className="room-messages-preview">
               <Message message={previewMessage} />
             </div>
           }
