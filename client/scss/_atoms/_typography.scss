@@ -39,7 +39,6 @@ p + p {
 .md {
   $borders: 1px solid color(grey, light);
   line-height: 1.5;
-  margin: 1em 0;
 
   a {
     text-decoration: underline;
@@ -115,7 +114,7 @@ p + p {
   }
 
   img {
-   max-width: 300px;
+    max-width: 300px;
   }
 
   hr {
