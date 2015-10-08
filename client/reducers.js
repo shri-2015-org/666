@@ -56,6 +56,7 @@ function newMessage(room, action) {
       ...room.roomMessages,
       [messageID]: {
         ...message,
+        attachments: [], // TODO may by get it from server??
         status: 'confirmed',
         index: room.orderedMessages.length, // ! appended to the end.
       },
