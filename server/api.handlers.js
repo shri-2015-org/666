@@ -66,9 +66,20 @@ const leaveRoom = request => () => actions.leaveRoom(request)
   });
 
 const message = request => () => actions.message(request)
-  .then(data => {
+  .then(({data, metas}) => {
     const {roomID} = data;
     const channel = `room:${roomID}`;
+    const reqMetas = metas.map(reqMeta => {
+      return reqMeta
+        .then(metaData => {
+          return {
+            type: 'roomcast',
+            channel,
+            event: 'attachment',
+            data: metaData,
+          };
+        });
+    });
 
     return [{
       type: 'exchange',
@@ -77,7 +88,9 @@ const message = request => () => actions.message(request)
       type: 'roomcast',
       channel,
       data,
-    }];
+    },
+    ...reqMetas,
+    ];
   });
 
 const searchRoomID = request => () => actions.searchRoomID(request)

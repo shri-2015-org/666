@@ -25,8 +25,9 @@ const errorHandler = (event, socket, request) => err => {
   });
 };
 
-const responser = (event, socket, request) => responses => {
-  function switcher({type, channel, data}) {
+const responser = (reqEvent, socket, request) => responses => {
+  function switcher({type, event: resEvent, channel, data}) {
+    const event = resEvent || reqEvent;
     switch (type) {
       case 'exchange':
         return socket.emit(`server-response:${event}@${request.exchangeID}`, {
