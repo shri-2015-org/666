@@ -35,6 +35,17 @@ export function onMessage(handler) {
   });
 }
 
+export function onAttachment(handler) {
+  socket.on('roomcast:attachment', data => {
+    assert(typeof data.roomID === 'string');
+    assert(typeof data.messageID === 'string');
+    assert(typeof data.url === 'string');
+    assert(typeof data.index === 'number');
+    assert(data.meta);
+    handler(data);
+  });
+}
+
 export function onJoinUser(handler) {
   socket.on('roomcast:joinUser', data => {
     assert(typeof data.roomID === 'string');
@@ -58,12 +69,14 @@ function getExchangeID() {
   return exchangeCount++;
 }
 
-export function joinRoom(roomID) {
+export function joinRoom({roomID, userID, secret}) {
   const exchangeID = getExchangeID();
   socket.emit('client-request:joinRoom', {
     exchangeID,
     data: {
       roomID,
+      userID,
+      secret,
     },
   });
 
@@ -88,11 +101,10 @@ export function joinRoom(roomID) {
           assert(typeof user.nick === 'string');
         });
         return resolve(res.data);
-      } else {
-        assert(res.status === 'ERROR');
-        assert(typeof res.description === 'string');
-        return reject(res.description);
       }
+      assert(res.status === 'ERROR');
+      assert(typeof res.description === 'string');
+      return reject(res.description);
     });
     setTimeout(() => reject('joinRoom timeout'), EXCHANGE_TIMEOUT);
   });
@@ -110,15 +122,14 @@ export function leaveRoom({roomID, userID, secret}) {
   });
 
   return new Promise( (resolve, reject) => {
-    socket.once(`server-response:joinRoom@${exchangeID}`, res => {
+    socket.once(`server-response:leaveRoom@${exchangeID}`, res => {
       assert(res instanceof Object);
       if (res.status === 'OK') {
         return resolve();
-      } else {
-        assert(res.status === 'ERROR');
-        assert(typeof res.description === 'string');
-        return reject(res.description);
       }
+      assert(res.status === 'ERROR');
+      assert(typeof res.description === 'string');
+      return reject(res.description);
     });
     setTimeout(() => reject('leaveRoom timeout'), EXCHANGE_TIMEOUT);
   });
@@ -148,13 +159,67 @@ export function message({roomID, userID, secret, text, time}) {
         assert(typeof res.data.text === 'string');
         assert(typeof res.data.time === 'number');
         return resolve(res.data);
-      } else {
-        assert(res.status === 'ERROR');
-        assert(typeof res.description === 'string');
-        return reject(res.description);
       }
+      assert(res.status === 'ERROR');
+      assert(typeof res.description === 'string');
+      return reject(res.description);
     });
     setTimeout(() => reject('message timeout'), EXCHANGE_TIMEOUT);
+  });
+}
+
+export function searchRoomID(partialRoomID) {
+  const exchangeID = getExchangeID();
+  socket.emit('client-request:searchRoomID', {
+    exchangeID,
+    data: {
+      partialRoomID,
+    },
+  });
+
+  return new Promise( (resolve, reject) => {
+    socket.once(`server-response:searchRoomID@${exchangeID}`, res => {
+      assert(res instanceof Object);
+      if (res.status === 'OK') {
+        assert(res.data instanceof Array);
+        res.data.forEach(room => {
+          assert(room instanceof Object);
+          assert(typeof room.roomID === 'string');
+          assert(typeof room.name   === 'string');
+          assert(typeof room.users  === 'number');
+          assert(typeof room.rating === 'number');
+        });
+        return resolve(res.data);
+      }
+      assert(res.status === 'ERROR');
+      assert(typeof res.description === 'string');
+      return reject(res.description);
+    });
+    setTimeout(() => reject('searchRoomID timeout'), EXCHANGE_TIMEOUT);
+  });
+}
+
+// TODO много повторяющегося кода в каждом из обработчиков; можно вынести его.
+export function createRoom(roomID) {
+  const exchangeID = getExchangeID();
+  socket.emit('client-request:createRoom', {
+    exchangeID,
+    data: {
+      roomID,
+    },
+  });
+
+  return new Promise( (resolve, reject) => {
+    socket.once(`server-response:createRoom@${exchangeID}`, res => {
+      assert(res instanceof Object);
+      if (res.status === 'OK') {
+        return resolve();
+      }
+      assert(res.status === 'ERROR');
+      assert(typeof res.description === 'string');
+      return reject(res.description);
+    });
+    setTimeout(() => reject('createRoom timeout'), EXCHANGE_TIMEOUT);
   });
 }
 

@@ -2,7 +2,6 @@
 import http from 'http';
 import socketIO from 'socket.io';
 
-import _ from 'lodash';
 import actions from './mock/wrapper';
 
 const socketServer = new http.Server();
@@ -69,19 +68,49 @@ function onConnection(socket) {
   });
 
   socket.on('client-request:message', ({ exchangeID, data }) => {
-    const responseEvent = `server-response:message@${exchangeID}`;
-    // TODO request validation here
-    actions.message(data)
-      .then((res) => {
-        const { roomID } = res;
-        const channel = `room:${roomID}`;
+    const { roomID } = data;
+    const channel = `room:${roomID}`;
 
-        socket.join(channel);
+    const responseEvent = `server-response:message@${exchangeID}`;
+    const emitAttachment = emitData => {
+      io.to(channel).emit('roomcast:attachment', emitData);
+    };
+
+    // TODO request validation here
+    actions.message(data, emitAttachment)
+      .then((res) => {
         socket.emit(responseEvent, {
           status: 'OK',
           data: res,
         });
         io.to(channel).emit('roomcast:message', res);
+      })
+      .catch(handleError(socket, responseEvent));
+  });
+
+  socket.on('client-request:searchRoomID', ({ exchangeID, data }) => {
+    const responseEvent = `server-response:searchRoomID@${exchangeID}`;
+    // TODO request validation here
+    actions.searchRoomID(data)
+      .then((res) => {
+        socket.emit(responseEvent, {
+          status: 'OK',
+          data: res,
+        });
+      })
+      .catch(handleError(socket, responseEvent));
+  });
+
+  // TODO этот блок и предыдущий отличаются незначительно, помимо названия события.
+  // Это относится и к другим блокам. Явно просится роефактор.
+  socket.on('client-request:createRoom', ({ exchangeID, data }) => {
+    const responseEvent = `server-response:createRoom@${exchangeID}`;
+    // TODO request validation here
+    actions.createRoom(data)
+      .then(() => {
+        socket.emit(responseEvent, {
+          status: 'OK',
+        });
       })
       .catch(handleError(socket, responseEvent));
   });

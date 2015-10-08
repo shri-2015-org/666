@@ -93,6 +93,23 @@ npm run prod
 --- | ---
 :white_check_mark: | :white_check_mark: :exclamation: (mock)
 
+#### `attachment`
+Сервер добавил метаданные к сообщению.
+
+Данные:
+```
+{
+	roomID: string,
+	messageID: string,
+    url: string,
+	meta: any, // TODO уточнить
+}
+```
+
+Поддержка клиентом | Поддержка сервером
+--- | ---
+:white_check_mark: | :white_check_mark: :exclamation: (mock)
+
 #### `joinUser`
 Зашел новый пользователь.
 
@@ -133,9 +150,44 @@ npm run prod
 
 Пример: `client-request:joinRoom` и `server-response:joinRoom@17`
 
+#### `createRoom`
+* Я хотел бы создать комнату roomID.
+* Да, пожалуйста / Нет, такая уже есть.
+
+Данные запроса:
+```
+{
+	exchangeID: string,
+	data: {
+		roomID: string,
+	},
+}
+```
+ 
+Данные ответа: 
+```
+{
+	status: 'OK',
+}
+
+/* или */
+
+{
+	status: 'ERROR',
+	description: string,
+}
+```
+
+Поддержка клиентом | Поддержка сервером
+--- | ---
+:white_check_mark: | :white_check_mark: :exclamation: (mock)
+
 #### `joinRoom`
-* Я хотел бы присоединиться к комнате roomID / к случайной комнате (null).
-* Да, пожалуйста. Вас там будут знать как userID.
+* Я хотел бы 
+  - присоединиться к комнате roomID (userID, secret - null)
+  - присоединиться к случайной комнате (roomID - null)
+  - восстановиться в комнате roomID как userID
+* Да, пожалуйста. Вас там будут знать / уже знают как userID.
 
 Данные запроса:
 ```
@@ -143,6 +195,8 @@ npm run prod
 	exchangeID: string,
 	data: {
 		roomID: string || null,
+		userID: string || null,
+		secretID: string || null,
 	},
 }  
 ```
@@ -182,7 +236,6 @@ npm run prod
 Поддержка клиентом | Поддержка сервером
 --- | ---
 :white_check_mark: | :white_check_mark: :exclamation: (mock)
-
 
 #### `leaveRoom`
 * Я хотел бы отсоединиться от комнаты roomID.
@@ -248,6 +301,44 @@ npm run prod
 		text: string,
 		time: number,
 	}
+}
+
+/* или */
+
+{
+	status: 'ERROR',
+	description: string,
+}
+```
+
+Поддержка клиентом | Поддержка сервером
+--- | ---
+:white_check_mark: | :white_check_mark: :exclamation: (mock)
+
+#### `searchRoomID`
+* Какие комнаты начинаются с букв `partialRoomID`?
+* Да вот такие.
+
+Данные запроса:
+```
+{
+	exchangeID: string,
+	data: {
+		partialRoomID: string,
+	}
+}  
+```
+ 
+Данные ответа: 
+```
+{
+	status: 'OK',
+	data: [{
+		roomID: string,
+		name: string,
+		users: number,
+		rating: number,
+	}],
 }
 
 /* или */

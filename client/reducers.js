@@ -40,9 +40,9 @@ function leaveUser(room, action) {
 
 function newMessage(room, action) {
   const { message } = action;
+  const userID = action.message.userID;
   const { messageID } = message;
-  if (room.roomMessages[messageID]) {
-    // TODO: handle existing message.
+  if (room.userID === userID) { // ignore our message
     return room;
   }
   return {
@@ -63,6 +63,29 @@ function newMessage(room, action) {
   };
 }
 
+function newAttachment(room, action) {
+  const { messageID, meta, index, url } = action;
+  const message = room.roomMessages[messageID];
+  if (!message) {
+    // TODO handle situation;
+    console.log('newAttachment could not find the messageID: `${messageID}`');
+  }
+  const { attachments } = message;
+  return {
+    ...room,
+    roomMessages: {
+      ...room.roomMessages,
+      [messageID]: {
+        ...message,
+        attachments: [
+          ...attachments,
+          { meta, index, url },
+        ],
+      },
+    },
+  };
+}
+
 function sentMessage(room, action) {
   const { text, time, pendingID } = action;
   const { userID } = room;
@@ -72,6 +95,7 @@ function sentMessage(room, action) {
     messageID,
     text,
     time,
+    attachments: [],
   };
   return {
     ...room,
@@ -91,7 +115,7 @@ function sentMessage(room, action) {
 }
 
 function confirmSentMessage(room, action) {
-  const { pendingID, messageID } = action;
+  const { pendingID, messageID, text } = action;
   const { roomMessages, orderedMessages } = room;
   const { index } = roomMessages[pendingID];
 
@@ -102,6 +126,7 @@ function confirmSentMessage(room, action) {
     tmp[messageID] = {
       ...tmp[pendingID],
       status: 'confirmed',
+      text,
       messageID,
     };
     delete tmp[pendingID];
@@ -178,12 +203,25 @@ function joinedRooms(state = {}, action) {
       return insideRoom(action.roomID, leaveUser);
     case actions.NEW_MESSAGE:
       return insideRoom(action.roomID, newMessage);
+    case actions.NEW_ATTACHMENT:
+      return insideRoom(action.roomID, newAttachment);
     case actions.SENT_MESSAGE:
       return insideRoom(action.roomID, sentMessage);
     case actions.CONFIRM_SENT_MESSAGE:
       return insideRoom(action.roomID, confirmSentMessage);
     case actions.REJECT_SENT_MESSAGE: {
       return insideRoom(action.roomID, rejectSentMessage);
+    }
+    case actions.RESTORE_MESSAGES: {
+      const { roomID, roomMessages, orderedMessages } = action;
+      return {
+        ...state,
+        [roomID]: {
+          ...state[roomID],
+          roomMessages,
+          orderedMessages,
+        },
+      };
     }
     case actions.JOIN_ROOM:
       return state;
@@ -233,17 +271,66 @@ function joinedRooms(state = {}, action) {
 
 const initialUi = {
   navigationCollapsed: false,
+  previewCollapsed: true,
   currentRoomID: null,
+  searchInputText: '',
+  roomInputText: '',
+  searchResults: null,
 };
 
 /*
    ui: {
      navigationCollapsed: boolean,
+     previewCollapsed: boolean,
      currentRoomID: string || null,
+     searchInputText: string,
+     roomInputText: string,
+     searchResults: null || [{
+       roomID: string,
+       name: string,
+       users: number,
+       rating: number,
+     }],
    }
 */
 function ui(state = initialUi, action) {
   switch (action.type) {
+    case actions.CREATE_ROOM_FAILED: {
+      // TODO handle it here.
+      console.log('CREATE_ROOM_FAILED', action.description);
+      return state;
+    }
+    case actions.SEARCH_RESULTS_FAILED: {
+      // TODO indicate the failure to the user?
+      return {
+        ...state,
+        searchResults: null,
+      };
+    }
+    case actions.SEARCH_RESULTS_UPDATE: {
+      return {
+        ...state,
+        searchResults: action.results,
+      };
+    }
+    case actions.SEARCH_INPUT_CHANGE: {
+      return {
+        ...state,
+        searchInputText: action.text,
+      };
+    }
+    case actions.TOGGLE_PREVIEW: {
+      return {
+        ...state,
+        previewCollapsed: !state.previewCollapsed,
+      };
+    }
+    case actions.ROOM_INPUT_CHANGE: {
+      return {
+        ...state,
+        roomInputText: action.text,
+      };
+    }
     case actions.TOGGLE_NAVIGATION: {
       return {
         ...state,
@@ -259,8 +346,8 @@ function ui(state = initialUi, action) {
     case actions.LEAVE_ROOM: {
       if (state.currentRoomID !== action.roomID) return state;
       return {
-          ...state,
-          currentRoomID: null,
+        ...state,
+        currentRoomID: null,
       };
     }
     default: return state;

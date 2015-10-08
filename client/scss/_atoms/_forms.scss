@@ -9,6 +9,9 @@
   background-color: color(grey, light);
   padding: .75em 1em .9em;
 
+  overflow-y: auto;
+  max-height: 50vh;
+
   &--underline {
     @extend %reset-input;
 
@@ -33,10 +36,31 @@ textarea {
   background-color: color(blue);
   color: white;
   border-radius: $radius;
-  padding: .75rem 1rem .9rem;
+  padding: .75rem 1.25rem .9rem;
+  transition: all .2s;
 
-  &:disabled {
+  &:hover {
+    background-color: color(blue, light);
+  }
+
+  &:disabled, &.is-disabled {
     background-color: color(grey);
+    cursor: not-allowed;
+  }
+
+  &.is-off {
+    background-color: color(grey);
+  }
+
+  &--outline {
+    background-color: transparent;
+    border: 1px solid;
+    color: inherit;
+
+    &:hover {
+      background-color: color(blue);
+      color: white;
+    }
   }
 }
 
