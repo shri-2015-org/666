@@ -327,10 +327,8 @@ function ui(state = initialUi, action) {
       };
     }
     case actions.ROOM_INPUT_CHANGE: {
-      const previewCollapsed = action.text !== '' ? state.previewCollapsed : true;
       return {
         ...state,
-        previewCollapsed,
         roomInputText: action.text,
       };
     }

@@ -1,0 +1,35 @@
+@import '../../scss/common';
+
+.attachments {
+  margin: .5rem -.5rem .5em;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.attachment {
+  flex-basis: 200px;
+  width: 100%;
+  border: 1px solid color(grey, light);
+  border-radius: $radius;
+  overflow: hidden;
+  margin: .5em;
+
+  &-caption {
+    padding: 0 1rem;
+
+    &-title {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
+  &-image {
+    display: block;
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+    max-height: 100px;
+  }
+}

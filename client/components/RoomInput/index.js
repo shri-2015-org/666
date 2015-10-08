@@ -24,7 +24,7 @@ class RoomInput extends Component {
   }
 
   render() {
-    const { dispatch, text, buttonEnabled } = this.props;
+    const { dispatch, text, buttonEnabled, previewCollapsed } = this.props;
     return (
       <form className="room-actions"
         onSubmit={e => onClick(e, () => dispatch(sendMessage()))}>
@@ -39,9 +39,8 @@ class RoomInput extends Component {
           value={text}
         ></textarea>
         <button
-          className="btn"
+          className={`btn ${ previewCollapsed ? 'is-off' : ''}`}
           onClick={e => onClick(e, () => dispatch(togglePreview()))}
-          disabled={!buttonEnabled}
         > Preview </button>
         <button
           className="room-actions-send btn"
@@ -56,9 +55,11 @@ class RoomInput extends Component {
 
 export default connect(state => {
   const text = state.ui.roomInputText;
+  const { previewCollapsed } = state.ui;
 
   return {
     buttonEnabled: !!text,
+    previewCollapsed,
     text,
   };
 })(RoomInput);

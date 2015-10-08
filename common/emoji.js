@@ -893,6 +893,6 @@ export const EMOJI_IMAGES = {
 export default function emoji(text) {
   return text.replace(EMOJI_REGEX, match => {
     const emojiImageUrl = EMOJI_IMAGES[match.replace(/\:?/g, '')];
-    return emojiImageUrl ? `![]( ${ emojiImageUrl })` : match;
+    return emojiImageUrl ? `![emoji]( ${ emojiImageUrl })` : match;
   });
 }
