@@ -1,7 +1,9 @@
 export const NEW_MESSAGE = 'NEW_MESSAGE';
+export const NEW_ATTACHMENT = 'NEW_ATTACHMENT';
 export const JOIN_USER = 'JOIN_USER';
 export const LEAVE_USER = 'LEAVE_USER';
 export const TOGGLE_NAVIGATION = 'TOGGLE_NAVIGATION';
+export const TOGGLE_PREVIEW = 'TOGGLE_PREVIEW';
 export const UPDATE_TOP_ROOMS = 'UPDATE_TOP_ROOMS';
 export const JOIN_ROOM = 'JOIN_ROOM';
 export const CONFIRM_JOIN_ROOM = 'CONFIRM_JOIN_ROOM';
@@ -12,6 +14,7 @@ export const REJECT_SENT_MESSAGE = 'REJECT_SENT_MESSAGE';
 export const SWITCH_TO_JOINED_ROOM = 'SWITCH_TO_JOINED_ROOM';
 export const LEAVE_ROOM = 'LEAVE_ROOM';
 export const SEARCH_INPUT_CHANGE = 'SEARCH_INPUT_CHANGE';
+export const ROOM_INPUT_CHANGE = 'ROOM_INPUT_CHANGE';
 export const SEARCH_RESULTS_UPDATE = 'SEARCH_RESULTS_UPDATE';
 export const SEARCH_RESULTS_FAILED = 'SEARCH_RESULTS_FAILED';
 export const CREATE_ROOM_FAILED = 'CREATE_ROOM_FAILED';
@@ -41,6 +44,13 @@ export function searchResultsFailed(description) {
 export function searchInputChange(text) {
   return {
     type: SEARCH_INPUT_CHANGE,
+    text,
+  };
+}
+
+export function roomInputChange(text) {
+  return {
+    type: ROOM_INPUT_CHANGE,
     text,
   };
 }
@@ -121,6 +131,17 @@ export function newMessage({roomID, userID, messageID, text, time}) {
   };
 }
 
+export function newAttachment({roomID, messageID, url, meta, index}) {
+  return {
+    type: NEW_ATTACHMENT,
+    roomID,
+    messageID,
+    url,
+    index,
+    meta,
+  };
+}
+
 export function addUser(user) {
   return {
     type: ADD_USER,
@@ -131,6 +152,12 @@ export function addUser(user) {
 export function toggleNavigation() {
   return {
     type: TOGGLE_NAVIGATION,
+  };
+}
+
+export function togglePreview() {
+  return {
+    type: TOGGLE_PREVIEW,
   };
 }
 

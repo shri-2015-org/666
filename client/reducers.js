@@ -63,6 +63,29 @@ function newMessage(room, action) {
   };
 }
 
+function newAttachment(room, action) {
+  const { messageID, meta, index, url } = action;
+  const message = room.roomMessages[messageID];
+  if (!message) {
+    // TODO handle situation;
+    console.log('newAttachment could not find the messageID: `${messageID}`');
+  }
+  const { attachments } = message;
+  return {
+    ...room,
+    roomMessages: {
+      ...room.roomMessages,
+      [messageID]: {
+        ...message,
+        attachments: [
+          ...attachments,
+          { meta, index, url },
+        ],
+      },
+    },
+  };
+}
+
 function sentMessage(room, action) {
   const { text, time, pendingID } = action;
   const { userID } = room;
@@ -72,6 +95,7 @@ function sentMessage(room, action) {
     messageID,
     text,
     time,
+    attachments: [],
   };
   return {
     ...room,
@@ -179,6 +203,8 @@ function joinedRooms(state = {}, action) {
       return insideRoom(action.roomID, leaveUser);
     case actions.NEW_MESSAGE:
       return insideRoom(action.roomID, newMessage);
+    case actions.NEW_ATTACHMENT:
+      return insideRoom(action.roomID, newAttachment);
     case actions.SENT_MESSAGE:
       return insideRoom(action.roomID, sentMessage);
     case actions.CONFIRM_SENT_MESSAGE:
@@ -245,16 +271,20 @@ function joinedRooms(state = {}, action) {
 
 const initialUi = {
   navigationCollapsed: false,
+  previewCollapsed: true,
   currentRoomID: null,
   searchInputText: '',
+  roomInputText: '',
   searchResults: null,
 };
 
 /*
    ui: {
      navigationCollapsed: boolean,
+     previewCollapsed: boolean,
      currentRoomID: string || null,
      searchInputText: string,
+     roomInputText: string,
      searchResults: null || [{
        roomID: string,
        name: string,
@@ -287,6 +317,20 @@ function ui(state = initialUi, action) {
       return {
         ...state,
         searchInputText: action.text,
+      };
+    }
+    case actions.TOGGLE_PREVIEW: {
+      return {
+        ...state,
+        previewCollapsed: !state.previewCollapsed,
+      };
+    }
+    case actions.ROOM_INPUT_CHANGE: {
+      const previewCollapsed = action.text !== '' ? state.previewCollapsed : true;
+      return {
+        ...state,
+        previewCollapsed,
+        roomInputText: action.text,
       };
     }
     case actions.TOGGLE_NAVIGATION: {

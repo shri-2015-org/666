@@ -35,6 +35,17 @@ export function onMessage(handler) {
   });
 }
 
+export function onAttachment(handler) {
+  socket.on('roomcast:attachment', data => {
+    assert(typeof data.roomID === 'string');
+    assert(typeof data.messageID === 'string');
+    assert(typeof data.url === 'string');
+    assert(typeof data.index === 'number');
+    assert(data.meta);
+    handler(data);
+  });
+}
+
 export function onJoinUser(handler) {
   socket.on('roomcast:joinUser', data => {
     assert(typeof data.roomID === 'string');

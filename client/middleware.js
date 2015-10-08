@@ -7,6 +7,9 @@ import { writeState } from './storage';
 const loggerMiddleware = createLogger({
   level: 'info',
   collapsed: true,
+  predicate: (_, action) =>
+    action.type !== 'ROOM_INPUT_CHANGE' &&
+    action.type !== 'SEARCH_INPUT_CHANGE',
 });
 
 /**
