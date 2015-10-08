@@ -32,6 +32,7 @@ const joinRoom = request => () => actions.joinRoom(request)
       channel,
     }, {
       type: 'roomcast',
+      event: 'joinUser',
       channel,
       data: {
         roomID,
@@ -55,6 +56,7 @@ const leaveRoom = request => () => actions.leaveRoom(request)
       channel,
     }, {
       type: 'roomcast',
+      event: 'leaveUser',
       channel,
       data: {
         roomID,

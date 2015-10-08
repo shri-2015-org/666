@@ -101,7 +101,8 @@ npm run prod
 {
 	roomID: string,
 	messageID: string,
-    url: string,
+  url: string,
+  index: number,
 	meta: any, // TODO уточнить
 }
 ```

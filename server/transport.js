@@ -15,7 +15,6 @@ const validate = (event, request) => () => {
   return Promise.resolve();
 };
 
-// TODO think about place it to inner
 const errorHandler = (event, socket, request) => err => {
   const exchangeID = request && request.exchangeID ? request.exchangeID : 'error';
 
@@ -35,9 +34,9 @@ const responser = (reqEvent, socket, request) => responses => {
           data,
         });
       case 'join':
-        return io.join(channel);
+        return socket.join(channel);
       case 'leave':
-        return io.leave(channel);
+        return socket.leave(channel);
       case 'roomcast':
         return io.to(channel).emit(`roomcast:${event}`, data);
       case 'broadcast':
@@ -72,9 +71,9 @@ export default function(port) {
   io.on('connection', (socket) => {
     Object.keys(handlers)
       .map(wrapper(socket));
-    topRooms().then(response => {
-      responser('topRooms')([response]);
-    });
+    topRooms()
+      .then(response => responser('topRooms')([response]))
+      .catch(errorHandler('topRooms', socket));
   });
 }
 
