@@ -181,8 +181,8 @@ export function message({roomID, userID, secret, text, time}) {
     attachments,
   });
 
-  const metas = fetchMetas(text).map(fetchMeta => {
-    return fetchMeta
+  const metas = fetchMetas(text).map(metaPromise => {
+    return metaPromise
       .then(({url, index, meta}) => {
         attachments[url] = meta;
         return {

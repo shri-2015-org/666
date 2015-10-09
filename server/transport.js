@@ -24,7 +24,7 @@ const errorHandler = (event, socket, request) => err => {
   });
 };
 
-const responser = (reqEvent, socket, request) => responses => {
+const executeResponses = (reqEvent, socket, request) => responses => {
   function switcher({type, event: resEvent, channel, data}) {
     const event = resEvent || reqEvent;
     switch (type) {
@@ -59,7 +59,7 @@ const wrapper = socket => event => {
     Promise.resolve()
       .then(validate(event, request))
       .then(handlers[event](request.data)) // it will be actions in future
-      .then(responser(event, socket, request))
+      .then(executeResponses(event, socket, request))
       .catch(errorHandler(event, socket, request));
   });
 };
@@ -72,7 +72,7 @@ export default function(port) {
     Object.keys(handlers)
       .map(wrapper(socket));
     topRooms()
-      .then(response => responser('topRooms')([response]))
+      .then(response => executeResponses('topRooms', socket)([response]))
       .catch(errorHandler('topRooms', socket));
   });
 }
