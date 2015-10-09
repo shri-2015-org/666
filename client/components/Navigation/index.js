@@ -12,8 +12,8 @@ function onClick(e, handler) {
 
 class Navigation extends Component {
   render() {
-    const { dispatch, collapsed, currentRoomID, shouldShowCreation,
-            joinedRooms, topRooms, searchResults, searchText } = this.props;
+    const { dispatch, collapsed, routerRoomID, shouldShowCreation,
+            joinedRooms, topRooms, searchResults, searchText, history } = this.props;
     return (
       <nav className={
         collapsed ?
@@ -33,7 +33,8 @@ class Navigation extends Component {
             <div>
               <h4 className="navigation-group-label"> Create Room </h4>
               <a
-                onClick={e => onClick(e, () => dispatch(createRoom(searchText)))}>
+                onClick={e => onClick(e, () =>
+                  dispatch(createRoom(history, searchText)))}>
                   {`#${searchText}`}
               </a>
               <br /><br />
@@ -46,9 +47,10 @@ class Navigation extends Component {
                 {_.map(searchResults, ({roomID, name, rating, users}, index) =>
                   <li key={index}>
                     <a
-                      onClick={e => onClick(e, () => dispatch(switchToRoom(roomID)))}
-                      title={name}
-                      href={`#!/room/#${roomID}`}>{`#${roomID}`}
+                      onClick={e => onClick(e, () =>
+                        dispatch(switchToRoom(history, roomID)))}
+                      title={name}>
+                        {`#${roomID}`}
                     </a>
                     <span className="badge">{users}</span>
                   </li>
@@ -61,15 +63,16 @@ class Navigation extends Component {
             {_.map(joinedRooms, ({roomName: name}, roomID) =>
                 <li
                   key={roomID}
-                  className={roomID === currentRoomID ? 'is-active' : ''}>
+                  className={roomID === routerRoomID ? 'is-active' : ''}>
                 <a
-                  onClick={e => onClick(e, () => dispatch(switchToRoom(roomID)))}
-                  title={name}
-                  href={`#!/room/#${roomID}`}>{`#${roomID}`}
+                  onClick={e => onClick(e, () =>
+                    dispatch(switchToRoom(history, roomID)))}
+                  title={name}>
+                    {`#${roomID}`}
                 </a>
                 <button
                   className="reset-input"
-                  onClick={() => dispatch(leaveRoom(roomID))}>
+                  onClick={() => dispatch(leaveRoom(history, roomID))}>
                     x
                 </button>
               </li>
@@ -82,9 +85,10 @@ class Navigation extends Component {
             {_.map(topRooms, ({name, users, roomID}, index) =>
               <li key={index}>
                 <a
-                  onClick={e => onClick(e, () => dispatch(switchToRoom(roomID)))}
-                  title={name}
-                  href={`#!/room/#${roomID}`}>{`#${roomID}`}
+                  onClick={e => onClick(e, () =>
+                    dispatch(switchToRoom(history, roomID)))}
+                  title={name}>
+                    {`#${roomID}`}
                 </a>
                 <span className="badge">{users}</span>
               </li>
@@ -98,10 +102,10 @@ class Navigation extends Component {
 
 export default connect(state => {
   const collapsed = state.ui.navigationCollapsed;
-  const { currentRoomID } = state.ui;
   const { topRooms, joinedRooms } = state;
   const searchResults = state.ui.searchResults;
   const searchText = state.ui.searchInputText;
+  const routerRoomID = state.router.params.roomID;
   const shouldShowCreation =
     searchText.length > 0 &&
     searchResults &&
@@ -112,11 +116,11 @@ export default connect(state => {
 
   return {
     collapsed,
-    currentRoomID,
     topRooms,
     joinedRooms,
     searchResults,
     searchText,
+    routerRoomID,
     shouldShowCreation,
   };
 })(Navigation);

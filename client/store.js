@@ -1,8 +1,10 @@
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import createLogger from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
+import { reduxReactRouter } from 'redux-router';
 
 import { writeState } from './storage';
+import createHistory from 'history/lib/createBrowserHistory';
 
 const loggerMiddleware = createLogger({
   level: 'info',
@@ -29,5 +31,8 @@ let middleware = [thunkMiddleware, vanillaPromise, writeState];
 middleware = NODE_ENV === 'production' ? middleware :
               middleware.concat(loggerMiddleware);
 
-export default applyMiddleware(...middleware)(createStore);
+export default compose(
+  applyMiddleware(...middleware),
+  reduxReactRouter({ createHistory })
+)(createStore);
 

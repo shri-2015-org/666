@@ -16,7 +16,7 @@ const io = socketIO(socketServer);
 const handleError = (socket, responseEvent) => (err) => {
   socket.emit(responseEvent, {
     status: 'ERROR',
-    description: err,
+    description: err.toString(),
   });
 };
 

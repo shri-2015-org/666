@@ -1,6 +1,7 @@
 import * as actions from './actions';
 import * as transport from './transport';
 import validRoomID from '../common/RoomID';
+import { pushState } from 'redux-router';
 
 export const searchInputChange = partialRoomID => dispatch => {
   dispatch(actions.searchInputChange(partialRoomID));
@@ -17,19 +18,25 @@ export const searchInputChange = partialRoomID => dispatch => {
 };
 
 export const joinRoom = ({roomID, userID, secret}) => dispatch => {
-  dispatch(actions.joinRoom(roomID));
   const result = transport.joinRoom({roomID, userID, secret})
     .then(data => actions.confirmJoinRoom(data),
-          description => actions.rejectJoinRoom(description));
+          description => {
+            dispatch(pushState(null, `/`));
+            return actions.rejectJoinRoom(description);
+          });
   return dispatch(result);
 };
 
 export const restoreState = state => dispatch => {
   if (!state || !state.joinedRooms) return Promise.resolve();
 
-  const { currentRoomID } = state.ui ? state.ui : {};
   const rooms = state.joinedRooms;
   const roomKeys = Object.keys(rooms);
+
+  const routerRoomID = state.router.params.roomID;
+  if (routerRoomID && !rooms[routerRoomID]) {
+    dispatch(joinRoom({roomID: routerRoomID}));
+  }
 
   return Promise
     .all(roomKeys.map(roomID => {
@@ -43,33 +50,30 @@ export const restoreState = state => dispatch => {
           }));
           return room.roomID;
         });
-    }))
-    .then(joinedRooms => {
-      if (!~joinedRooms.indexOf(currentRoomID)) return; // void
-      dispatch(actions.switchToJoinedRoom(currentRoomID));
-    });
+    }));
 };
 
-export const switchToRoom = roomID => (dispatch, getState) => {
+export const switchToRoom = (history, roomID) => (dispatch, getState) => {
   const state = getState();
-  const { currentRoomID } = state.ui;
-  if (roomID && currentRoomID === roomID) return; // do nothing!
-  const needToJoin = state.joinedRooms[roomID] === undefined;
+  const routerRoomID = state.router.params.roomID;
+  if (roomID && routerRoomID === roomID) return; // do nothing!
+  const needToJoin = !roomID || (state.joinedRooms[roomID] === undefined);
 
   if (needToJoin) {
-    dispatch(joinRoom({roomID}))
-      .then(({room}) => dispatch(actions.switchToJoinedRoom(room.roomID)));
+    dispatch(joinRoom({roomID})).then(data =>
+      dispatch(pushState(history, `/room/${data.room.roomID}`))
+    );
   } else {
-    dispatch(actions.switchToJoinedRoom(roomID));
+    dispatch(pushState(history, `/room/${roomID}`));
   }
 };
 
-export const createRoom = roomID => dispatch => {
+export const createRoom = (history, roomID) => dispatch => {
   if (validRoomID(roomID)) {
     transport.createRoom(roomID)
       .then(() => {
         dispatch(actions.searchResultsUpdate(null));
-        dispatch(switchToRoom(roomID));
+        dispatch(switchToRoom(history, roomID));
       }, description =>
         dispatch(actions.createRoomFailed(description))
       );
@@ -78,7 +82,7 @@ export const createRoom = roomID => dispatch => {
   }
 };
 
-export const leaveRoom = roomID => (dispatch, getState) => {
+export const leaveRoom = (history, roomID) => (dispatch, getState) => {
   const state = getState();
   const room = state.joinedRooms[roomID];
   if (!room) {
@@ -86,6 +90,10 @@ export const leaveRoom = roomID => (dispatch, getState) => {
     return;
   }
   const { secret, userID } = room;
+  const routerRoomID = state.router.params.roomID;
+  if (routerRoomID === roomID) {
+    dispatch(pushState(history, `/`));
+  }
   dispatch(actions.leaveRoom(roomID));
   transport.leaveRoom({roomID, userID, secret});
   // TODO handle replies?
@@ -99,7 +107,7 @@ function newPendingID() {
 export const sendMessage = () => (dispatch, getState) => {
   const state = getState();
   if (state.ui.roomInputText === '') return; // don't send
-  const roomID = state.ui.currentRoomID;
+  const roomID = state.router.params.roomID;
   const room = state.joinedRooms[roomID];
   if (!room) {
     throw new Error('Terminal failure: sent a message without being in a room.');

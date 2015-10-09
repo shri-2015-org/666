@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import * as actions from 'actions';
+import { routerStateReducer } from 'redux-router';
 
 /*
   topRooms: [{
@@ -224,8 +225,6 @@ function joinedRooms(state = {}, action) {
         },
       };
     }
-    case actions.JOIN_ROOM:
-      return state;
     case actions.LEAVE_ROOM: {
       const { roomID } = action;
       const newState = Object.assign({}, state);
@@ -273,7 +272,6 @@ function joinedRooms(state = {}, action) {
 const initialUi = {
   navigationCollapsed: false,
   previewCollapsed: true,
-  currentRoomID: null,
   searchInputText: '',
   roomInputText: '',
   searchResults: null,
@@ -283,7 +281,6 @@ const initialUi = {
    ui: {
      navigationCollapsed: boolean,
      previewCollapsed: boolean,
-     currentRoomID: string || null,
      searchInputText: string,
      roomInputText: string,
      searchResults: null || [{
@@ -338,22 +335,14 @@ function ui(state = initialUi, action) {
         navigationCollapsed: !state.navigationCollapsed,
       };
     }
-    case actions.SWITCH_TO_JOINED_ROOM: {
-      return {
-        ...state,
-        currentRoomID: action.roomID,
-      };
-    }
-    case actions.LEAVE_ROOM: {
-      if (state.currentRoomID !== action.roomID) return state;
-      return {
-        ...state,
-        currentRoomID: null,
-      };
-    }
     default: return state;
   }
 }
 
-export default combineReducers({joinedRooms, topRooms, ui});
+export default combineReducers({
+  joinedRooms,
+  topRooms,
+  ui,
+  router: routerStateReducer,
+});
 
