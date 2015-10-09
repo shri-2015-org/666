@@ -7,7 +7,7 @@ class RoomHeader extends Component {
   render() {
     const { dispatch, navigationCollapsed, room } = this.props;
     const { roomName } = room;
-    const { nick, avatar } = room.roomUsers[room.userID];
+    const { nick, avatar } = room.roomUsers[room.userID] || {}; // TODO fix it
 
     return (
       <header className="room-header">

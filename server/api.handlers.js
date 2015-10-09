@@ -1,4 +1,4 @@
-import actions from './mock/wrapper';
+import * as actions from './actions';
 
 export const topRooms = () => actions.getTop()
   .then(data => {
@@ -110,4 +110,9 @@ export const handlers = {
   message,
   searchRoomID,
 };
+
+actions.connectToDB(() => {
+  actions.createRoom({roomID: 'lobby'})
+    .then(() => console.log('connect to db'));
+});
 

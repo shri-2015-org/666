@@ -1,66 +1,48 @@
 import io from 'socket.io-client';
+import * as apiChecks from './api-checks';
 
 /* eslint no-console: 0 */
 const socket = io( window.location.hostname + ':' + DATAPORT );
 const EXCHANGE_TIMEOUT = 3000;
 console.log('transport: socket connection');
 
-function assert(condition) {
-  if (!condition) {
-    throw new Error('Assertion failed!');
-  }
-}
-
 export function onTopRooms(handler) {
   socket.on('broadcast:topRooms', data => {
-    assert(data.rooms instanceof Array);
-    data.rooms.forEach(room => {
-      assert(typeof room.roomID === 'string');
-      assert(typeof room.name === 'string');
-      assert(typeof room.users === 'number');
-      assert(typeof room.rating === 'number');
-    });
-    handler(data);
+    if (apiChecks.topRooms(data)) {
+      handler(data);
+    }
   });
 }
 
 export function onMessage(handler) {
   socket.on('roomcast:message', data => {
-    assert(typeof data.roomID === 'string');
-    assert(typeof data.userID === 'string');
-    assert(typeof data.messageID === 'string');
-    assert(typeof data.text === 'string');
-    assert(typeof data.time === 'number');
-    handler(data);
+    if (apiChecks.message(data)) {
+      handler(data);
+    }
   });
 }
 
 export function onAttachment(handler) {
   socket.on('roomcast:attachment', data => {
-    assert(typeof data.roomID === 'string');
-    assert(typeof data.messageID === 'string');
-    assert(typeof data.url === 'string');
-    assert(typeof data.index === 'number');
-    assert(data.meta);
-    handler(data);
+    if (apiChecks.attachment(data)) {
+      handler(data);
+    }
   });
 }
 
 export function onJoinUser(handler) {
   socket.on('roomcast:joinUser', data => {
-    assert(typeof data.roomID === 'string');
-    assert(typeof data.userID === 'string');
-    assert(typeof data.avatar === 'string');
-    assert(typeof data.nick === 'string');
-    handler(data);
+    if (apiChecks.joinUser(data)) {
+      handler(data);
+    }
   });
 }
 
 export function onLeaveUser(handler) {
   socket.on('roomcast:leaveUser', data => {
-    assert(typeof data.roomID === 'string');
-    assert(typeof data.userID === 'string');
-    handler(data);
+    if (apiChecks.leaveUser(data)) {
+      handler(data);
+    }
   });
 }
 
@@ -82,29 +64,13 @@ export function joinRoom({roomID, userID, secret}) {
 
   return new Promise( (resolve, reject) => {
     socket.once(`server-response:joinRoom@${exchangeID}`, res => {
-      assert(res instanceof Object);
-      if (res.status === 'OK') {
-        assert(res.data instanceof Object);
-        assert(res.data.identity instanceof Object);
-        assert(typeof res.data.identity.userID === 'string');
-        assert(typeof res.data.identity.avatar === 'string');
-        assert(typeof res.data.identity.nick === 'string');
-        assert(typeof res.data.identity.secret === 'string');
-        assert(res.data.room instanceof Object);
-        assert(typeof res.data.room.roomID === 'string');
-        assert(typeof res.data.room.name === 'string');
-        assert(res.data.room.users instanceof Array);
-        res.data.room.users.forEach(user => {
-          assert(typeof user.roomID === 'string');
-          assert(typeof user.userID === 'string');
-          assert(typeof user.avatar === 'string');
-          assert(typeof user.nick === 'string');
-        });
-        return resolve(res.data);
+      if (apiChecks.joinRoom(res)) {
+        if (res.status === 'OK') {
+          return resolve(res.data);
+        }
+        return reject(res.description);
       }
-      assert(res.status === 'ERROR');
-      assert(typeof res.description === 'string');
-      return reject(res.description);
+      return reject('API check has failed.');
     });
     setTimeout(() => reject('joinRoom timeout'), EXCHANGE_TIMEOUT);
   });
@@ -123,13 +89,13 @@ export function leaveRoom({roomID, userID, secret}) {
 
   return new Promise( (resolve, reject) => {
     socket.once(`server-response:leaveRoom@${exchangeID}`, res => {
-      assert(res instanceof Object);
-      if (res.status === 'OK') {
-        return resolve();
+      if (apiChecks.leaveRoom(res)) {
+        if (res.status === 'OK') {
+          return resolve(res.data);
+        }
+        return reject(res.description);
       }
-      assert(res.status === 'ERROR');
-      assert(typeof res.description === 'string');
-      return reject(res.description);
+      return reject('API check has failed.');
     });
     setTimeout(() => reject('leaveRoom timeout'), EXCHANGE_TIMEOUT);
   });
@@ -150,19 +116,13 @@ export function message({roomID, userID, secret, text, time}) {
 
   return new Promise( (resolve, reject) => {
     socket.once(`server-response:message@${exchangeID}`, res => {
-      assert(res instanceof Object);
-      if (res.status === 'OK') {
-        assert(res.data instanceof Object);
-        assert(typeof res.data.roomID === 'string');
-        assert(typeof res.data.userID === 'string');
-        assert(typeof res.data.messageID === 'string');
-        assert(typeof res.data.text === 'string');
-        assert(typeof res.data.time === 'number');
-        return resolve(res.data);
+      if (apiChecks.messageExchange(res)) {
+        if (res.status === 'OK') {
+          return resolve(res.data);
+        }
+        return reject(res.description);
       }
-      assert(res.status === 'ERROR');
-      assert(typeof res.description === 'string');
-      return reject(res.description);
+      return reject('API check has failed.');
     });
     setTimeout(() => reject('message timeout'), EXCHANGE_TIMEOUT);
   });
@@ -179,21 +139,13 @@ export function searchRoomID(partialRoomID) {
 
   return new Promise( (resolve, reject) => {
     socket.once(`server-response:searchRoomID@${exchangeID}`, res => {
-      assert(res instanceof Object);
-      if (res.status === 'OK') {
-        assert(res.data instanceof Array);
-        res.data.forEach(room => {
-          assert(room instanceof Object);
-          assert(typeof room.roomID === 'string');
-          assert(typeof room.name   === 'string');
-          assert(typeof room.users  === 'number');
-          assert(typeof room.rating === 'number');
-        });
-        return resolve(res.data);
+      if (apiChecks.searchRoomID(res)) {
+        if (res.status === 'OK') {
+          return resolve(res.data);
+        }
+        return reject(res.description);
       }
-      assert(res.status === 'ERROR');
-      assert(typeof res.description === 'string');
-      return reject(res.description);
+      return reject('API check has failed.');
     });
     setTimeout(() => reject('searchRoomID timeout'), EXCHANGE_TIMEOUT);
   });
@@ -211,13 +163,13 @@ export function createRoom(roomID) {
 
   return new Promise( (resolve, reject) => {
     socket.once(`server-response:createRoom@${exchangeID}`, res => {
-      assert(res instanceof Object);
-      if (res.status === 'OK') {
-        return resolve();
+      if (apiChecks.createRoom(res)) {
+        if (res.status === 'OK') {
+          return resolve();
+        }
+        return reject(res.description);
       }
-      assert(res.status === 'ERROR');
-      assert(typeof res.description === 'string');
-      return reject(res.description);
+      return reject('API check has failed.');
     });
     setTimeout(() => reject('createRoom timeout'), EXCHANGE_TIMEOUT);
   });
