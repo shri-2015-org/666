@@ -10,14 +10,14 @@ export default class Message extends Component {
     const humanTime = `${date.getHours()}:${date.getMinutes()}`;
     const finalTime = status === 'confirmed' ? humanTime : `${ status }`;
     const ourMessageClass = (isOurMessage) ? 'message--myself' : '';
-    const msgClass = `message message--${ status } ${ ourMessageClass }`;
+    const messageClass = `message message--${ status } ${ ourMessageClass }`;
 
     const avaStyle = avatar === null ? {} :
       {'backgroundImage': `url(${avatar})`};
 
     return (
       // TODO highlight 'myself'
-      <li className={msgClass}>
+      <li className={messageClass}>
         <div className="message-meta">
           <p className="user-name">{nick}</p>
           <time className="message-time">{finalTime}</time>
