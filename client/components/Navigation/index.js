@@ -36,7 +36,6 @@ class Navigation extends Component {
                 dispatch(createRoom(history, searchText)))}>
                 {`#${searchText}`}
             </a>
-            <br /><br />
           </div>
         }
         {searchResults === null ? <div className="navigation-group" /> :
