@@ -17,19 +17,19 @@ export const searchInputChange = partialRoomID => dispatch => {
   }
 };
 
-// returns a Promise(bool) -- was the operation successful?
+// returns a Promise(roomID || null)
 export const joinRoom = ({roomID, userID, secret}) => dispatch => {
   dispatch(actions.joiningRoom(roomID));
   return transport.joinRoom({roomID, userID, secret})
     .then(
       data => {
         dispatch(actions.confirmJoinRoom(data));
-        return true;
+        return data.room.roomID;
       },
       description => {
         dispatch(pushState(null, `/`));
         dispatch(actions.rejectJoinRoom(description));
-        return false;
+        return null;
       });
 };
 
@@ -58,9 +58,9 @@ export const switchToRoom = (history, roomID) => (dispatch, getState) => {
 
   if (needToJoin) {
     dispatch(joinRoom({roomID}))
-    .then(didJoin => {
-      if (didJoin) {
-        dispatch(pushState(history, `/room/${roomID}`));
+    .then(realRoomID => {
+      if (realRoomID) {
+        dispatch(pushState(history, `/room/${realRoomID}`));
       }
     });
   } else {
