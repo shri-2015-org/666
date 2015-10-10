@@ -12,15 +12,21 @@ class RoomEntrance extends Component {
         <article className="article">
           <h1>Loading...</h1>
           <h2>Joining #{roomID}</h2>
+
+          <div className="loader" style={{ 'marginTop': '2em' }}>
+            <div className="loader-item"></div>
+            <div className="loader-item"></div>
+            <div className="loader-item"></div>
+          </div>
         </article>
-      </div>);
+      </div> );
     }
     return ( <div className="splash">
         <article className="article">
           <h1>You have left this room.</h1>
           <h2>Rejoin #{roomID}?</h2>
         </article>
-      </div>);
+      </div> );
   }
 }
 
