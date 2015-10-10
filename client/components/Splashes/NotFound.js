@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './index.scss';
 import { connect } from 'react-redux';
 import { switchToRoom } from '../../smartActions';
 
@@ -8,7 +7,7 @@ class NotFound extends Component {
   render() {
     const { dispatch } = this.props;
     return (
-      <div className="welcome notfound">
+      <div className="splash">
         <article className="article">
           <h1 className="giga">Sorry</h1>
           <h2>The URL you specified is not valid</h2>

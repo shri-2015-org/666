@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Navigation from '../Navigation';
-import Welcome from '../Welcome';
+import { Welcome } from '../Splashes';
 import './index.scss';
 
 export default class extends Component {

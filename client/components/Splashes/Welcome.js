@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './index.scss';
 import { switchToRoom } from '../../smartActions';
 import { connect } from 'react-redux';
 
@@ -7,7 +6,7 @@ class Welcome extends Component {
   render() {
     const { dispatch } = this.props;
     return (
-      <div className="welcome">
+      <div className="splash">
         <article className="article">
           <h1 className="giga">Welcome</h1>
           <h2>Make yourself at home</h2>

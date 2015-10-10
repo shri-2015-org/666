@@ -7,8 +7,7 @@ import { readState } from './storage';
 import createStorePlus from './store';
 import all from './reducers';
 import App from './components/App';
-import RoomEntrance from './components/RoomEntrance';
-import NotFound from './components/NotFound';
+import { NotFound, RoomEntrance } from './components/Splashes';
 import { updateTopRooms, newMessage, newAttachment,
          joinUser, leaveUser } from 'actions';
 import { restoreState } from './smartActions';
