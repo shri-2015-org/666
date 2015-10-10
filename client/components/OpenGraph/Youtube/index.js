@@ -23,4 +23,3 @@ export default meta => {
 
   return <Youtube url={url} />;
 };
-
