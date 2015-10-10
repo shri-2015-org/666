@@ -217,10 +217,10 @@ export function joinRoom({roomID, userID, secret}) {
     })
     .then( ({user, room}) => {
       room.messages = room.messages.slice(-HISTORY_COUNT);
-      resolve({
+      return {
         identity: user,
         room,
-      });
+      };
     });
 }
 
