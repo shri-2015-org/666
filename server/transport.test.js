@@ -5,12 +5,13 @@ should(); // actually call the function
 import dataServer from './transport.js';
 import io from 'socket.io-client';
 
-const port = 3002;
-const socket = io('http://localhost:' + port);
+import config from '../config';
 
-describe('Socket server test on port' + port, () => {
+const socket = io('http://' + config.host + ':' + config.socket.port);
+
+describe('Socket server test on port' + config.socket.port, () => {
   before( () => {
-    dataServer(port);
+    dataServer(config.socket.port);
   });
 
   const mockRoomID = 'lobby';

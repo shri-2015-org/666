@@ -15,3 +15,4 @@ tmp/**/*.*
 .jshintignore
 .jshintrc
 build/
+config/index.js
