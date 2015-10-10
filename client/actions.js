@@ -16,6 +16,14 @@ export const ROOM_INPUT_CHANGE = 'ROOM_INPUT_CHANGE';
 export const SEARCH_RESULTS_UPDATE = 'SEARCH_RESULTS_UPDATE';
 export const SEARCH_RESULTS_FAILED = 'SEARCH_RESULTS_FAILED';
 export const CREATE_ROOM_FAILED = 'CREATE_ROOM_FAILED';
+export const JOINING_ROOM = 'JOINING_ROOM';
+
+export function joiningRoom(roomID) {
+  return {
+    type: JOINING_ROOM,
+    roomID,
+  };
+}
 
 export function searchResultsUpdate(results) {
   return {
@@ -67,9 +75,10 @@ export function confirmJoinRoom({identity, room}) {
   };
 }
 
-export function rejectJoinRoom(description) {
+export function rejectJoinRoom(description, roomID) {
   return {
     type: REJECT_JOIN_ROOM,
+    roomID,
     description,
   };
 }

@@ -9,7 +9,7 @@ import createStorePlus from './store';
 import all from './reducers';
 import App from './components/App';
 import RoomEntrance from './components/RoomEntrance';
-import NotFound from './components/NotFound';
+import NotFound from './components/Splashes/NotFound';
 import { updateTopRooms, newMessage, newAttachment,
          joinUser, leaveUser } from 'actions';
 import { restoreState } from './smartActions';

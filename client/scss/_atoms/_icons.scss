@@ -137,3 +137,33 @@ $iconNav-breakpoint: 580px;
         </svg>') no-repeat center / contain;
   padding: .75em;
 }
+
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader-item {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+
+  background-color: royalblue;
+  border-radius: 50%;
+  animation: pulse .45s infinite alternate;
+
+  &:nth-of-type(2) {
+    animation-delay: .1s;
+  }
+
+  &:nth-of-type(3) {
+    animation-delay: .2s;
+  }
+}
+
+@keyframes pulse {
+  to {
+    transform: scale(.5);
+  }
+}

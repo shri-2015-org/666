@@ -19,6 +19,7 @@ export const searchInputChange = partialRoomID => dispatch => {
 
 // returns a Promise(bool) -- was the operation successful?
 export const joinRoom = ({roomID, userID, secret}) => dispatch => {
+  dispatch(actions.joiningRoom(roomID));
   return transport.joinRoom({roomID, userID, secret})
     .then(
       data => {
