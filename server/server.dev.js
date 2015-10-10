@@ -2,18 +2,17 @@
 import dataServer from './transport.js';
 import express from 'express';
 
+import config from '../config';
+
 // --- DATA SERVER
 
-dataServer(3001);
+dataServer(config.socket.port);
 
 // --- DEV FILE AND HOT RELOAD SERVER
 
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 import dev from '../webpack.config.babel';
-
-const FILEPORT = 8080;
-const FILEPATH = '/../static';
 
 const fileServer = new WebpackDevServer(webpack(dev), {
   publicPath: dev.output.publicPath,
@@ -25,8 +24,8 @@ const fileServer = new WebpackDevServer(webpack(dev), {
   },
 });
 
-fileServer.use('/', express.static(__dirname + FILEPATH));
-fileServer.listen(FILEPORT, () => {
-  console.log('FIle and hot reload server listening on *:' + FILEPORT);
+fileServer.use('/', express.static(__dirname + '/../static'));
+fileServer.listen(config.port, () => {
+  console.log('File and hot reload server listening on ' + config.host + ':' + config.port);
 });
 

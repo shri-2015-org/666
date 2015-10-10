@@ -4,6 +4,7 @@ import path from 'path';
 import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import config from './config';
 
 webpack({
   debug: false,
@@ -64,7 +65,7 @@ webpack({
     new webpack.optimize.DedupePlugin(),
     new webpack.DefinePlugin({
       NODE_ENV: '"production"',
-      DATAPORT: '"3000"',
+      DATAPORT: '"' + config.socket.port + '"',
     }),
   ],
 }, (err, res) => {
@@ -80,7 +81,7 @@ fs.readFile('package.json', (err, data) => {
     version: orig.version,
     description: orig.description,
     scripts: {
-      start: 'PORT=8080 DATAPORT=3000 babel-node server/server.prod.js',
+      start: 'babel-node server/server.prod.js',
     },
     dependencies: orig.dependencies,
     author: orig.author,

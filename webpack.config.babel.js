@@ -1,15 +1,13 @@
 import path from 'path';
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-
-const FILEHOST = 'localhost';
-const FILEPORT = 8080;
+import config from './config';
 
 export default {
   debug: true,
   devtool: 'eval',
   entry: [
-    'webpack-dev-server/client?http://' + FILEHOST + ':' + FILEPORT,
+    'webpack-dev-server/client?http://' + config.host + ':' + config.port,
     'webpack/hot/only-dev-server',
     './client/main',
   ],
@@ -54,7 +52,7 @@ export default {
     }),
     new webpack.DefinePlugin({
       NODE_ENV: '"development"',
-      DATAPORT: '"3001"',
+      DATAPORT: '"' + config.socket.port + '"',
     }),
   ],
 };

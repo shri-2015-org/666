@@ -9,12 +9,10 @@ import * as userGenerator from './userGenerator';
 
 import { fetchMetas } from './open-graph';
 
-import config from './config';
-
 const HISTORY_COUNT = 100;
 
-const env = process.env.NODE_ENV || 'development';
-mongoose.connect(config.db[env], (err) => {
+import config from '../config';
+mongoose.connect(config.db.host, (err) => {
   if (err) {
     throw new Error('db connection error!');
   }
