@@ -339,8 +339,34 @@ function ui(state = initialUi, action) {
   }
 }
 
+/*
+  joiningRooms: HashMap('roomID', bool)
+*/
+function joiningRooms(state = {}, action) {
+  switch (action.type) {
+    case actions.JOINING_ROOM: {
+      return {
+        ...state,
+        [action.roomID]: true,
+      };
+    }
+    case action.CONFIRM_JOIN_ROOM: {
+      const newState = Object.assign(state);
+      delete newState[action.roomID];
+      return newState;
+    }
+    case action.REJECT_JOIN_ROOM: {
+      const newState = Object.assign(state);
+      delete newState[action.roomID];
+      return newState;
+    }
+    default: return state;
+  }
+}
+
 export default combineReducers({
   joinedRooms,
+  joiningRooms,
   topRooms,
   ui,
   router: routerStateReducer,
