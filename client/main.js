@@ -4,24 +4,33 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import { readState } from './storage';
-import createStorePlus from './middleware';
+import createStorePlus from './store';
 import all from './reducers';
 import App from './components/App';
+import RoomEntrance from './components/RoomEntrance';
+import NotFound from './components/NotFound';
 import { updateTopRooms, newMessage, newAttachment,
          joinUser, leaveUser } from 'actions';
 import { restoreState } from './smartActions';
 import * as transport from './transport';
+import { ReduxRouter } from 'redux-router';
+import { Route } from 'react-router';
 
 const store = createStorePlus(all);
 const rootElement = document.getElementById('content');
 
 const app = (
   <Provider store={store}>
-    {() => <App />}
+    {() =>
+      <ReduxRouter>
+        <Route path="/" component={App}>
+          <Route path="/room/:roomID" component={RoomEntrance}/>
+          <Route path="*" component={NotFound}/>
+        </Route>
+      </ReduxRouter>
+    }
   </Provider>
 );
-
-store.dispatch(restoreState(readState()));
 
 transport.onMessage(data =>
     store.dispatch(newMessage(data)));
@@ -38,4 +47,7 @@ transport.onTopRooms(data =>
     store.dispatch(updateTopRooms(data.rooms)));
 
 React.render(app, rootElement);
+
+// dispatch after render. otherwise the router doesn't initialize correctly
+store.dispatch(restoreState(readState()));
 

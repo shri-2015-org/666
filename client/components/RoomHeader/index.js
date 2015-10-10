@@ -22,7 +22,7 @@ class RoomHeader extends Component {
           </li>
           <li className="room-header-bar-item">
             <h4 className="room-name">
-              <a href="{`#!/room/#${currentRoomID}`}">
+              <a>
                 {`#${roomName}`}
               </a>
             </h4>

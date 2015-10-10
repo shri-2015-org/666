@@ -20,7 +20,7 @@ const errorHandler = (event, socket, request) => err => {
 
   socket.emit(`server-response:${event}@${exchangeID}`, {
     status: 'ERROR',
-    description: err,
+    description: err.toString(),
   });
 };
 

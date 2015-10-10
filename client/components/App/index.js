@@ -1,33 +1,17 @@
-import { connect } from 'react-redux';
 import React, { Component } from 'react';
-import Room from '../Room';
 import Navigation from '../Navigation';
 import Welcome from '../Welcome';
 import './index.scss';
 
-class App extends Component {
+export default class extends Component {
   render() {
-    const { showWelcome, room } = this.props;
+    const { children, history } = this.props;
     return (
       <div className="app">
-        <Navigation />
-        { showWelcome ?
-          <Welcome /> :
-          <Room room={room} />
-        }
+        <Navigation history={history} />
+        {children ? children : <Welcome/>}
       </div>
     );
   }
 }
-
-export default connect(state => {
-  const roomID = state.ui.currentRoomID;
-  return {
-    showWelcome: roomID === null,
-    room: {
-      ...state.joinedRooms[roomID],
-      roomID,
-    },
-  };
-})(App);
 

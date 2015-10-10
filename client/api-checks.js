@@ -135,12 +135,12 @@ export const searchRoomID = wrap('searchRoomID', res => {
 });
 
 export const createRoom = wrap('createRoom', res => {
-  assert(res instanceof Object);
+  throwWhen(res instanceof Object);
   if (res.status === 'OK') {
     return true;
   }
-  assert(res.status === 'ERROR');
-  assert(typeof res.description === 'string');
+  throwWhen(res.status === 'ERROR');
+  throwWhen(typeof res.description === 'string');
   return true;
 });
 
