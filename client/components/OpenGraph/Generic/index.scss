@@ -1,0 +1,22 @@
+.attachment--generic {
+  flex-basis: 200px;
+  width: 100%;
+
+  .attachment-caption {
+    padding: 0 1rem;
+
+    .attachment-title {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .attachment-image {
+    display: block;
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+    max-height: 100px;
+  }
+}

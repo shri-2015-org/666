@@ -21,11 +21,7 @@ class RoomHeader extends Component {
             </i>
           </li>
           <li className="room-header-bar-item">
-            <h4 className="room-name">
-              <a>
-                {`#${roomName}`}
-              </a>
-            </h4>
+            <h4 className="room-name">#{roomName}</h4>
           </li>
         </ul>
         <ul className="room-header-bar">

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import './index.scss';
 
 class Generic extends Component {
   render() {
     const { imageUrl, title, link } = this.props;
     return (
-    <figure className="attachment">
+    <figure className="attachment attachment--generic">
       <figcaption className="attachment-caption article">
         <a href={link} target="_blank">
           <h4 className="attachment-caption-title">{ title }</h4>
