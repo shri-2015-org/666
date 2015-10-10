@@ -25,7 +25,7 @@
 
     &-ava {
       margin-right: 1rem;
-      margin-top: 1rem;
+      margin-top: .85rem;
     }
 
     &-text {
@@ -36,7 +36,7 @@
         content: "";
         position: absolute;
         display: block;
-        top: 1.5rem;
+        top: 1.35rem;
         right: 100%;
 
         padding: .5rem;
@@ -44,7 +44,16 @@
         border-left: 1px solid color(grey, light);
         border-bottom: 1px solid color(grey, light);
 
-        transform: translate(50%) rotate(45deg);
+        transform: translate3d(50%, 0, 0) rotate(45deg);
+      }
+
+      .message--myself & {
+        border-color: color(blue);
+
+        &:before {
+          border-left-color: color(blue);
+          border-bottom-color: color(blue);
+        }
       }
 
       .md { margin: 1em 0; }
@@ -78,16 +87,11 @@
   }
 }
 
-.bubble {
+%bubble, .bubble {
   background-color: white;
   padding: 0 1.5rem .25em;
   border-radius: $radius;
   border: 1px solid color(grey, light);
-
-  .message--myself & {
-    background-color: color(blue);
-    color: white;
-  }
 }
 
 .ava {

@@ -5,11 +5,12 @@ import OpenGraph from '../OpenGraph';
 
 export default class Message extends Component {
   render() {
-    const { attachments, time, nick, avatar, text, status } = this.props.message;
+    const { attachments, time, nick, avatar, text, status, isOurMessage } = this.props.message;
     const date = new Date(time);
     const humanTime = `${date.getHours()}:${date.getMinutes()}`;
     const finalTime = status === 'confirmed' ? humanTime : `${ status }`;
-    const msgClass = `message message--${ status }`;
+    const ourMessageClass = (isOurMessage) ? 'message--myself' : '';
+    const msgClass = `message message--${ status } ${ ourMessageClass }`;
 
     const avaStyle = avatar === null ? {} :
       {'backgroundImage': `url(${avatar})`};
