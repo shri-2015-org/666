@@ -48,7 +48,7 @@ export function onLeaveUser(handler) {
 
 let exchangeCount = 0;
 function getExchangeID() {
-  return exchangeCount++;
+  return String(exchangeCount++);
 }
 
 export function joinRoom({roomID, userID, secret}) {

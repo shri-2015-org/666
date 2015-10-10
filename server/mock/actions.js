@@ -96,7 +96,7 @@ export function joinRoom({roomID, userID, secret}) {
     user = userID;
   } else {
     user = uuid.v4();
-  
+
     // room mutation
     roomUsers[user] = {
       secret: uuid.v4(),
@@ -153,7 +153,7 @@ export function leaveRoom({roomID, userID, secret}) {
   });
 }
 
-export function message({roomID, userID, secret, text, time}, metaCallback) {
+export function message({roomID, userID, secret, text, time}) {
   if (roomID && !rooms.hasOwnProperty(roomID)) {
     return Promise.reject('No room is found');
   }
@@ -181,24 +181,30 @@ export function message({roomID, userID, secret, text, time}, metaCallback) {
     attachments,
   });
 
-  fetchMetas(text, (url, index, meta) => {
-    attachments[url] = meta;
-    metaCallback({
-      roomID,
-      messageID,
-      url,
-      index,
-      meta,
-    });
+  const metas = fetchMetas(text).map(metaPromise => {
+    return metaPromise
+      .then(({url, index, meta}) => {
+        attachments[url] = meta;
+        return {
+          roomID,
+          messageID,
+          url,
+          index,
+          meta,
+        };
+      });
   });
 
   // return API structure
   return Promise.resolve({
-    roomID,
-    userID,
-    messageID,
-    text,
-    time,
+    data: {
+      roomID,
+      userID,
+      messageID,
+      text,
+      time,
+    },
+    metas,
   });
 }
 

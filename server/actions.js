@@ -1,6 +1,5 @@
 import uuid from 'uuid';
 import mongoose from 'mongoose';
-import _ from 'lodash';
 
 import * as Room from './models/Room';
 import * as User from './models/User';
@@ -10,15 +9,10 @@ import * as userGenerator from './userGenerator';
 
 import config from './config';
 
-export function connectToDB(cb) {
+export function connectToDB() {
   const env = process.env.NODE_ENV || 'development';
-  mongoose.connect(config.db[env], () => {
-    for (const i in mongoose.connection.collections) {
-      if (mongoose.connection.collections.hasOwnProperty(i)) {
-        mongoose.connection.collections[i].remove(function() {});
-      }
-    }
-    cb();
+  return new Promise(resolve => {
+    mongoose.connect(config.db[env], resolve);
   });
 }
 
