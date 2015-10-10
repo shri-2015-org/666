@@ -1,4 +1,5 @@
 // twitter widget API
+// https://dev.twitter.com/web/javascript/loading
 if (window) {
   window.twttr = (function(d, s, id) {
     let js;
@@ -17,4 +18,8 @@ if (window) {
 
     return t;
   }(document, 'script', 'twitter-wjs'));
+}
+
+export function createTweet(id, domNode, opts) {
+  twttr.widgets.createTweet(id, domNode, opts);
 }

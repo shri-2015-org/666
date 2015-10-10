@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import './api';
+import { createTweet } from './api';
 
 const URL = /^https?:\/\/twitter.com\/.*\/(\d+)/;
 
 class Twitter extends Component {
   componentDidMount() {
     const { status } = this.props;
-    twttr.widgets.createTweet(status, this.myTweet.getDOMNode());
+    createTweet(status, this.myTweet.getDOMNode());
   }
 
   render() {
