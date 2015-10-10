@@ -214,17 +214,6 @@ function joinedRooms(state = {}, action) {
     case actions.REJECT_SENT_MESSAGE: {
       return insideRoom(action.roomID, rejectSentMessage);
     }
-    case actions.RESTORE_MESSAGES: {
-      const { roomID, roomMessages, orderedMessages } = action;
-      return {
-        ...state,
-        [roomID]: {
-          ...state[roomID],
-          roomMessages,
-          orderedMessages,
-        },
-      };
-    }
     case actions.LEAVE_ROOM: {
       const { roomID } = action;
       const newState = Object.assign({}, state);
@@ -246,6 +235,27 @@ function joinedRooms(state = {}, action) {
             },
           };
         }, {});
+      const orderedMessages = room.messages.map(({messageID}) => messageID);
+      const roomMessages = room.messages
+        .reduce(
+          ({result, index}, {userID: thatUserID, messageID, text, time}) =>
+            ({
+              result: {
+                ...result,
+                [messageID]: {
+                  messageID,
+                  userID: thatUserID,
+                  text,
+                  time,
+                  status: 'confirmed',
+                  index,
+                  attachments: [],
+                },
+              },
+              index: index + 1,
+            }),
+          {index: 0, result: {}}
+        ).result;
 
       return {
         ...state,
@@ -254,8 +264,8 @@ function joinedRooms(state = {}, action) {
           secret,
           roomName,
           roomUsers,
-          roomMessages: {},
-          orderedMessages: [],
+          roomMessages,
+          orderedMessages,
         },
       };
     }
