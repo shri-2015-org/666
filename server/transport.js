@@ -17,7 +17,6 @@ const validate = (event, request) => () => {
 
 const errorHandler = (event, socket, request) => err => {
   const exchangeID = request && request.exchangeID ? request.exchangeID : 'error';
-
   socket.emit(`server-response:${event}@${exchangeID}`, {
     status: 'ERROR',
     description: err.toString(),

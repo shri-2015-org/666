@@ -5,7 +5,7 @@ export const fetchMetas = text => {
   const urls = getUrls(text);
   return urls.map((url, index) => {
     return new Promise((resolve, reject) => {
-      ogs({url, timeout: 2000}, (error, meta) => {
+      ogs({url, timeout: 5000}, (error, meta) => {
         if (error) {
           console.log('fetchMetas error', error);
           return reject(error);
