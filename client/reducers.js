@@ -281,7 +281,7 @@ function joinedRooms(state = {}, action) {
 
 const initialUi = {
   navigationCollapsed: false,
-  previewCollapsed: true,
+  previewCollapsed: false,
   searchInputText: '',
   roomInputText: '',
   searchResults: null,
