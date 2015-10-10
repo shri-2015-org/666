@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
-import './index.scss';
-import { switchToRoom } from '../../smartActions';
 import { connect } from 'react-redux';
+import { switchToRoom } from '../../smartActions';
+import './index.scss';
 
-class Welcome extends Component {
+// Скопировано с Welcome
+class NotFound extends Component {
   render() {
     const { dispatch } = this.props;
     return (
-      <div className="welcome">
+      <div className="splash">
         <article className="article">
-          <h1 className="giga">Welcome</h1>
-          <h2>Make yourself at home</h2>
+          <h1 className="giga">Sorry</h1>
+          <h2>The URL you specified is not valid</h2>
           <p>Join a room and find your new identity.</p>
         </article>
         <article className="article faded">
@@ -28,4 +29,4 @@ class Welcome extends Component {
   }
 }
 
-export default connect()(Welcome);
+export default connect()(NotFound);

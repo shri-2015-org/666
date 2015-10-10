@@ -37,9 +37,7 @@ class RoomHeader extends Component {
             <li>
               <div
                 className="user-ava ava"
-                style={{
-                  backgroundImage: `url(${avatar})`,
-                }}>
+                style={{ backgroundImage: `url(${ avatar })` }}>
               </div>
             </li>
           </ul>
