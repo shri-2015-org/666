@@ -46,7 +46,7 @@
     }
 
     &-list {
-      li {
+      &-item {
         display: flex;
         justify-content: space-between;
         padding: .4em 1em;
@@ -54,9 +54,14 @@
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
+        transition: background-color .2s;
 
-        &.is-active {
-          background: color(blue);
+        &--is-active {
+          background-color: color(blue);
+        }
+
+        &:hover {
+          background-color: rgba(white, .1);
         }
       }
     }
