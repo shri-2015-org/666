@@ -353,7 +353,6 @@ function joiningRooms(state = {}, action) {
     case actions.CONFIRM_JOIN_ROOM: {
       const newState = Object.assign(state);
       delete newState[action.room.roomID];
-      console.log(666, state, newState);
       return newState;
     }
     case actions.REJECT_JOIN_ROOM: {
