@@ -4,6 +4,7 @@ export const topRooms = () => actions.getTop()
   .then(data => {
     return {
       type: 'broadcast',
+      event: 'topRooms',
       data,
     };
   });

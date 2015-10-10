@@ -1,9 +1,9 @@
 import uuid from 'uuid';
 import mongoose from 'mongoose';
 
-import * as Room from './models/Room';
-import * as User from './models/User';
-import * as Message from './models/Message';
+import { Room } from './models/Room';
+import { User } from './models/User';
+import { Message } from './models/Message';
 
 import * as userGenerator from './userGenerator';
 
@@ -25,7 +25,7 @@ mongoose.connect(config.db[env], (err) => {
  */
 function _getRoom(roomID) {
   return new Promise((resolve, reject) => {
-    Room.model.findOne({roomID}, (err, room) => {
+    Room.findOne({roomID}, (err, room) => {
       if (err) {
         return reject(err);
       }
@@ -42,14 +42,14 @@ function _getRoom(roomID) {
  * @param  {Room} options.room - Room instance
  * @return {Promise}
  */
-function _createUser({room, userID}) {
+function _createUser({room}) {
   return new Promise((resolve, reject) => {
-    const id = uuid.v4();
-    const user = new User.model({
+    const userID = uuid.v4();
+    const user = new User({
       roomID: room.roomID,
-      userID: id,
+      userID,
       secret: uuid.v4(),
-      avatar: userGenerator.generateAvatar(id),
+      avatar: userGenerator.generateAvatar(userID),
       nick: userGenerator.generateName(),
     });
     room.users.push(user);
@@ -89,12 +89,21 @@ function _getUser({room, userID}) {
  */
 function _deleteUser({room, userID, secret}) {
   return new Promise((resolve, reject) => {
-    room.update({$pull: {users: {userID, secret}, $inc: {rating: -1} }}, (err) => {
-      if (err) {
-        return reject(err);
-      }
-      resolve({roomID: room.roomID, userID});
-    });
+    if (room.rating <= 1) {
+      Room.remove({roomID: room.roomID}, err => {
+        if (err) {
+          return reject(err);
+        }
+        resolve({roomID: room.roomID, userID});
+      });
+    } else {
+      room.update({$pull: {users: {userID, secret}}, $inc: {rating: -1} }, (err) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve({roomID: room.roomID, userID});
+      });
+    }
   });
 }
 
@@ -113,7 +122,7 @@ function _createMessage({room, user, secret, text, time}) {
       return reject(new Error('Wrong secret'));
     }
     const messageID = uuid.v4();
-    const msg = new Message.model({
+    const msg = new Message({
       roomID: room.roomID,
       userID: user.userID,
       messageID,
@@ -149,7 +158,7 @@ function _createMessage({room, user, secret, text, time}) {
  */
 export function createRoom({roomID}) {
   return new Promise((resolve, reject) => {
-    const room = new Room.model({roomID, name: roomID});
+    const room = new Room({roomID, name: roomID});
     room.save( (err, createdRoom) => {
       if (err) {
         return reject(err);
@@ -161,12 +170,12 @@ export function createRoom({roomID}) {
 
 function _getRandomRoom() {
   return new Promise((resolve, reject) => {
-    Room.model.count( (err, count) => {
+    Room.count( (err, count) => {
       if (err) {
         return reject(err);
       }
       const rand = Math.floor(Math.random() * count);
-      Room.model
+      Room
         .findOne()
         .skip(rand)
         .exec( (error, room) => {
@@ -174,7 +183,7 @@ function _getRandomRoom() {
             return reject(error);
           }
           if (!room) {
-            return reject(new Error('Can not find user in unexisted room'));
+            return reject(new Error('Can not join to random room'));
           }
           resolve(room);
         });
@@ -205,7 +214,7 @@ export function joinRoom({roomID, userID, secret}) {
       return userMethod({room, userID});
     })
     .then( ({user, room}) => {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         resolve({
           identity: user,
           room: room,
@@ -253,7 +262,7 @@ export function message({roomID, userID, secret, text, time}) {
  */
 export function getTop() {
   return new Promise((resolve, reject) => {
-    Room.model
+    Room
       .find()
       .sort({rating: -1})
       .exec( (err, rooms) => {
@@ -276,7 +285,7 @@ export function getTop() {
  */
 export function searchRoomID({partialRoomID}) {
   return new Promise((resolve, reject) => {
-    Room.model
+    Room
       .find({roomID: new RegExp(partialRoomID, 'i')})
       .exec( (err, rooms) => {
         if (err) {

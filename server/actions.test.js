@@ -1,18 +1,12 @@
 import { assert } from 'chai';
-
-import utils from './testUtils';
-
+import './testUtils';
 import * as actions from './actions';
 
 let emptyData;
 let data;
-let onlyRoomID;
 
 before( () => {
   emptyData = {};
-  onlyRoomID = {
-    roomID: 'roomID',
-  };
   data = {
     roomID: 'roomID',
     userID: 'userID',

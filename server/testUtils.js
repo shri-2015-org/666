@@ -13,7 +13,7 @@ beforeEach( done => {
   function clearDB() {
     for (const i in mongoose.connection.collections) {
       if (mongoose.connection.collections.hasOwnProperty(i)) {
-        mongoose.connection.collections[i].remove(function() {});
+        mongoose.connection.collections[i].remove();
       }
     }
     return done();
