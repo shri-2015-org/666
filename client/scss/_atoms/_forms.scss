@@ -38,6 +38,8 @@ textarea {
   border-radius: $radius;
   padding: .75rem 1.25rem .9rem;
   transition: all .2s;
+  cursor: pointer;
+  display: inline-block;
 
   &:hover {
     background-color: color(blue, light);

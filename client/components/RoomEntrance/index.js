@@ -1,10 +1,16 @@
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
+import { joinRoom } from '../../smartActions';
 import Room from '../Room';
+
+function onClick(e, handler) {
+  e.preventDefault();
+  handler();
+}
 
 class RoomEntrance extends Component {
   render() {
-    const { roomLoading, roomLoaded, room, roomID } = this.props;
+    const { roomLoading, roomLoaded, room, roomID, dispatch } = this.props;
     if (roomLoaded) {
       return <Room room={room} />;
     } else if (roomLoading) {
@@ -24,7 +30,14 @@ class RoomEntrance extends Component {
     return ( <div className="splash">
         <article className="article">
           <h1>You have left this room.</h1>
-          <h2>Rejoin #{roomID}?</h2>
+          <p className="faded">
+            <span className="btn btn--outline"
+                onClick={e => onClick(e, () =>
+                  dispatch(joinRoom({ roomID })))}
+                title={name}>
+                Rejoin #{roomID}
+            </span>
+          </p>
         </article>
       </div> );
   }
