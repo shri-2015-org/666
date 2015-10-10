@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { switchToRoom } from '../../smartActions';
 import { connect } from 'react-redux';
+import './index.scss';
 
 class Welcome extends Component {
   render() {

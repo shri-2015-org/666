@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { switchToRoom } from '../../smartActions';
+import './index.scss';
 
 // Скопировано с Welcome
 class NotFound extends Component {

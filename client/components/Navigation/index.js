@@ -28,7 +28,7 @@ class Navigation extends Component {
             className="input--underline"
             placeholder="# Find / Create new" />
         </div>
-        {!shouldShowCreation ? <div className="navigation-group" /> :
+        {!shouldShowCreation ? false :
           <div className="navigation-group">
             <h4 className="navigation-group-label"> Create Room </h4>
             <a href={`/room/${searchText}`}
@@ -38,7 +38,7 @@ class Navigation extends Component {
             </a>
           </div>
         }
-        {searchResults === null ? <div className="navigation-group" /> :
+        {searchResults === null ? false :
           <div className="navigation-group">
             <h4 className="navigation-group-label"> Search Results </h4>
             <ul className="navigation-group-list">
@@ -56,7 +56,7 @@ class Navigation extends Component {
             </ul>
           </div>
         }
-        { _.isEmpty(joinedRooms) ? <div className="navigation-group" /> :
+        { _.isEmpty(joinedRooms) ? false :
          <div className="navigation-group">
             <h4 className="navigation-group-label"> Joined </h4>
             <ul className="navigation-group-list">

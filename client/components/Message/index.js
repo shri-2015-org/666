@@ -23,7 +23,9 @@ export default class Message extends Component {
           <time className="message-time">{finalTime}</time>
         </div>
         <div className="message-content">
-          <div className="message-content-ava ava" style={avaStyle} />
+          <div className="message-content-ava">
+            <div className="ava" style={avaStyle} />
+          </div>
           <div className="message-content-text bubble">
             <MessageBody text={text} />
               <div className="attachments">
