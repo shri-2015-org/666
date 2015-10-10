@@ -44,19 +44,10 @@ export const restoreState = state => dispatch => {
     dispatch(joinRoom({roomID: routerRoomID}));
   }
 
-  return Promise
-    .all(roomKeys.map(roomID => {
-      const { userID, secret, roomMessages, orderedMessages } = rooms[roomID];
-      return dispatch(joinRoom({roomID, userID, secret}))
-        .then(didJoin => {
-          if (!didJoin) return null;
-          dispatch(actions.restoreMessages(roomID, {
-            roomMessages,
-            orderedMessages,
-          }));
-          return roomID;
-        });
-    }));
+  roomKeys.forEach(roomID => {
+    const { userID, secret } = rooms[roomID];
+    dispatch(joinRoom({roomID, userID, secret}));
+  });
 };
 
 export const switchToRoom = (history, roomID) => (dispatch, getState) => {
