@@ -1,8 +1,5 @@
 import * as actions from './actions';
 
-actions.connectToDB()
-  .then(() => console.log('connect to db'));
-
 export const topRooms = () => actions.getTop()
   .then(data => {
     return {
