@@ -24,7 +24,8 @@ const vanillaPromise = store => next => action => {
     return next(action);
   }
 
-  return Promise.resolve(action).then(store.dispatch);
+  action.then(store.dispatch);
+  return action;
 };
 
 let middleware = [thunkMiddleware, vanillaPromise, writeState];

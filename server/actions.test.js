@@ -1,18 +1,12 @@
 import { assert } from 'chai';
-
-import utils from './testUtils';
-
+import './testUtils';
 import * as actions from './actions';
 
 let emptyData;
 let data;
-let onlyRoomID;
 
 before( () => {
   emptyData = {};
-  onlyRoomID = {
-    roomID: 'roomID',
-  };
   data = {
     roomID: 'roomID',
     userID: 'userID',
@@ -110,11 +104,11 @@ describe('actions', () => {
             time: 0,
           };
           actions.message(messageData)
-            .then(message => {
-              assert.equal(message.roomID, messageData.roomID);
-              assert.equal(message.userID, messageData.userID);
-              assert.equal(message.text, messageData.text);
-              assert.equal(message.time, messageData.time);
+            .then( (msgData) => {
+              assert.equal(msgData.data.roomID, messageData.roomID);
+              assert.equal(msgData.data.userID, messageData.userID);
+              assert.equal(msgData.data.text, messageData.text);
+              assert.equal(msgData.data.time, messageData.time);
               done();
             });
         });

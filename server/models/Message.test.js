@@ -1,8 +1,6 @@
 import { assert } from 'chai';
-
-import utils from '../testUtils';
-
-import * as Message from './Message';
+import '../testUtils';
+import { Message } from './Message';
 
 describe('Message: model', () => {
   describe('#create()', () => {
@@ -14,7 +12,7 @@ describe('Message: model', () => {
         text: 'text',
         time: 0,
       };
-      const message = new Message.model(messageData);
+      const message = new Message(messageData);
       message.save( (err, createdMessage) => {
         assert.equal(err, null);
         assert.equal(createdMessage.roomID, 'roomID');
@@ -27,8 +25,8 @@ describe('Message: model', () => {
       });
     });
     it('should throw Error', done => {
-      const message = new Message.model({});
-      message.save( (err, createdMessage) => {
+      const message = new Message({});
+      message.save( err => {
         assert.equal(err.name, 'ValidationError');
         done();
       });

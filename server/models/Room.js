@@ -1,15 +1,15 @@
 import mongoose from 'mongoose';
-import * as User from './User';
-import * as Message from './Message';
+import { userSchema } from './User';
+import { messageSchema } from './Message';
 
-const schema = new mongoose.Schema({
-  roomID: { type: String, required: true, index: true },
+const roomSchema = new mongoose.Schema({
+  roomID: { type: String, required: true, index: { unique: true } },
   name: { type: String, required: true },
   rating: { type: Number, default: 0},
-  users: [User.schema],
-  messages: [Message.schema],
+  users: [userSchema],
+  messages: [messageSchema],
 });
 
-const model = mongoose.model('Room', schema);
+const Room = mongoose.model('Room', roomSchema);
 
-export {schema, model};
+export {roomSchema, Room};
