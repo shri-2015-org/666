@@ -8,26 +8,21 @@ export default class Message extends Component {
     const { attachments, time, nick, avatar, text, status } = this.props.message;
     const date = new Date(time);
     const humanTime = `${date.getHours()}:${date.getMinutes()}`;
-    const finalTime = status === 'preview' ? '(preview)' : humanTime;
-
-    let msgStyle;
-    if (status === 'sent') msgStyle = {opacity: 1};
-    if (status === 'rejected') msgStyle = {opacity: 0.5};
+    const finalTime = status === 'confirmed' ? humanTime : `${ status }`;
+    const msgClass = `message message--${ status }`;
 
     const avaStyle = avatar === null ? {} :
       {'backgroundImage': `url(${avatar})`};
 
     return (
       // TODO highlight 'myself'
-      <li className="message" style={msgStyle}>
+      <li className={msgClass}>
         <div className="message-meta">
           <p className="user-name">{nick}</p>
           <time className="message-time">{finalTime}</time>
         </div>
         <div className="message-content">
-          <div className="message-content-ava ava"
-            style={avaStyle}>
-          </div>
+          <div className="message-content-ava ava" style={avaStyle} />
           <div className="message-content-text bubble">
             <MessageBody text={text} />
               <div className="attachments">

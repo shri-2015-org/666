@@ -8,7 +8,7 @@ class NotFound extends Component {
   render() {
     const { dispatch } = this.props;
     return (
-      <div className="notfound">
+      <div className="welcome notfound">
         <article className="article">
           <h1 className="giga">Sorry</h1>
           <h2>The URL you specified is not valid</h2>

@@ -6,8 +6,11 @@ class RoomEntrance extends Component {
   render() {
     const { roomLoaded, room, roomID } = this.props;
     return roomLoaded ? <Room room={room}/> : (
-      <div>
-        <h1>Loading #{roomID}...</h1>
+      <div className="welcome">
+        <article className="article">
+          <h1>Loading...</h1>
+          <h2>Joining #{roomID}</h2>
+        </article>
       </div>
     );
   }
