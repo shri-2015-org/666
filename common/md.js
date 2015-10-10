@@ -6,18 +6,21 @@ renderer.link = ( href, title, text ) => {
 };
 
 renderer.image = ( href, title, text ) => {
-  let html = `<object data="${ href }"`;
+  let out = `<img src="${ href }" alt="${ text }"`;
   if (title) {
-    html += ` title="${ title }"`;
+    out += ` title="${ title }"`;
   }
-  if (/emoji/.test(href)) {
-    html += ' class="md-emoji"';
+  if (text === 'emoji') {
+    out += ` class="md-emoji"`;
   }
-  return html + `>${ text }</object>`;
+  out += '/>';
+  return out;
 };
 
-export default text => marked(text, {
+const options = {
   sanitize: true,
   breaks: true,
   renderer,
-});
+};
+
+export default text => marked(text, options);
