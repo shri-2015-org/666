@@ -19,7 +19,10 @@ const fileServer = new WebpackDevServer(webpack(dev), {
   publicPath: dev.output.publicPath,
   hot: true,
   historyApiFallback: true,
-  stats: {colors: true},
+  stats: {
+    colors: true,
+    chunkModules: false,
+  },
 });
 
 fileServer.use('/', express.static(__dirname + FILEPATH));
