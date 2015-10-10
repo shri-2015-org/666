@@ -22,6 +22,12 @@ Run MongoDB before run server:
 ```
 mongod
 ```
+DropDB:
+```
+mongo
+use anonymClub-dev
+db.dropDatabase();
+```
 Run dev server:
 ```
 npm run dev
