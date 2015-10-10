@@ -17,15 +17,20 @@ export const searchInputChange = partialRoomID => dispatch => {
   }
 };
 
+// returns a Promise(bool) -- was the operation successful?
 export const joinRoom = ({roomID, userID, secret}) => dispatch => {
   dispatch(actions.joiningRoom(roomID));
-  const result = transport.joinRoom({roomID, userID, secret})
-    .then(data => actions.confirmJoinRoom(data),
-          description => {
-            dispatch(pushState(null, `/`));
-            return actions.rejectJoinRoom(description, roomID);
-          });
-  return dispatch(result);
+  return transport.joinRoom({roomID, userID, secret})
+    .then(
+      data => {
+        dispatch(actions.confirmJoinRoom(data));
+        return true;
+      },
+      description => {
+        dispatch(pushState(null, `/`));
+        dispatch(actions.rejectJoinRoom(description));
+        return false;
+      });
 };
 
 export const restoreState = state => dispatch => {
@@ -43,13 +48,13 @@ export const restoreState = state => dispatch => {
     .all(roomKeys.map(roomID => {
       const { userID, secret, roomMessages, orderedMessages } = rooms[roomID];
       return dispatch(joinRoom({roomID, userID, secret}))
-        .then(({room}) => {
-          if (!room) return null;
-          dispatch(actions.restoreMessages(room.roomID, {
+        .then(didJoin => {
+          if (!didJoin) return null;
+          dispatch(actions.restoreMessages(roomID, {
             roomMessages,
             orderedMessages,
           }));
-          return room.roomID;
+          return roomID;
         });
     }));
 };
@@ -61,9 +66,12 @@ export const switchToRoom = (history, roomID) => (dispatch, getState) => {
   const needToJoin = !roomID || (state.joinedRooms[roomID] === undefined);
 
   if (needToJoin) {
-    dispatch(joinRoom({roomID})).then(data =>
-      dispatch(pushState(history, `/room/${data.room.roomID}`))
-    );
+    dispatch(joinRoom({roomID}))
+    .then(didJoin => {
+      if (didJoin) {
+        dispatch(pushState(history, `/room/${roomID}`));
+      }
+    });
   } else {
     dispatch(pushState(history, `/room/${roomID}`));
   }

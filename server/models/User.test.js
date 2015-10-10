@@ -1,8 +1,6 @@
 import { assert } from 'chai';
-
-import utils from '../testUtils';
-
-import * as User from './User';
+import '../testUtils';
+import { User } from './User';
 
 describe('User: model', () => {
   describe('#create()', () => {
@@ -14,7 +12,7 @@ describe('User: model', () => {
         avatar: 'avatar',
         nick: 'nick',
       };
-      const user = new User.model(userData);
+      const user = new User(userData);
       user.save( (err, createdUser) => {
         assert.equal(err, null);
         assert.equal(createdUser.roomID, 'roomID');
@@ -27,8 +25,8 @@ describe('User: model', () => {
     });
     it('should throw Error', done => {
       const userData = {};
-      const user = new User.model(userData);
-      user.save( (err, createdUser) => {
+      const user = new User(userData);
+      user.save( err => {
         assert.equal(err.name, 'ValidationError');
         done();
       });

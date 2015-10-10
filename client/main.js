@@ -1,4 +1,5 @@
 import 'scss/main.scss';
+import 'babel-core/polyfill';
 
 import React from 'react';
 import { Provider } from 'react-redux';
