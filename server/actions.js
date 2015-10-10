@@ -11,15 +11,12 @@ import { fetchMetas } from './open-graph';
 
 import config from './config';
 
-function connectToDB() {
-  const env = process.env.NODE_ENV || 'development';
-  mongoose.connect(config.db[env], (err) => {
-    if (err) {
-      throw new Error('db connection error!');
-    }
-  });
-}
-connectToDB();
+const env = process.env.NODE_ENV || 'development';
+mongoose.connect(config.db[env], (err) => {
+  if (err) {
+    throw new Error('db connection error!');
+  }
+});
 
 /**
  * Retun promise that resolve with Room instance from db or reject with error
