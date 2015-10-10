@@ -360,12 +360,12 @@ function joiningRooms(state = {}, action) {
         [action.roomID]: true,
       };
     }
-    case action.CONFIRM_JOIN_ROOM: {
+    case actions.CONFIRM_JOIN_ROOM: {
       const newState = Object.assign(state);
       delete newState[action.room.roomID];
       return newState;
     }
-    case action.REJECT_JOIN_ROOM: {
+    case actions.REJECT_JOIN_ROOM: {
       const newState = Object.assign(state);
       delete newState[action.roomID];
       return newState;
