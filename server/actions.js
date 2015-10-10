@@ -7,6 +7,8 @@ import * as Message from './models/Message';
 
 import * as userGenerator from './userGenerator';
 
+import { fetchMetas } from './open-graph';
+
 import config from './config';
 
 export function connectToDB() {
@@ -110,18 +112,32 @@ function _createMessage({room, user, secret, text, time}) {
     if (user.secret !== secret) {
       return reject(new Error('Wrong secret'));
     }
+    const messageID = uuid.v4();
     const msg = new Message.model({
       roomID: room.roomID,
       userID: user.userID,
-      messageID: uuid.v4(),
-      text: text,
-      time: time,
+      messageID,
+      text,
+      time,
+    });
+    const metas = fetchMetas(text).map(metaPromise => {
+      return metaPromise
+        .then(({url, index, meta}) => {
+          return {
+            roomID: room.roomID,
+            messageID,
+            url,
+            index,
+            meta,
+          };
+        });
     });
     room.update({$push: {messages: msg}}, err => {
       if (err) {
         return reject(err);
       }
-      resolve(msg);
+
+      resolve({data: msg, metas});
     });
   });
 }
