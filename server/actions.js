@@ -1,22 +1,13 @@
 import uuid from 'uuid';
-import mongoose from 'mongoose';
 
 import { Room } from './models/Room';
 import { User } from './models/User';
 import { Message } from './models/Message';
 
 import * as userGenerator from './userGenerator';
-
 import { fetchMetas } from './open-graph';
 
 const HISTORY_COUNT = 100;
-
-import config from '../config';
-mongoose.connect(config.db.host, (err) => {
-  if (err) {
-    throw new Error('db connection error!');
-  }
-});
 
 /**
  * Retun promise that resolve with Room instance from db or reject with error
@@ -298,3 +289,4 @@ export function searchRoomID({partialRoomID}) {
       });
   });
 }
+

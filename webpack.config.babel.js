@@ -7,7 +7,7 @@ export default {
   debug: true,
   devtool: 'eval',
   entry: [
-    'webpack-dev-server/client?http://' + config.host + ':' + config.port,
+    'webpack-hot-middleware/client',
     'webpack/hot/only-dev-server',
     './client/main',
   ],
@@ -44,6 +44,8 @@ export default {
     extensions: ['', '.js', '.jsx', '.json', '.scss', '.css'],
   },
   plugins: [
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.NoErrorsPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       inject: 'body',
@@ -52,7 +54,7 @@ export default {
     }),
     new webpack.DefinePlugin({
       NODE_ENV: '"development"',
-      DATAPORT: '"' + config.socket.port + '"',
+      DATAPORT: '"' + config.socketPort + '"',
     }),
   ],
 };
