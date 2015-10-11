@@ -1,9 +1,11 @@
 import io from 'socket.io-client';
 import * as apiChecks from './api-checks';
 
-/* eslint no-console: 0 */
-const socket = io( window.location.hostname + ':' + DATAPORT );
 const EXCHANGE_TIMEOUT = 3000;
+const EXCHANGE_HOST = window.location.hostname;
+const EXCHANGE_PORT = window.ENVIROMENT_SOCKET_PORT || '3001';
+
+const socket = io( EXCHANGE_HOST + ':' + EXCHANGE_PORT );
 console.log('transport: socket connection');
 
 export function onTopRooms(handler) {

@@ -1,10 +1,8 @@
-/* eslint no-console: 0 */
 import fs from 'fs';
 import path from 'path';
 import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import config from './config';
 
 webpack({
   debug: false,
@@ -65,7 +63,6 @@ webpack({
     new webpack.optimize.DedupePlugin(),
     new webpack.DefinePlugin({
       NODE_ENV: '"production"',
-      DATAPORT: '"' + config.socket.port + '"',
     }),
   ],
 }, (err, res) => {
@@ -81,7 +78,7 @@ fs.readFile('package.json', (err, data) => {
     version: orig.version,
     description: orig.description,
     scripts: {
-      start: 'babel-node server/server.prod.js',
+      start: 'NODE_ENV=production babel-node server/index.js',
     },
     dependencies: orig.dependencies,
     author: orig.author,

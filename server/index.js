@@ -45,6 +45,12 @@ if (config.hotReload) {
   app.use('/', express.static(__dirname + '/../static'));
 }
 
+app.use('/enviroment.js', (req, res) => {
+  res.send(`
+    window.ENVIROMENT_SOCKET_PORT = ${config.socketPort};
+  `);
+});
+
 httpServer.listen(config.httpPort, () => {
   console.log('File server listening on *:' + config.httpPort);
 });
