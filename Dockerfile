@@ -1,11 +1,11 @@
 FROM node:0.12.7-slim
 
 ENV PORT 80
+ENV PORT 3000
+EXPOSE 80 3000
 
-ADD ./ /root
+ADD ./build /root
 WORKDIR /root
 
-EXPOSE 80
-
-RUN npm install -production
-CMD npm run server
+RUN npm install --production
+CMD npm run start
