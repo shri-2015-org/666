@@ -84,7 +84,7 @@ npm run prod
 
 Поддержка клиентом | Поддержка сервером
 --- | ---
-:white_check_mark: | :white_check_mark: :exclamation: (mock)
+:white_check_mark: | :white_check_mark:
 
 ## `roomcast`
 Сообщения, приходящие от сервера всем в комнате. Имена socket.io событий нужно начинать с `roomcast:`
@@ -107,7 +107,7 @@ npm run prod
 
 Поддержка клиентом | Поддержка сервером
 --- | ---
-:white_check_mark: | :white_check_mark: :exclamation: (mock)
+:white_check_mark: | :white_check_mark:
 
 #### `attachment`
 Сервер добавил метаданные к сообщению.
@@ -125,7 +125,7 @@ npm run prod
 
 Поддержка клиентом | Поддержка сервером
 --- | ---
-:white_check_mark: | :white_check_mark: :exclamation: (mock)
+:white_check_mark: | :white_check_mark:
 
 #### `joinUser`
 Зашел новый пользователь.
@@ -142,7 +142,7 @@ npm run prod
 
 Поддержка клиентом | Поддержка сервером
 --- | ---
-:white_check_mark: | :white_check_mark: :exclamation: (mock)
+:white_check_mark: | :white_check_mark:
 
 #### `leaveUser`
 Пользователь нас покинул.
@@ -157,7 +157,7 @@ npm run prod
 
 Поддержка клиентом | Поддержка сервером
 --- | ---
-:white_check_mark: | :white_check_mark: :exclamation: (mock)
+:white_check_mark: | :white_check_mark:
 
 ## `exchange`
 
@@ -197,7 +197,7 @@ npm run prod
 
 Поддержка клиентом | Поддержка сервером
 --- | ---
-:white_check_mark: | :white_check_mark: :exclamation: (mock)
+:white_check_mark: | :white_check_mark:
 
 #### `joinRoom`
 * Я хотел бы
@@ -252,7 +252,7 @@ npm run prod
 
 Поддержка клиентом | Поддержка сервером
 --- | ---
-:white_check_mark: | :white_check_mark: :exclamation: (mock)
+:white_check_mark: | :white_check_mark:
 
 #### `leaveRoom`
 * Я хотел бы отсоединиться от комнаты roomID.
@@ -286,7 +286,7 @@ npm run prod
 
 Поддержка клиентом | Поддержка сервером
 --- | ---
-:white_check_mark: | :white_check_mark: :exclamation: (mock)
+:white_check_mark: | :white_check_mark:
 
 
 #### `message`
@@ -330,7 +330,7 @@ npm run prod
 
 Поддержка клиентом | Поддержка сервером
 --- | ---
-:white_check_mark: | :white_check_mark: :exclamation: (mock)
+:white_check_mark: | :white_check_mark:
 
 #### `searchRoomID`
 * Какие комнаты начинаются с букв `partialRoomID`?
@@ -368,4 +368,4 @@ npm run prod
 
 Поддержка клиентом | Поддержка сервером
 --- | ---
-:white_check_mark: | :white_check_mark: :exclamation: (mock)
+:white_check_mark: | :white_check_mark:
