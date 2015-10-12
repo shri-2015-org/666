@@ -6,7 +6,7 @@
     "lint": "eslint .",
     "dev": "NODE_ENV=development babel-node server/index.js",
     "prod": "npm run build; cd build; npm run start",
-    "dock": "sh run_local.sh",
+    "dock": "npm run build; sh run_local.sh",
     "build": "npm run lint; bash build.sh",
     "test": "NODE_ENV=testing npm run test-server; npm run test-common; npm run test-client",
     "test-server": "mocha --compilers js:babel/register 'server/**/*.test.js'",
