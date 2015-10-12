@@ -29,8 +29,9 @@ if (config.hotReload) {
   const webpack = require('webpack');
   const webpackDevMiddleware = require('webpack-dev-middleware');
   const webpackHotMiddleware = require('webpack-hot-middleware');
-  const webpackDevConfig = require('../webpack.config.babel');
+  const webpackDevConfig = require('../config/webpack.dev');
   const compiller = webpack(webpackDevConfig);
+
   app.use(webpackDevMiddleware(compiller, {
     publicPath: webpackDevConfig.output.publicPath,
     historyApiFallback: true,
