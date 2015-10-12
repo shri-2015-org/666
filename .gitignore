@@ -16,4 +16,3 @@ tmp/**/*.*
 .jshintrc
 logs/
 build/
-config/index.js
