@@ -21,38 +21,43 @@ mongoose.connect(config.dbHost, (err) => {
 
 // --- STATIC FILE  SERVER
 
-const app = express();
-const httpServer = new http.Server(app);
-
 if (config.hotReload) {
   // --- DEV HOT RELOAD SERVER
   const webpack = require('webpack');
-  const webpackDevMiddleware = require('webpack-dev-middleware');
-  const webpackHotMiddleware = require('webpack-hot-middleware');
+  const webpackDevServer = require('webpack-dev-server');
   const webpackDevConfig = require('../config/webpack.dev');
-  const compiller = webpack(webpackDevConfig);
 
-  app.use(webpackDevMiddleware(compiller, {
+  const fileServer = new webpackDevServer(webpack(webpackDevConfig), {
     publicPath: webpackDevConfig.output.publicPath,
+    hot: true,
     historyApiFallback: true,
     stats: {
       colors: true,
       chunkModules: false,
     },
-  }));
-  app.use(webpackHotMiddleware(compiller));
+  });
+
+  fileServer.use('/', express.static(__dirname + '/../static'));
+  fileServer.listen(config.httpPort, () => {
+    console.log('FIle and hot reload server listening on *:' + config.httpPort);
+  });
 } else {
+  const app = express();
+  const httpServer = new http.Server(app);
+  const historyFallback = require('connect-history-api-fallback');
+
+  app.use(historyFallback());
+
   // --- PROD FILE SERVER
   app.use('/', express.static(__dirname + '/../static'));
+
+  app.use('/enviroment.js', (req, res) => {
+    res.send(`
+      window.ENVIROMENT_SOCKET_PORT = ${config.socketPort};
+    `);
+  });
+
+  httpServer.listen(config.httpPort, () => {
+    console.log('File server listening on *:' + config.httpPort);
+  });
 }
-
-app.use('/enviroment.js', (req, res) => {
-  res.send(`
-    window.ENVIROMENT_SOCKET_PORT = ${config.socketPort};
-  `);
-});
-
-httpServer.listen(config.httpPort, () => {
-  console.log('File server listening on *:' + config.httpPort);
-});
-
