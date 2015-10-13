@@ -53,6 +53,11 @@ Run prod server:
 npm run prod
 ```
 
+### Prod in docker
+Нужно установить docker, затем в его консоли:
+```
+npm run dock
+```
 
 # API :smirk_cat:
  Описание взаимодействия клиентов и сервера.

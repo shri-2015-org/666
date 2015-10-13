@@ -19,6 +19,7 @@ import { Route } from 'react-router';
 
 const store = createStorePlus(all);
 const rootElement = document.getElementById('content');
+const lastState = readState();
 
 const app = (
   <Provider store={store}>
@@ -50,5 +51,5 @@ transport.onTopRooms(data =>
 React.render(app, rootElement);
 
 // dispatch after render. otherwise the router doesn't initialize correctly
-store.dispatch(restoreState(readState()));
+store.dispatch(restoreState(lastState));
 

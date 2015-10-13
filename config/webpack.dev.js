@@ -1,18 +1,20 @@
 import path from 'path';
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import config from './config';
+
+const root = __dirname.slice(0, -7);
+console.log('Root folder is', root);
 
 export default {
   debug: true,
   devtool: 'eval',
   entry: [
-    'webpack-dev-server/client?http://' + config.host + ':' + config.port,
+    'webpack-hot-middleware/client',
     'webpack/hot/only-dev-server',
     './client/main',
   ],
   output: {
-    path: path.join(__dirname, 'build/client'),
+    path: path.join(root, 'build/client'),
     filename: 'bundle.js',
     publicPath: '/',
   },
@@ -21,8 +23,8 @@ export default {
       test: /\.js$/,
       loaders: ['react-hot?sourceMap', 'babel?sourceMap'],
       include: [
-        path.join(__dirname, 'client'),
-        path.join(__dirname, 'common'),
+        path.join(root, 'client'),
+        path.join(root, 'common'),
       ],
     }, {
       test: /\.scss$/,
@@ -34,25 +36,26 @@ export default {
   },
   resolve: {
     alias: {
-      'actions': path.join(__dirname, 'client/actions.js'),
+      'actions': path.join(root, 'client/actions.js'),
     },
     modulesDirectories: [
       'node_modules',
-      path.join(__dirname, 'client'),
-      path.join(__dirname, 'common'),
+      path.join(root, 'client'),
+      path.join(root, 'common'),
     ],
     extensions: ['', '.js', '.jsx', '.json', '.scss', '.css'],
   },
   plugins: [
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.NoErrorsPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       inject: 'body',
       filename: 'index.html',
-      template: __dirname + '/client/index.html',
+      template: root + '/client/index.html',
     }),
     new webpack.DefinePlugin({
       NODE_ENV: '"development"',
-      DATAPORT: '"' + config.socket.port + '"',
     }),
   ],
 };

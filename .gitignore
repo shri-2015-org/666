@@ -14,5 +14,5 @@ tmp/**/*.*
 *.swp
 .jshintignore
 .jshintrc
+logs/
 build/
-config/index.js
