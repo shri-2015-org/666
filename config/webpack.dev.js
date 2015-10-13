@@ -56,6 +56,7 @@ export default {
     }),
     new webpack.DefinePlugin({
       NODE_ENV: '"development"',
+      SOCKET_PORT: '"3001"',
     }),
   ],
 };

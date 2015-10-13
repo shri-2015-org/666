@@ -3,7 +3,7 @@ import * as apiChecks from './api-checks';
 
 const EXCHANGE_TIMEOUT = 3000;
 const EXCHANGE_HOST = window.location.hostname;
-const EXCHANGE_PORT = window.ENVIROMENT_SOCKET_PORT || '3001';
+const EXCHANGE_PORT = window.ENVIROMENT_SOCKET_PORT || SOCKET_PORT;
 
 const socket = io( EXCHANGE_HOST + ':' + EXCHANGE_PORT );
 console.log('transport: socket connection');
