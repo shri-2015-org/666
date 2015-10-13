@@ -1,3 +1,4 @@
+/* eslint func-names: 0 */
 // twitter widget API
 // https://dev.twitter.com/web/javascript/loading
 if (window) {
