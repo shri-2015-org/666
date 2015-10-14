@@ -5,28 +5,28 @@ import OpenGraph from '../OpenGraph';
 
 export default class Message extends Component {
   render() {
-    const { attachments, time, nick, avatar, text, status } = this.props.message;
+    const { attachments, time, nick, avatar, text, status, isOurMessage } = this.props.message;
     const date = new Date(time);
-    const humanTime = `${date.getHours()}:${date.getMinutes()}`;
-    const finalTime = status === 'preview' ? '(preview)' : humanTime;
-
-    let msgStyle;
-    if (status === 'sent') msgStyle = {opacity: 1};
-    if (status === 'rejected') msgStyle = {opacity: 0.5};
+    const hours = ('00' + String(date.getHours())).slice(-2);
+    const minutes = ('00' + String(date.getMinutes())).slice(-2);
+    const humanTime = `${hours}:${minutes}`;
+    const finalTime = status === 'confirmed' ? humanTime : `${ status }`;
+    const ourMessageClass = (isOurMessage) ? 'message--myself' : '';
+    const messageClass = `message message--${ status } ${ ourMessageClass }`;
 
     const avaStyle = avatar === null ? {} :
       {'backgroundImage': `url(${avatar})`};
 
     return (
       // TODO highlight 'myself'
-      <li className="message" style={msgStyle}>
+      <li className={messageClass}>
         <div className="message-meta">
           <p className="user-name">{nick}</p>
           <time className="message-time">{finalTime}</time>
         </div>
         <div className="message-content">
-          <div className="message-content-ava ava"
-            style={avaStyle}>
+          <div className="message-content-ava">
+            <div className="ava" style={avaStyle} />
           </div>
           <div className="message-content-text bubble">
             <MessageBody text={text} />

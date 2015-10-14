@@ -10,6 +10,10 @@ class Room extends Component {
   render() {
     const { room, showPreview, inputText } = this.props;
     const { orderedMessages, roomMessages, roomUsers } = room;
+
+    const ourUserID = room.userID;
+    const {nick: ourNick, avatar: ourAvatar} = room.roomUsers[ourUserID];
+
     const messages = orderedMessages.map(messageID => {
       const { text, time, userID,
               status, attachments } = roomMessages[messageID];
@@ -17,18 +21,19 @@ class Room extends Component {
         nick: 'Leaved user',
         avatar: '', // TODO link to our logo with anonym man
       };
+
+      const isOurMessage = (ourUserID === userID);
+
       return {
         text,
         time,
         nick,
+        isOurMessage,
         avatar,
         status,
         attachments,
       };
     });
-
-    const ourUserID = room.userID;
-    const {nick: ourNick, avatar: ourAvatar} = room.roomUsers[ourUserID];
 
     const previewMessage = {
       text: inputText,
@@ -42,8 +47,8 @@ class Room extends Component {
     return (
       <div className="room">
         <RoomHeader room={room} />
-        <div className="room-messages">
-          {!showPreview ? '' :
+        <div className="room-messages" id="roomMessages">
+          {!showPreview ? false :
             <div className="room-messages-preview">
               <Message message={previewMessage} />
             </div>

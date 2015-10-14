@@ -1,6 +1,7 @@
 %icon {
   position: relative;
   display: inline-block;
+  vertical-align: middle;
 }
 
 $iconNav-size: 21px;
@@ -136,4 +137,34 @@ $iconNav-breakpoint: 580px;
           <path d="M12.744 4.322h.767v2.385l3.323-3.353-3.323-3.354v1.989h-.767c-3.078 0-4.813 2.282-6.345 4.293-1.377 1.81-2.567 3.374-4.488 3.374h-1.743v2.333h1.744c3.078 0 4.813-2.28 6.345-4.293 1.377-1.811 2.567-3.373 4.488-3.373zm-8.069 1.47l.398-.519c.325-.428.67-.879 1.043-1.33-1.102-1.028-2.429-1.787-4.205-1.787h-1.744v2.333h1.744c1.106 0 1.968.519 2.764 1.303zm8.835 4.03h-.767c-1.172 0-2.073-.584-2.909-1.448l-.252.331c-.367.483-.763 1.001-1.199 1.515 1.13 1.103 2.5 1.937 4.36 1.937h.767v1.998l3.324-3.354-3.323-3.354v2.376z" fill="#{ color(grey) }"/>\
         </svg>') no-repeat center / contain;
   padding: .75em;
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader-item {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+
+  background-color: royalblue;
+  border-radius: 50%;
+  animation: pulse .45s infinite alternate;
+
+  &:nth-of-type(2) {
+    animation-delay: .1s;
+  }
+
+  &:nth-of-type(3) {
+    animation-delay: .2s;
+  }
+}
+
+@keyframes pulse {
+  to {
+    transform: scale(.5);
+  }
 }

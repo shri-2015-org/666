@@ -5,20 +5,25 @@ export const LEAVE_USER = 'LEAVE_USER';
 export const TOGGLE_NAVIGATION = 'TOGGLE_NAVIGATION';
 export const TOGGLE_PREVIEW = 'TOGGLE_PREVIEW';
 export const UPDATE_TOP_ROOMS = 'UPDATE_TOP_ROOMS';
-export const JOIN_ROOM = 'JOIN_ROOM';
 export const CONFIRM_JOIN_ROOM = 'CONFIRM_JOIN_ROOM';
 export const REJECT_JOIN_ROOM = 'REJECT_JOIN_ROOM';
 export const SENT_MESSAGE = 'SENT_MESSAGE';
 export const CONFIRM_SENT_MESSAGE = 'CONFIRM_SENT_MESSAGE';
 export const REJECT_SENT_MESSAGE = 'REJECT_SENT_MESSAGE';
-export const SWITCH_TO_JOINED_ROOM = 'SWITCH_TO_JOINED_ROOM';
 export const LEAVE_ROOM = 'LEAVE_ROOM';
 export const SEARCH_INPUT_CHANGE = 'SEARCH_INPUT_CHANGE';
 export const ROOM_INPUT_CHANGE = 'ROOM_INPUT_CHANGE';
 export const SEARCH_RESULTS_UPDATE = 'SEARCH_RESULTS_UPDATE';
 export const SEARCH_RESULTS_FAILED = 'SEARCH_RESULTS_FAILED';
 export const CREATE_ROOM_FAILED = 'CREATE_ROOM_FAILED';
-export const RESTORE_MESSAGES = 'RESTORE_MESSAGES';
+export const JOINING_ROOM = 'JOINING_ROOM';
+
+export function joiningRoom(roomID) {
+  return {
+    type: JOINING_ROOM,
+    roomID,
+  };
+}
 
 export function searchResultsUpdate(results) {
   return {
@@ -62,20 +67,6 @@ export function leaveRoom(roomID) {
   };
 }
 
-export function switchToJoinedRoom(roomID) {
-  return {
-    type: SWITCH_TO_JOINED_ROOM,
-    roomID,
-  };
-}
-
-export function joinRoom(roomID) {
-  return {
-    type: JOIN_ROOM,
-    roomID,
-  };
-}
-
 export function confirmJoinRoom({identity, room}) {
   return {
     type: CONFIRM_JOIN_ROOM,
@@ -84,9 +75,10 @@ export function confirmJoinRoom({identity, room}) {
   };
 }
 
-export function rejectJoinRoom(description) {
+export function rejectJoinRoom(description, roomID) {
   return {
     type: REJECT_JOIN_ROOM,
+    roomID,
     description,
   };
 }
@@ -187,15 +179,6 @@ export function rejectSentMessage(pendingID, roomID, description) {
     pendingID,
     roomID,
     description,
-  };
-}
-
-export function restoreMessages(roomID, {roomMessages, orderedMessages}) {
-  return {
-    type: RESTORE_MESSAGES,
-    roomID,
-    roomMessages,
-    orderedMessages,
   };
 }
 

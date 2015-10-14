@@ -1,7 +1,13 @@
 import _ from 'lodash';
 
-const FIRST = ['Limited', 'Endless', 'Orange', 'Blue', 'Swollen', 'Horrible', 'Great', 'Awesome', 'Terrible', 'Idiotic', 'Massive', 'Cheesy'];
-const LAST = ['Peppermints', 'Oil', 'Dragon', 'Cafeteria', 'Junkie', 'Vegetables', 'Twinkies', 'Turtle', 'Fox', 'Calculator', 'Bandwidth', 'Crust', 'Cake', 'Derp'];
+const FIRST = [
+  'Limited', 'Endless', 'Orange', 'Blue', 'Swollen', 'Horrible',
+  'Great', 'Awesome', 'Terrible', 'Idiotic', 'Massive', 'Cheesy',
+];
+const LAST = [
+  'Peppermints', 'Oil', 'Dragon', 'Cafeteria', 'Junkie', 'Vegetables', 'Twinkies',
+  'Turtle', 'Fox', 'Calculator', 'Bandwidth', 'Crust', 'Cake', 'Derp',
+];
 const GENDER = ['male', 'female'];
 
 function _generateUrl(uid) {

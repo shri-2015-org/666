@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import * as actions from 'actions';
+import { routerStateReducer } from 'redux-router';
 
 /*
   topRooms: [{
@@ -213,19 +214,6 @@ function joinedRooms(state = {}, action) {
     case actions.REJECT_SENT_MESSAGE: {
       return insideRoom(action.roomID, rejectSentMessage);
     }
-    case actions.RESTORE_MESSAGES: {
-      const { roomID, roomMessages, orderedMessages } = action;
-      return {
-        ...state,
-        [roomID]: {
-          ...state[roomID],
-          roomMessages,
-          orderedMessages,
-        },
-      };
-    }
-    case actions.JOIN_ROOM:
-      return state;
     case actions.LEAVE_ROOM: {
       const { roomID } = action;
       const newState = Object.assign({}, state);
@@ -247,6 +235,27 @@ function joinedRooms(state = {}, action) {
             },
           };
         }, {});
+      const orderedMessages = room.messages.map(({messageID}) => messageID);
+      const roomMessages = room.messages
+        .reduce(
+          ({result, index}, {userID: thatUserID, messageID, text, time}) =>
+            ({
+              result: {
+                ...result,
+                [messageID]: {
+                  messageID,
+                  userID: thatUserID,
+                  text,
+                  time,
+                  status: 'confirmed',
+                  index,
+                  attachments: [],
+                },
+              },
+              index: index + 1,
+            }),
+          {index: 0, result: {}}
+        ).result;
 
       return {
         ...state,
@@ -255,8 +264,8 @@ function joinedRooms(state = {}, action) {
           secret,
           roomName,
           roomUsers,
-          roomMessages: {},
-          orderedMessages: [],
+          roomMessages,
+          orderedMessages,
         },
       };
     }
@@ -272,8 +281,7 @@ function joinedRooms(state = {}, action) {
 
 const initialUi = {
   navigationCollapsed: false,
-  previewCollapsed: true,
-  currentRoomID: null,
+  previewCollapsed: false,
   searchInputText: '',
   roomInputText: '',
   searchResults: null,
@@ -283,7 +291,6 @@ const initialUi = {
    ui: {
      navigationCollapsed: boolean,
      previewCollapsed: boolean,
-     currentRoomID: string || null,
      searchInputText: string,
      roomInputText: string,
      searchResults: null || [{
@@ -338,22 +345,40 @@ function ui(state = initialUi, action) {
         navigationCollapsed: !state.navigationCollapsed,
       };
     }
-    case actions.SWITCH_TO_JOINED_ROOM: {
+    default: return state;
+  }
+}
+
+/*
+  joiningRooms: HashMap('roomID', bool)
+*/
+function joiningRooms(state = {}, action) {
+  switch (action.type) {
+    case actions.JOINING_ROOM: {
       return {
         ...state,
-        currentRoomID: action.roomID,
+        [action.roomID]: true,
       };
     }
-    case actions.LEAVE_ROOM: {
-      if (state.currentRoomID !== action.roomID) return state;
-      return {
-        ...state,
-        currentRoomID: null,
-      };
+    case actions.CONFIRM_JOIN_ROOM: {
+      const newState = Object.assign(state);
+      delete newState[action.room.roomID];
+      return newState;
+    }
+    case actions.REJECT_JOIN_ROOM: {
+      const newState = Object.assign(state);
+      delete newState[action.roomID];
+      return newState;
     }
     default: return state;
   }
 }
 
-export default combineReducers({joinedRooms, topRooms, ui});
+export default combineReducers({
+  joinedRooms,
+  joiningRooms,
+  topRooms,
+  ui,
+  router: routerStateReducer,
+});
 

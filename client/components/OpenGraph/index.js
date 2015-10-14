@@ -1,8 +1,12 @@
 import { Component } from 'react';
 import generic from './Generic';
+import twitter from './Twitter';
+import youtube from './Youtube';
 import './index.scss';
 
 const plugins = [
+  youtube,
+  twitter,
   generic,
 ];
 
