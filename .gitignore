@@ -15,5 +15,4 @@ tmp/**/*.*
 .jshintignore
 .jshintrc
 logs/
-build/
 docker/dependensy/data/
