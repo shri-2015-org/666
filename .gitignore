@@ -16,3 +16,4 @@ tmp/**/*.*
 .jshintrc
 logs/
 build/
+docker/dependensy/data/
