@@ -16,7 +16,8 @@ fs.readFile('package.json', (err, data) => {
     version: orig.version,
     description: orig.description,
     scripts: {
-      start: 'bash start.sh; bash;',
+      start: 'bash start.sh; bash',
+      'local-prod': 'babel-node server',
     },
     dependencies: orig.dependencies,
     author: orig.author,

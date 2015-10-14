@@ -1,7 +1,5 @@
 #!/bin/bash
 
-docker pull anonym/main;
-
 sh stop.sh;
 
 docker run -id \
