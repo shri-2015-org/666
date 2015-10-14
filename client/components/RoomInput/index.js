@@ -11,7 +11,9 @@ function onKeyPress(e, handler) {
   }
 
   const roomMessages = document.getElementById('roomMessages');
-  roomMessages.scrollTop = roomMessages.scrollHeight;
+  if (roomMessages !== null) {
+    roomMessages.scrollTop = roomMessages.scrollHeight;
+  }
 }
 
 function onClick(e, handler) {
