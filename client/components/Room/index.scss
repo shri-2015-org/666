@@ -13,7 +13,14 @@
 		overflow: auto;
 		-webkit-overflow-scrolling: touch;
 
+    background-color: #f5f5f5;
+
 		padding: 1.15em;
+
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=1042151
+    @-moz-document url-prefix() {
+     justify-content: flex-end;
+    }
 
     &-preview {
       opacity: .5;

@@ -9,6 +9,9 @@ function onKeyPress(e, handler) {
     e.preventDefault();
     handler();
   }
+
+  const roomMessages = document.getElementById('roomMessages');
+  roomMessages.scrollTop = roomMessages.scrollHeight;
 }
 
 function onClick(e, handler) {

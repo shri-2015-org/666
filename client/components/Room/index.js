@@ -47,8 +47,8 @@ class Room extends Component {
     return (
       <div className="room">
         <RoomHeader room={room} />
-        <div className="room-messages">
-          {!showPreview ? '' :
+        <div className="room-messages" id="roomMessages">
+          {!showPreview ? false :
             <div className="room-messages-preview">
               <Message message={previewMessage} />
             </div>
