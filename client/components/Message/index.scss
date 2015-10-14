@@ -31,6 +31,8 @@
     &-text {
       position: relative;
       flex: 1;
+      word-wrap: break-word;
+      hyphens: auto;
 
       &:before {
         content: "";

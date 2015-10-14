@@ -10,6 +10,10 @@
   color: color(grey);
   border-bottom: 1px solid color(grey, light);
 
+  @media (max-width: 580px) {
+    border-bottom-color: transparent;
+  }
+
   &-bar  {
     display: flex;
     justify-content: space-between;
