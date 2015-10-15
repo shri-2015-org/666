@@ -4,16 +4,20 @@ import validRoomID from '../common/RoomID';
 import { pushState } from 'redux-router';
 
 export const searchInputChange = partialRoomID => dispatch => {
-  dispatch(actions.searchInputChange(partialRoomID));
-  if (partialRoomID.length > 0) {
-    transport.searchRoomID(partialRoomID)
-      .then(data =>
-        dispatch(actions.searchResultsUpdate(data))
-      , description =>
-        dispatch(actions.searchResultsFailed(description))
-      );
+  if (validRoomID(partialRoomID) || partialRoomID.length === 0) {
+    dispatch(actions.searchInputChange(partialRoomID));
+    if (partialRoomID.length > 0) {
+      transport.searchRoomID(partialRoomID)
+        .then(data =>
+          dispatch(actions.searchResultsUpdate(data))
+        , description =>
+          dispatch(actions.searchResultsFailed(description))
+        );
+    } else {
+      dispatch(actions.searchResultsUpdate(null));
+    }
   } else {
-    dispatch(actions.searchResultsUpdate(null));
+    // TODO показать пользователю, что такую искать нельзя
   }
 };
 

@@ -4,7 +4,7 @@ const dbHost = 'mongodb://' + (process.env.DB_HOST || 'localhost');
 const production = {
   hotReload: false,
   httpPort: 80,
-  socketPort: 3000,
+  socketPort: 8080,
   dbHost: dbHost + '/anonymClub-prod',
 };
 
