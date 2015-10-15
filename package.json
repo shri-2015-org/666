@@ -5,7 +5,7 @@
   "scripts": {
     "lint": "eslint .",
     "dev": "NODE_ENV=development babel-node server",
-    "prod": "npm run build; cd build; HTTP_PORT=8080 npm run local-prod",
+    "prod": "npm run build; cd build; HTTP_PORT=8080 SOCKET_PORT=3000 npm run local-prod",
     "dock": "npm run build; sh build_container.sh; sh run_local.sh",
     "build": "npm run lint; bash build.sh; babel-node build.js",
     "test": "NODE_ENV=testing npm run test-server; npm run test-common; npm run test-client",

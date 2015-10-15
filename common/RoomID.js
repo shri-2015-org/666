@@ -1,2 +1,2 @@
 const re = /^[a-z0-9]+$/i;
-export default roomID => re.test(roomID);
+export default roomID => (re.test(roomID) && roomID.length < 255);
